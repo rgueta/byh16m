@@ -1,0 +1,38 @@
+ion-thumbnail {
+    // width:200px;
+    height:auto !important;
+    // --size:200px
+  
+  ion-img
+    {
+    width:100% !important;
+    // height:140px !important;
+    }
+}
+
+.tamamataMargen{
+    margin:10px;
+}
+
+.auxuwiMargen{
+    margin:5px;
+}
+
+.auxuwiPadding{
+    padding: 5px;
+}
+
+.HiddenCardInfo{
+    background-color:#BABFC4 ;
+}
+
+.CardInfo{
+    background-color: #fff;
+}
+
+.VisibleCtrl{
+    padding-left: 5px;
+    display: flex;
+    font-size: 1.5rem;
+    justify-content:space-around;
+}

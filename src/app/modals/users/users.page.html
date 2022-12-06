@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar>
+     <ion-buttons class="modalcloseButton" slot="end">
+      <ion-icon (click)='closeModal()' name='close-circle' >Cerrar</ion-icon>
+    </ion-buttons>
+    <ion-title>Nuevo usuario {{CoreName}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup] = "RegisterForm" >
+
+    <ion-item class="wrap-input">
+       <ion-input class='input' type="text" placeholder="Nombre" formControlName="name"  
+       [(ngModel)]="localName" ></ion-input>
+      <br><br>
+  </ion-item>
+  
+    <ion-item class="wrap-input" >
+      <ion-input class='input' type="text" placeholder="Usuario" 
+      formControlName="username" pattern=".{8,}"
+      [(ngModel)]="localUsername"  ></ion-input>
+    </ion-item>
+  
+    <ion-item class="wrap-input" >
+      <ion-input class='input' type="text" pattern="[^@\s]+@[^@\s]+\.[^@\s]+" placeholder="Email" 
+      formControlName="email" 
+        [(ngModel)]="localEmail" ></ion-input>
+    </ion-item>
+
+    <ion-item  class="wrap-input">
+      <ion-input class='input' type="text" 
+        placeholder="UUID" formControlName="uuid" [(ngModel)]="localuuid" ></ion-input>
+    </ion-item>
+
+    <ion-item class="wrap-input">
+      <ion-input class='input' type="text" 
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}" 
+        placeholder="Password" formControlName="pwd" [(ngModel)]="localPwd" ></ion-input>
+    </ion-item>
+
+     <ion-item class="wrap-input">
+      <ion-input class='input' type="text" 
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}" 
+        placeholder="Confirma password" formControlName="pwdConfirm" 
+        [(ngModel)]="localPwdConfirm" ></ion-input>
+    </ion-item>
+
+    <ion-item class="wrap-input">
+      <ion-input class='input' type="text" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" 
+      placeholder="Tel formato 123-456-7890" 
+        formControlName="sim" [(ngModel)]="localSim"></ion-input>
+    </ion-item>
+
+    <ion-item class="wrap-input">
+      <ion-label>Numero de casa: </ion-label>
+      <ion-input class='input' type="text" formControlName="house" [(ngModel)]="localHouse" ></ion-input>
+    </ion-item>
+
+    <ion-item class="wrap-input">
+      <ion-label>Genero</ion-label>
+      <ion-select okText="Aceptar" cancelText="Cancelar" [ngModelOptions]="{standalone:true}" 
+      [(ngModel)]="gender">
+        <ion-select-option value="M">Hombre</ion-select-option>
+        <ion-select-option value="F">Mujer</ion-select-option>
+        <ion-select-option value="O">Otro</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+    <!-- <ion-item class="wrap-input">
+      <ion-label>Core</ion-label>
+      <ion-select okText="Aceptar" cancelText="Cancelar" formControlName="core" [(ngModel)]="localCore" 
+          (ionChange)="setupCore(localCore)">
+        <ion-select-option *ngFor="let item of CoresList" value={{item._id}}>{{item.Name}}</ion-select-option>
+      </ion-select>
+    </ion-item> -->
+
+    
+
+       <ion-item>
+          <ion-label class='labelInput' floating>Roles:</ion-label>
+          <ion-select  multiple [(ngModel)]="roleId" ok-text="Seleccionar" cancel-text="Cancelar" 
+              (ionChange)="rolesSelection(roleId)" formControlName="roles" >
+            <ion-select-option  *ngFor="let item of rolesList" value={{item._id}}  >{{item.name}}</ion-select-option>
+          </ion-select>
+      </ion-item>
+
+      <ion-item class="wrap-input">
+        <ion-button class="main-buttons-blue" [disabled]="RegisterForm.invalid" 
+          (click)="sendNewUser()" fill="clear" >Registar
+        </ion-button>
+      </ion-item>
+
+  </form>
+
+</ion-content>

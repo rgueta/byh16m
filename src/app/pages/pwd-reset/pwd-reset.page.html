@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Recuperar contraseña</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="login_logo">
+   <img src="../../../assets/logo_v2.png"/>
+   <div class="version">version {{version}}</div>
+  </div> 
+ 
+   <form (ngSubmit)="psswordRST_request()" [formGroup]="credentials">
+     <div class="input-group">
+       <ion-item>
+         <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
+       </ion-item>
+       <div *ngIf="(email.dirty || email.touched) && email.errors" class="errors">
+         <span *ngIf="email.errors?.required">Email es requerido</span>
+         <span *ngIf="email.errors?.email">Email no es valido</span>
+       </div>
+     </div>
+  
+     <ion-button class="loginButton" type="submit" expand="block" [disabled]="!credentials.valid">Mandar solicitud</ion-button>
+
+   </form>
+ </ion-content>

@@ -1,0 +1,360 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+
+
+.my-modal {
+    .modal-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        --width: 100%;
+        --height: 100%;
+    } 
+}
+
+.title{
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.titleBlue{
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    --background:#6599CE;
+    color:#fff
+}
+
+.titleGreen{
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    --background:#64AA95;
+    color:#fff
+}
+
+.basic-alert{
+    .alert-wrapper {
+        .alert-head {
+            h2{
+                color: navy;
+            }
+        }
+      }
+}
+
+.modalcloseButton{
+    font-size: 30px;
+}
+
+.aperturas{
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    overflow: hidden;
+    height: 125px;
+}
+
+.aperturas ion-title{
+    padding: 5px ;
+    text-align: center;
+}
+
+.aperturas ion-button{
+    border-radius: 20px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    height: 50px;
+    margin: 10px 20px ;
+    margin-bottom: 20px;
+    width: 40%;
+}
+
+// aperturas gris  ---------------------------------------
+
+.aperturas-gris{
+    background-color:lightgrey;
+}
+
+// aperturas blanco  ------------------------------------
+
+.aperturas-blanco{
+    background-color:white;
+}
+
+
+// ----------------------------------------------------
+
+.info{
+    margin-top: 152px!important;
+}
+
+.info-store{
+    // margin-top: 152px!important;
+}
+
+.button-blue{
+    --background: #6599CE;
+}
+
+.button-green{
+    --background: #64AA95;
+}
+
+
+.main-buttons{
+    border-radius: 10px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    background-color: lightgray;
+    color: black;
+    font-size: 1em;
+    margin: 20px auto;
+    width: 80%;
+    height: 60px;
+}
+
+.main-buttons-blue{
+    border-radius: 10px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    background-color: #6599CE;
+    color: #fff;
+    font-size: 1em;
+    margin: 20px auto;
+    width: 80%;
+    height: 60px;
+}
+
+.main-buttons ion-icon{
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    right:0;
+    position: absolute;
+}
+
+
+
+
+.titleButtonBlue{
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    // background-color:white;
+    margin:15px;
+    border-radius: 100%;
+    --background:#6599CE;
+}
+
+.titleButtonGreen{
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    // background-color:white;
+    margin:15px;
+    border-radius: 100%;
+    --background:#64AA95;
+    // object-position: center;
+    // width: 60px;
+    // height: 60px;
+    // padding: 0 0 -10px 0;
+    // font-size: 3em;
+}
+
+.buttonAdd{
+    border-radius: 100%;
+    // height: 70px;
+    width: auto;
+    // --ionicon-stroke-width: 16px;
+}
+
+.my-modal-class {
+    --background: #222;
+  }
+
+  .submit{
+      font-size: 1.5em;
+      height: 40px;
+      width: 100%;
+    //   margin:10px auto 10px auto;
+  }
+
+  .Validation{
+      color:rgba(255, 77, 0, 0.989);
+  }
+
+  .inputValue{
+      font-weight: bold;
+  }
+
+  .labelInput{
+      color: red;
+  }
+
+//   --- ACCORDION section  -----
+
+ion-content{
+    --background: var(--ion-color-light);
+}
+
+
+
+.accordion-list{
+    --ion-item-background: #fff;
+    .section, .section-active, .section-expired{
+    border-radius: 5px;
+
+
+   max-width: 95% !important;
+   margin-left: auto;
+   margin-right: auto;
+    // margin-bottom: 4px;
+    --min-height:58px;
+    }
+
+    ion-icon{
+        color: #000;
+    }
+}
+
+
+.section{
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    --ion-item-background:#64AA95;
+    --ion-item-color:#fff;
+}
+
+.section-expired{
+    // margin-top: -6px;
+    padding-top: -6px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);
+    --ion-item-background:lightgray;
+    --ion-item-color:gray;
+}
+
+.section-active{
+    --ion-item-background:#64AA95;
+    --ion-item-color: #fff;
+    font-weight: 600;
+
+    ion-icon{
+        color:#fff;
+    }
+}
+
+.detail-list{
+    padding:0px;
+    margin: 0px;
+    .detail, .detail-active{
+        margin-bottom:2px;
+    }
+}
+
+.detail{
+    padding-left:12px;
+    max-width: 97% !important;
+    --ion-item-background:#efeeee;
+    --ion-item-color: #000;
+}
+
+.detail-active{
+    --ion-item-background: #fad86b;
+    --ion-item-color:#fff;
+
+    ion-icon{
+        color: #fff;
+    }
+}
+
+.product-list{
+    padding:0px;
+    margin:0px;
+}
+
+.detail-item{
+    border-radius: 5px;
+    margin-top:2px;
+    margin-bottom:1px;
+}
+
+// ion-toggle{
+
+//     --handle-box-shadow: 0 3px 12px rgba(255, 98, 0, 0.6), 0 3px 1px rgba(50, 70, 255, 0.6);
+
+// }
+
+// ----  Main logo section  -----------------------------------------------
+
+// .login_logo {
+//     position:relative;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content:center ;
+//     height: 200px;
+//     top:-60px;
+
+//     img{
+//         border-radius: 50%;
+//         border: 2px solid #fff;
+//         position: absolute;
+//     }
+// }
+
+// .resetPwd-Link{
+//     margin-top: 15px;
+//     text-align: center!important;
+
+//     a{
+//     color: #6599CE;
+//     }
+// }
+
+// // Small phones
+//     @media only screen and (min-width: 200px) {
+//         .login_logo {      
+//             img{
+//                 margin-bottom: 20px;
+//                 width: 170px;
+//                 height: 170px;
+//             }
+//      }
+//     }
+
+//     // Large phones
+//     @media only screen and (min-width: 400px) {
+//         .login_logo {      
+//             img{
+//                 margin-bottom: 40px;
+//                 width: 190px;
+//                 height: 190px;
+//             }
+//      }
+//     }
+
+//     // Tablets
+//     @media only screen and (min-width: 768px) {
+//         .login_logo {      
+//             img{
+//                 margin-bottom: 180px;
+//                 width: 300px;
+//                 height: 300px;
+                
+//             }
+//      }
+
+//     }

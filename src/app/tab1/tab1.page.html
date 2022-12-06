@@ -1,0 +1,89 @@
+<ion-header [translucent]="true" [ngClass]="{'section-SendSMS-show' : SoyAdmin}">
+  <ion-toolbar>
+    <div class="mainToolBar">
+      <div id='header-logo'>
+        <div class="mainTitle">
+          <img class="logo_header" src="../../assets/logo_transparent.png">
+        </div>
+        <div class="version">version {{version}}</div>
+      </div>
+      <div id="header-core">
+        <ion-title>Aperturas {{coreName}}</ion-title>
+      </div>
+    </div>
+    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large" class="ion-text-center">BYTHEG</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+        <!-- fab placed to the bottom end -->
+        <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+          <ion-fab-button class="button-green" (click)="modalVisitors()">
+            <ion-icon name="people"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+
+        <!-- Bi-color -->
+        <div slot="fixed" class="wrap-input aperturas aperturas-blanco" >
+          <!-- <ion-title>Aperturas {{coreName}}</ion-title> -->
+          <div style="display:flex; justify-content:space-between; margin-top: 15px;">
+            <ion-button class="doorsButton-green"  (click)="sendOpening('open,peatonal')">Peatonal</ion-button>
+            <ion-button class="doorsButton-blue"  (click)="sendOpening('open,vehicular')">Vehicular</ion-button>
+          </div>
+        </div> 
+
+        <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
+
+    <div class="info">
+      <ion-card class="" *ngFor="let item of localInfo; let i = index;">
+        <ion-card-header>
+          <ion-card-title>{{item.title}}</ion-card-title>
+          <ion-card-subtitle>{{item.createdAt}}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content class="" (click)="openUrl(item.url)">
+            <img src="{{item.path}}{{item.image}}" href={{item.url}}/>
+              <p>
+                {{item.description}}
+              </p>
+        </ion-card-content>
+      </ion-card>
+
+  </div>
+   <!-- <ion-item id="formSendSMS" [ngClass]="{'section-SendSMS-hide' : !SoyAdmin,'section-SendSMS-show' : SoyAdmin}">-->
+   <div [hidden]="!SoyAdmin">
+      <ion-item class="wrap-input">
+        <ion-input class='input' type="text" name='msg' required placeholder="Message" value={{msg}} [(ngModel)]="msg" ></ion-input>
+
+      </ion-item>
+
+      <ion-item class="wrap-input">
+        <ion-input class='input' type="tel" name='sim' pattern="[0-9]*" maxlength='13'  required placeholder="Numero sim" value={{sim}} [(ngModel)]='sim'></ion-input>
+      </ion-item>
+
+
+      <ion-item class="wrap-input">
+        <ion-button class="main-buttons"  (click)="sendSMS()" fill="clear" >Send msg
+          <ion-icon name="send-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+
+   
+    </div>
+ 
+  <!-- </form> -->
+
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button class="logout" expand="full" (click)="logout()">Logout</ion-button>
+  </ion-toolbar>
+</ion-footer>

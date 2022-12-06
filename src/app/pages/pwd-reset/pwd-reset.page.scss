@@ -1,0 +1,77 @@
+.input-group {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20vh;
+    margin-bottom: 15px;
+}
+
+.version{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+
+
+.login_logo {
+    position:relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center ;
+    height: 200px;
+    top: 50px;
+
+    img{
+        border-radius: 50%;
+        border: 2px solid #fff;
+        position: absolute;
+    }
+}
+
+.resetPwd-Link{
+    margin-top: 15px;
+    text-align: center!important;
+
+    a{
+    color: #6599CE;
+    }
+}
+
+// Small phones
+    @media only screen and (min-width: 200px) {
+        .login_logo {      
+            img{
+                margin-bottom: 20px;
+                width: 170px;
+                height: 170px;
+            }
+     }
+    }
+
+    // Large phones
+    @media only screen and (min-width: 400px) {
+        .login_logo {      
+            img{
+                margin-bottom: 40px;
+                width: 190px;
+                height: 190px;
+            }
+     }
+    }
+
+    // Tablets
+     @media only screen and (min-width: 768px) {
+        .login_logo {      
+            margin-top: 60px;
+            img{
+                // margin-bottom: 100px;
+                width: 300px;
+                height: 300px;
+                
+            }
+     }
+    
+
+    }

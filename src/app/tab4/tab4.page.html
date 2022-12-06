@@ -1,0 +1,65 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="title">Visitas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+   <!-- fab placed to the bottom end -->
+   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button class="button-green" (click)="modalVisitors()">
+      <ion-icon name="people"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-list  *ngFor="let item of VisitorsList; let i = index;" class="accordion-list" lines="none" detail="false" no-padding>
+    
+    <ion-item tappable class='section' (click)="toggleSection(i)">
+       <ion-icon color="white" slot="end" name="chevron-forward-outline" *ngIf="!item.open"></ion-icon>
+       <ion-icon color="white" slot="end" name="chevron-down-outline" *ngIf="item.open"></ion-icon>
+       <ion-label class="ion-text-wrap">
+        Nombre: <strong>{{item.name}}</strong><b></b></ion-label>
+   </ion-item>
+
+   <form tappable *ngIf="item.open" class="detail">
+       <ion-item class='detail-item'>
+         <ion-label> Address: <b>{{item.address}}</b></ion-label>
+         <button ion-button clear (click)="update('direccion',item._id,item.name,item.address)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+       </ion-item>
+       
+       <ion-item class='detail-item'>
+         <ion-label> Sim:  <b>{{item.sim}}</b></ion-label>
+         <button ion-button clear (click)="update('telefono',item._id, item.name,item.sim)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+       </ion-item>
+       <ion-item class='detail-item'>
+         <ion-label> Email: <b>{{item.email}}</b></ion-label>
+         <button ion-button clear (click)="update('email',item._id,item.name,item.email)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+       </ion-item>
+       <ion-item class='detail-item'>
+         <ion-label class='labelInput'>Gender : <b>{{item.gender}}</b></ion-label>
+         <button ion-button clear (click)="updateGender(item._id, item.name,item.gender)">
+          <ion-icon name="create"></ion-icon>
+        </button>
+       </ion-item>
+
+        <!-- <ion-item  *ngIf="myVisitorsList?.length > 0" >
+         <ion-label class='labelInput' floating>Users:</ion-label>
+         <ion-select ok-text="Seleccionar" cancel-text="Cancelar" (ionChange)="setupCode(visitorId)" >
+           <ion-select-option *ngFor="let user of myVisitorsList; let i = index;" value={{user._id}}  >{{user.name}}</ion-select-option>
+         </ion-select>
+        </ion-item> -->
+   </form>
+ </ion-list>
+
+</ion-content>

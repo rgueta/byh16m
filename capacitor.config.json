@@ -1,0 +1,18 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "byh16m-v2",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_ionic_logo",
+      "iconColor": "#0000FF"
+    }
+  },
+  "cordova": {}
+  
+}

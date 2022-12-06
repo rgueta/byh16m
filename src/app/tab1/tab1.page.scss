@@ -1,0 +1,108 @@
+.mainToolBar{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.mainTitle{
+    font-size: 28px;
+}
+
+#header-logo{
+    margin-top: 5px;
+    text-align: center;
+    width: 30vh;
+}
+
+#header-core{
+    text-align: center;
+    vertical-align: middle;
+    width: 70vh;
+
+    ion-title{
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: auto;
+    }
+}
+
+.logo_header{
+    width: 16vw;
+    height: 7vh;
+}
+
+.version{
+    display: block;
+    font-size: 12px;
+}
+
+.doorsButton{
+    height: 80px;
+    // margin:20px;
+    --background:#64AA95;
+    --o-animation: 20px;
+    box-shadow: 0px 10px 15px rgba(182, 170, 170, 0.3);
+}
+
+.doorsButton-outline-green{
+    border: 2px solid #64AA95;
+    color: #64AA95;
+    font-size: 1.1rem;
+    height: 80px;
+    --o-animation: 20px;
+}
+
+.doorsButton-outline-blue{
+    border: 2px solid #6599CE;
+    color: #6599CE;
+    font-size: 1.1rem;
+    height: 80px;
+    --o-animation: 20px;
+}
+
+
+.doorsButton-green{
+    // border: 2px solid #64AA95;
+    color: white;
+    --background: #64AA95;
+    font-size: 1.1rem;
+    height: 80px;
+    --o-animation: 20px;
+    --border-radius: 15px;
+}
+
+.doorsButton-blue{
+    // border: 2px solid #6599CE;
+    color:white;
+    --background: #6599CE;
+    font-size: 1.1rem;
+    height: 80px;
+    --o-animation: 20px;
+    --border-radius: 15px;
+}
+.logout{
+    --background:#6599CE;
+}
+
+.section-SendSMS-hide{
+    ion-item{
+        display:none;
+    }
+    // --ion-div-color:green;
+    // #formSendSMS{
+    //     display: none;
+    // }
+}
+
+.section-SendSMS-show {
+
+    ion-header{
+        background-color: #64AA95;
+    }
+    // --ion-div-color: red;
+    // #formSendSMS{
+    //     display: inline;
+    // }
+}
+

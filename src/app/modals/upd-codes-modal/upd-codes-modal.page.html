@@ -1,0 +1,70 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>Agregar codigo</ion-title>
+    <ion-buttons class="modalcloseButton" slot="end">
+      <ion-icon (click)='closeModal()' name='close-circle' >Cerrar</ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+      
+
+
+  <ion-item class="wrap-input">
+    <ion-input class='newCode' type="text" name='code' required placeholder="codigo" value={{code}} [(ngModel)]="code" ></ion-input>
+    <ion-button class="custom-fab-code" shape="round"  (click)="newCode()">
+      <ion-icon name="refresh-outline" size="large"></ion-icon>
+    </ion-button>
+  </ion-item>
+
+<form [formGroup] = "UpdCodeForm" >
+      <ion-item >
+          <ion-label class='labelInput' floating>Visitante:</ion-label>
+          <ion-select [(ngModel)]="selectdVisitor" ok-text="Seleccionar" cancel-text="Cancelar" 
+            (ionChange)="setupCode($event)" formControlName="visitor" >
+            <ion-select-option *ngFor="let item of myVisitors" 
+            [value] = "item">{{item.name}}</ion-select-option>
+          </ion-select>
+      </ion-item>
+
+      <ion-item class="wrap-input">
+      <ion-label class='labelInput' floating>Telefono : </ion-label>
+      <!--pattern="[+0-9] ([0-9]){3} [0-9]{3}-[0-9]{4}*" maxlength='16'-->
+        <ion-input class='phoneNumber' type="tel"  required value="visitorSim" 
+          [ngModel]="visitorSim" disabled formControlName="visitorSim" ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class='labelInput'>Activo desde : </ion-label>
+        <ion-datetime #myInitial display-format="D MMM YYYY h:mm a" min="2021" max="2040"
+         value={{initial}} (ionChange)="onChangeInitial(myInitial.value)"></ion-datetime>
+      </ion-item>
+
+      <ion-item >
+        <ion-label class='labelInput'>Expira hasta : </ion-label>
+        <ion-datetime #myExpiry display-format="D MMM YYYY h:mm a" min="2021" max="2040"
+         value={{expiry}} (ionChange)="onChangeExpiry(myExpiry.value)"></ion-datetime>
+      </ion-item>
+
+      <ion-item class="wrap-input">
+        <ion-label class='labelInput' floating>Expira en horas: </ion-label>
+        <ion-input class='input' type="number" name='diff' disabled value={{diff}}></ion-input>
+      </ion-item>
+
+      <ion-item  class="wrap-input">
+      <ion-label class="labelInput">Comentario: </ion-label>
+        <ion-textarea #mycomment class='input' 
+        (ionChange)="onChangeComment(mycomment.value)" 
+        name="comment" value={{comment}}></ion-textarea>
+      </ion-item>
+
+      <ion-item class="wrap-input">
+        <ion-button type="submit" class="submit titleButtonBlue" 
+        [disabled] = "UpdCodeForm.invalid" expand="full"  
+        (click)="onSubmitTemplate()" >Enviar</ion-button>
+      </ion-item>
+
+  </form>
+</ion-content>

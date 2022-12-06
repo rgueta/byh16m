@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="title"> Information</ion-title>
+    <ion-buttons class="modalcloseButton" slot="end">
+      <ion-icon (click)='closeModal()' name='close-circle' >Cerrar</ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content padding>
+  <form [formGroup] = "RegisterForm" >
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+
+        <ion-item>
+          <ion-label class='labelInput' floating>Country:</ion-label>
+          <ion-select [(ngModel)]="country" ok-text="Seleccionar" cancel-text="Cancelar" 
+              (ionChange)="countrySelection(country)" formControlName="frmCtrl_country" >
+            <ion-select-option *ngFor="let item of countriesList" value = {{item.shortName}} >{{item.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label class='labelInput' floating>State:</ion-label>
+          <ion-select [(ngModel)]="state" ok-text="Seleccionar" cancel-text="Cancelar" 
+              (ionChange)="stateSelection(state)" formControlName="frmCtrl_state" >
+            <ion-select-option *ngFor="let item of statesList" value={{item.shortName}}>{{item.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label class='labelInput' floating>City:</ion-label>
+          <ion-select  multiple [(ngModel)]="city" ok-text="Seleccionar" cancel-text="Cancelar" 
+              (ionChange)="citySelection(city)" formControlName="frmCtrl_city" >
+            <ion-select-option *ngFor="let item of citiesList" value={{item.shortName}}>{{item.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label class='labelInput' floating>Division:</ion-label>
+          <ion-select [(ngModel)]="division" ok-text="Seleccionar" cancel-text="Cancelar" 
+              (ionChange)="divisionSelection(division);" formControlName="frmCtrl_division" >
+            <ion-select-option *ngFor="let item of divisionsList" 
+                value = {{item.id}}>{{item.name}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+
+    <ion-item>
+      <ion-label class='labelInput' floating>Cpu:</ion-label>
+      <ion-select [(ngModel)]="cpu" ok-text="Seleccionar" cancel-text="Cancelar" 
+          (ionChange)="cpuSelection(cpu)" formControlName="frmCtrl_cpu" >
+        <ion-select-option *ngFor="let item of cpusList" value={{item.shortName}}>{{item.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label class='labelInput' floating>Core:</ion-label>
+      <ion-select [(ngModel)]="core" ok-text="Seleccionar" cancel-text="Cancelar" 
+      [selectedText]="code"
+          (ionChange)="coreSelection(core)" formControlName="frmCtrl_core" >
+        <ion-select-option *ngFor="let item of coresList" value={{item.shortName}}>{{item.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- <ion-item>
+      <ion-button class="titleBlue" fill="clear" [disabled]="RegisterForm.invalid" 
+      [(ngModel)]="showMoreControls" [ngModelOptions]="{standalone: true}" ngDefaultControl
+      (click)="getImage()">Get Image</ion-button>
+    </ion-item> -->
+
+  
+      <ion-button id="frmCtrl_image" class="tamamataMargen titleBlue" expand="block"
+      [disabled]="RegisterForm.invalid" (click)="getImage()">Get Image</ion-button>
+
+    </form>  
+
+    <ion-item *ngIf="imageFileName">
+      <ion-input type="text" class="ion-text-wrap" [ngModel]="localTitle"
+      placeholder="Title" ></ion-input>
+    </ion-item>
+  
+    
+      <div *ngIf="imageFileName">
+        <ion-item>
+          <ion-thumbnail  class="auxuwiMargen" >
+            <ion-img  class="auxuwiMargin" [src]="imageFileName" alt="Ionic File"></ion-img>
+          </ion-thumbnail>
+        </ion-item>
+
+        
+        <ion-item class="auxuwiMargen">
+          <ion-textarea rows="4"  placeholder="Url" value={{localUrl}}>
+            <b>URL:</b></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+          <ion-textarea rows="4" placeholder="Description"
+            value={{localDescription}} [(ngModel)]="localDescription"><b>Description:</b></ion-textarea>
+        </ion-item>
+
+        <ion-button class="tamamataMargen titleGreen"  expand="block" 
+        (click)="uploadFile()">Upload</ion-button>
+
+        <ion-button class="tamamataMargen" color="warning"  expand="block" 
+        (click)="cancelUploadFile()">Cancel</ion-button>
+      </div>
+
+    <ion-card [ngClass]="!item.disable ?  'CardInfo' : 'HiddenCardInfo'" *ngFor="let item of localInfo; let i = index;">
+      <ion-card-header>
+        <div class="VisibleCtrl">
+          <ion-card-subtitle *ngIf="item.disable">Mostrar</ion-card-subtitle>
+          <ion-card-subtitle *ngIf="!item.disable">Ocultar</ion-card-subtitle>
+          <ion-checkbox (ionChange)="StatusInfo($event,item.disable,item._id)"></ion-checkbox>
+        </div>
+        <ion-card-title>{{item.title}}</ion-card-title>
+        <ion-card-subtitle>{{item.createdAt}}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content class="">
+          <img style="height: 100px;" src="{{item.path}}{{item.image}}"/>
+            <p>
+              {{item.description}}
+            </p>
+      </ion-card-content>
+    </ion-card>
+    
+</ion-content>
