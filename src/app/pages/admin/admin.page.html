@@ -28,13 +28,25 @@
         <ion-item (click)="modalUpdInfo()">Add Information</ion-item>
         <ion-item-divider></ion-item-divider>
         <ion-item class="wrap-input">
-          <ion-toggle id="twilioToggle" class="ion-toggle-red" labelPlacement="start" [ngModel]="localenable" [checked]="false"  
-          [ngModelOptions]="{standalone: true}" (ionChange)="TwilioToggleEven($event)">Use twilio :</ion-toggle>
-      </ion-item>
-      <ion-item class="wrap-input">
-        <ion-toggle id="visitorEmail" class="ion-toggle-red" labelPlacement="start" [ngModel]="emailToVisitors" [checked]="emailToVisitors"  
-        [ngModelOptions]="{standalone: true}" (ionChange)="EmailVisitorToggleEven($event)">Send email to visitor :</ion-toggle>
-    </ion-item>
+          <ion-toggle id="twilioToggle" class="ion-toggle-red" labelPlacement="start" 
+            [ngModel]="localenable" [checked]="false"  
+            [ngModelOptions]="{standalone: true}" (ionChange)="TwilioToggleEven($event)">
+            Use twilio :
+          </ion-toggle>
+        </ion-item>
+        <ion-item class="wrap-input">
+          <ion-toggle id="visitorEmail" class="ion-toggle-red" labelPlacement="start" 
+            [ngModel]="emailToVisitor" [checked]="emailToVisitor"  
+            [ngModelOptions]="{standalone: true}" (ionChange)="EmailVisitorToggleEven($event)">
+            Send email to visitor :
+          </ion-toggle>
+        </ion-item>
+        <ion-item class="wrap-input">
+          <ion-toggle id="visitorEmail" class="ion-toggle-red" labelPlacement="start" 
+            [ngModel]="emailToVisitor" [checked]="emailToVisitor"  
+            [ngModelOptions]="{standalone: true}" (ionChange)="EmailCoreToggleEven($event)">
+            Send email to Core :</ion-toggle>
+        </ion-item>
       </ion-list>
     </ion-content>
   </ion-menu>

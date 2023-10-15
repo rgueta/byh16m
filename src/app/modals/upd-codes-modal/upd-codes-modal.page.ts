@@ -35,6 +35,7 @@ export class UpdCodesModalPage implements OnInit {
   userId = {};
   StrPlatform = '';
   comment = '';
+  Localtoast: any;
 
   public code_expiry:any;
 
@@ -206,7 +207,8 @@ async setupCode(event:any){
   async onSubmitTemplate(){
     var dateInit = '';
     var dateFinal = '';
-    // const sim =  await this.storage.get('my-core-sim')
+    
+
     const coreSim =  await localStorage.getItem('my-core-sim')
     const userSim =  await localStorage.getItem('my-sim')
     const coreName = await localStorage.getItem('core-name')
@@ -232,21 +234,34 @@ async setupCode(event:any){
 
         await console.log('response from aPI --> ', respId);
 
-         // Send code to core
         const pckgToCore = await 'codigo,' + this.code +','+ Utils.convDate(new Date(this.expiry))
         + ',' + this.userId + ',' + this.visitorSim + ',' + respId
 
         await console.log('send to core module --> ', pckgToCore);
 
       // Send code to Core
-      await this.sendSMS(coreSim, pckgToCore);
+      if(localStorage.getItem('emailToCore') === 'true'){
+        await this.sendSMS(coreSim, pckgToCore);
+      }else{
+        this.Localtoast = await this.toast.create({
+          message : 'Not sent to Core, check admin setting',
+          duration: 3000
+        });
+  
+          this.Localtoast.present();
+      }
 
       //  send code to visitor
       if(localStorage.getItem('emailToVisitor') === 'true'){
-        console.log('Se envio el SMS');
-      //  await this.sendSMS(this.visitorSim,'codigo ' + coreName + ': ' + this.code + '  Expira en ' + expire + ' Hrs.' )
+        await console.log(`send to Visitor --> ${this.visitorSim}, code: ${this.code}, Expira en ${expire} Hrs.`);
+        await this.sendSMS(this.visitorSim,'codigo ' + coreName + ': ' + this.code + '  Expira en ' + expire + ' Hrs.' )
       }else{
-        console.log('Modo debugging no se envio el SMS');
+        this.Localtoast = await this.toast.create({
+          message : 'Not sent to Visitor, check admin setting',
+          duration: 3000
+        });
+  
+          this.Localtoast.present();
       }
 
        this.closeModal();
@@ -277,9 +292,9 @@ async setupCode(event:any){
     try{
 
       if(use_twilio == 'false'){
-        if (environment.app.debugging_send_sms){
+        // if (environment.app.debugging_send_sms){
           await this.sms.send(sim,text);
-        }
+        // }
       }else{
         this.api.postData('api/twilio/open/' + this.userId + '/' + text + '/' + sim,'')
       }

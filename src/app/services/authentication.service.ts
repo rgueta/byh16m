@@ -28,6 +28,7 @@ const CODE_EXPIRY = 'code_expiry';
 const TOKEN_PX = 'token_px';
 const LOCKED = 'locked';
 const EMAIL_TO_VISITOR = 'emailToVisitor';
+const EMAIL_TO_CORE = 'emailToCore';
 
 
 
@@ -98,8 +99,8 @@ export class AuthenticationService {
         localStorage.setItem(TOKEN_EXP,tokens.expDate);
         localStorage.setItem(LOCKED,tokens.locked);
         localStorage.setItem(EMAIL_TO_VISITOR, 'true');
+        localStorage.setItem(EMAIL_TO_CORE, 'true');
         
-        console.log('tokens -->', tokens);
         const storeAccess = localStorage.setItem(TOKEN_KEY,tokens.accessToken);
         const storeRefresh = localStorage.setItem(REFRESH_TOKEN_KEY,tokens.refreshToken);
         return from(Promise.all([storeAccess, storeRefresh]));

@@ -8,7 +8,7 @@ export const environment = {
     version: "3.0.0",
     Description: "Main tab data information feed",
     debugging: true,
-    debugging_send_sms: true
+    debugging_send_sms: false
   },
   cloud : {
     server_url : "http://100.24.58.74/"

@@ -10,6 +10,7 @@ import { InfoPage } from "../../modals/info/info.page";
 
 const TWILIO = 'twilio';
 const EMAIL_TO_VISITOR = 'emailToVisitor'
+const EMAIL_TO_CORE = 'emailToCore'
 
 @Component({
   selector: 'app-admin',
@@ -26,7 +27,7 @@ export class AdminPage implements OnInit {
   public routineOpen=false;
   localenable:boolean=true;
   visitorId:string='';
-  emailToVisitors: boolean = true;
+  emailToVisitor: boolean = true;
 
 
   constructor(
@@ -42,9 +43,9 @@ export class AdminPage implements OnInit {
      }
 
   async ngOnInit() {
-    this.emailToVisitors = await (localStorage.getItem('emailToVisitor') === 'true');
+    this.emailToVisitor = await (localStorage.getItem('emailToVisitor') === 'true');
 
-    console.log('emailToVisitors value --> ', this.emailToVisitors);
+    console.log('emailToVisitor value --> ', this.emailToVisitor);
     this.getCores();
   }
 
@@ -367,6 +368,13 @@ export class AdminPage implements OnInit {
     }
   }
 
+  async EmailCoreToggleEven($event:any){
+    if($event.detail.checked){
+      await localStorage.setItem(EMAIL_TO_CORE,'true');
+    }else{
+      await localStorage.setItem(EMAIL_TO_CORE,'false');
+    }
+  }
 
   async modalUpdCity(){
     this.toastEvent('Process new city ');

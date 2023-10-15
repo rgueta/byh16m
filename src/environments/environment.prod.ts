@@ -4,7 +4,7 @@ export const environment = {
     version: "3.0.0",
     Description: "Main tab data information feed",
     debugging: true,
-    debugging_send_sms: true
+    debugging_send_sms: false
   },
   cloud : {
     // status 1 = Active; 2 = Inactive, 3 = New register
