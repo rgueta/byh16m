@@ -226,9 +226,7 @@ export class AdminPage implements OnInit {
       }
     }
     
-    // const sim =  await this.localStorage.getItem('my-core-sim');
     const sim =  await localStorage.getItem('my-core-sim');
-
 
     let alert = await this.alertCtrl.create({
       header: 'Confirm',
@@ -272,9 +270,101 @@ export class AdminPage implements OnInit {
     });
 
     await alert.present();
+  }
 
+  async setOpenGate(){
+    var options:SmsOptions={
+      replaceLineBreaks:false,
+      android:{
+        intent:''
+      }
+    }
+    const sim =  await localStorage.getItem('my-core-sim');
+
+    let alert = await this.alertCtrl.create({
+      header: 'Confirm',
+      message: 'Open gate with code?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'icon-color',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Yes',
+          cssClass: 'icon-color',
+          handler: async data => {
+            try{
+              await this.sms.send(sim,'setOpenCode,gate',options);
+                const toast = await this.toast.create({
+                  message : 'msg sent to ' + sim,
+                  duration: 3000
+                });
+                  toast.present();
+            }
+            catch(e){
+              const toast = await this.toast.create({
+                message : 'Text was not sent !.. error: ' + e,
+                duration: 3000
+              });
+                toast.present();
+              }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async setOpenMagnet(){
+    var options:SmsOptions={
+      replaceLineBreaks:false,
+      android:{
+        intent:''
+      }
+    }
+    const sim =  await localStorage.getItem('my-core-sim');
+    let alert = await this.alertCtrl.create({
+      header: 'Confirm',
+      message: 'Open magnet with code?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'icon-color',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Yes',
+          cssClass: 'icon-color',
+          handler: async data => {
+            try{
+              await this.sms.send(sim,'setOpenCode,magnet',options);
+                const toast = await this.toast.create({
+                  message : 'msg sent to ' + sim,
+                  duration: 3000
+                });
+                  toast.present();
+            }
+            catch(e){
+              const toast = await this.toast.create({
+                message : 'Text was not sent !.. error: ' + e,
+                duration: 3000
+              });
+                toast.present();
+              }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
 
   }
+
 
   async setupCode(visitorId:string){}
 
