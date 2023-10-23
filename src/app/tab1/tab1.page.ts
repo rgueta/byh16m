@@ -185,7 +185,7 @@ this.version = environment.app.version;
   }, 2000);
 }
 
-toggleButtons(icon:any){
+toggleButtons(){
   this.visible = !this.visible;
 }
 

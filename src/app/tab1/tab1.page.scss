@@ -61,10 +61,12 @@
 .doorsButton-toggle{
     display: flex;
     align-items: center;
-    justify-content: center;
+    font-size: 0.7em;
+    justify-content:center;
     width: 100%;
     background: transperent;
-    padding-bottom: 5px;
+    padding-top: -10px;
+    padding-bottom: 18px;
 }
 
 .doorsButton{

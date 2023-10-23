@@ -16,8 +16,12 @@
           </ion-button>
         </ion-buttons>
       </div>
-        <ion-icon class="doorsButton-toggle" [name]="visible ? 'chevron-up-outline' : 'chevron-down-outline'" 
-         (click)="toggleButtons(this)"></ion-icon>
+      <div class="doorsButton-toggle">
+        <ion-label (click)="toggleButtons()">{{visible ? 'Ocultar' : 'Visualizar'}}</ion-label>
+        <ion-icon  [name]="visible ? 'chevron-up-outline' : 'chevron-down-outline'" 
+         (click)="toggleButtons()" style="padding-left: 5px;"></ion-icon>
+         
+      </div>
   </ion-toolbar>
 </ion-header>
 
