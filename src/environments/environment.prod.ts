@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   app : {
-    version: "3.0.0",
+    version: "1.0.0",
     Description: "Main tab data information feed",
     debugging: true,
     debugging_send_sms: false

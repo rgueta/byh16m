@@ -40,6 +40,7 @@ export class Tab1Page implements OnInit {
   twilio_client : any;
   userId : string;
   id : number = 0;
+  public visible : boolean = true;
   
   REST_API_SERVER = environment.cloud.server_url;
 
@@ -182,6 +183,10 @@ this.version = environment.app.version;
   setTimeout(() => {
     event.target.complete();
   }, 2000);
+}
+
+toggleButtons(icon:any){
+  this.visible = !this.visible;
 }
 
 async presentToast(opts: ToastOptions) {

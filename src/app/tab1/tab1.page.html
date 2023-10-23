@@ -1,5 +1,5 @@
-<ion-header [translucent]="true" [ngClass]="{'section-SendSMS-show' : SoyAdmin}">
-  <ion-toolbar class="mainToolBar">
+<ion-header [translucent]="true">
+    <ion-toolbar slot="start">
       <div class='column left'>
         <div class="mainTitle">
           <img class="logo_header" src="../../assets/logo_transparent.png">
@@ -14,9 +14,10 @@
           <ion-button id="popover-button">
             <ion-icon  name="ellipsis-vertical-outline"></ion-icon>
           </ion-button>
-      </ion-buttons>
+        </ion-buttons>
       </div>
-    
+        <ion-icon class="doorsButton-toggle" [name]="visible ? 'chevron-up-outline' : 'chevron-down-outline'" 
+         (click)="toggleButtons(this)"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
@@ -61,9 +62,10 @@
 <!-- --------------------------------------------  -->
 
     <!-- Bi-color -->
-    <div slot="fixed" class="aperturas" >
+    <div slot="fixed" class="aperturas" *ngIf="visible">
         <ion-button class="doorsButton-green"  (click)="sendOpening('open,peatonal')">Peatonal</ion-button>
         <ion-button class="doorsButton-blue"  (click)="sendOpening('open,vehicular')">Vehicular</ion-button>
+        
     </div> 
 
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
