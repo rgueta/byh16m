@@ -365,6 +365,53 @@ export class AdminPage implements OnInit {
 
   }
 
+  async setKeypad(keypad:string){
+    var options:SmsOptions={
+      replaceLineBreaks:false,
+      android:{
+        intent:''
+      }
+    }
+    const sim =  await localStorage.getItem('my-core-sim');
+    let alert = await this.alertCtrl.create({
+      header: 'Confirm',
+      message: 'Set keypad ' + keypad + ' ?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'icon-color',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Yes',
+          cssClass: 'icon-color',
+          handler: async data => {
+            try{
+              await this.sms.send(sim,'setKeypad,' + keypad,options);
+                const toast = await this.toast.create({
+                  message : 'msg sent to ' + sim,
+                  duration: 3000
+                });
+                  toast.present();
+            }
+            catch(e){
+              const toast = await this.toast.create({
+                message : 'Text was not sent !.. error: ' + e,
+                duration: 3000
+              });
+                toast.present();
+              }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+  }
+
 
   async setupCode(visitorId:string){}
 
