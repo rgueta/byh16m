@@ -28,7 +28,9 @@ export class AdminPage implements OnInit {
   localenable:boolean=true;
   visitorId:string='';
   emailToVisitor: boolean = true;
-
+  public simSectionOpen = false;
+  sim:string;
+  public core_sim:string;
 
   constructor(
         public animationController : AnimationController,
@@ -38,11 +40,11 @@ export class AdminPage implements OnInit {
         private toast: ToastController,
         public alertCtrl: AlertController,
         // public routerOutlet :IonRouterOutlet 
-    ) {
-      
-     }
+    ) {}
 
   async ngOnInit() {
+    this.core_sim = await localStorage.getItem('my-core-sim');
+    this.userId = await localStorage.getItem('my-userId');
     this.emailToVisitor = await (localStorage.getItem('emailToVisitor') === 'true');
 
     console.log('emailToVisitor value --> ', this.emailToVisitor);
@@ -50,14 +52,12 @@ export class AdminPage implements OnInit {
   }
 
   async getCores(){
-    this.userId = await localStorage.getItem('my-userId');
     await this.api.getData('api/cores/admin/'  + this.userId).subscribe(async result =>{
       this.CoresList = await result;
       this.CoresList[0].open = true;
     },error => {
-      console.log('Error response --> ', error)
+      console.log('Error response --> ', JSON.stringify(error))
     });
-    
   }
 
   async doRefresh(event:any){
@@ -119,303 +119,37 @@ export class AdminPage implements OnInit {
     return await modal.present()
   }
 
-
-
-  async getSIMstatus(){
-     // Send a text message using default options
-    var options:SmsOptions={
-      replaceLineBreaks:false,
-      android:{
-        intent:''
-      }
-    }
-
-    // const sim =  await this.storage.get('my-core-sim');
-    const sim =  await localStorage.getItem('my-core-sim');
-    let alert = await this.alertCtrl.create({
-      header: 'Confirm',
-      message: 'Request module status?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'icon-color',
-          handler: () => {
-          }
-        },
-        {
-          text: 'Yes',
-          cssClass: 'icon-color',
-          handler: async data => {
-            try{
-
-              await this.sms.send(sim,'status,sim',options);
-
-              // alert('Text was sent !')
-                const toast = await this.toast.create({
-                  message : 'msg sent to ' + sim,
-                  duration: 3000
-                });
-        
-                  toast.present();
-          }catch(e){
-            const toast = await this.toast.create({
-              message : 'Text was not sent !.. error: ' + e,
-              duration: 3000
-            });
-              toast.present();
-          }
-
-          }
-        }
-      ]
-    });
-
-    await alert.present();
+  async getSIMstatus(event:any,item:any){
+    this.alertCtrlEvent(event, item,'Confirm', 'Request module status?',
+    'getSIMstatus', 'Yes', 'Cancel');
   }
 
-  async ModuleRST(){
-    // Send a text message using default options
-
-   var options:SmsOptions={
-     replaceLineBreaks:false,
-     android:{ intent:'' }
-   }
-   
-   const sim =  await localStorage.getItem('my-core-sim');
-   let alert = await this.alertCtrl.create({
-    header: 'Confirm',
-    message: 'Reset module ?',
-    buttons: [
-      {
-        text: 'Cancel',
-        role: 'cancel',
-        cssClass: 'icon-color',
-      },
-      {
-        text: 'Yes',
-        cssClass: 'icon-color',
-        handler: async data => {
-          try{
-            await this.sms.send(sim,'rst,sim',options);
-            const toast = await this.toast.create({
-              message : 'msg sent to ' + sim,
-              duration: 3000
-            });
-            toast.present();
-
-          }catch(e){
-            const toast = await this.toast.create({
-              message : 'Text was not sent !.. error: ' + e,
-              duration: 3000
-            });
-              toast.present();
-          }
-        }
-      }
-    ]
-  });
-  await alert.present();
+  async ModuleRST(event:any, item:any){
+   this.alertCtrlEvent(event,item,'Configm','Reset module ?','ModuleRST','Yes','Cancel')
  }
 
-  async getCoreCodes(){
-    var options:SmsOptions={
-      replaceLineBreaks:false,
-      android:{
-        intent:''
-      }
-    }
-    
-    const sim =  await localStorage.getItem('my-core-sim');
-
-    let alert = await this.alertCtrl.create({
-      header: 'Confirm',
-      message: 'Request codes from module?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'icon-color',
-          handler: () => {
-          }
-        },
-        {
-          text: 'Yes',
-          cssClass: 'icon-color',
-          handler: async data => {
-            try{
-              await this.sms.send(sim,'active_codes,sim',options);
-        
-              // alert('Text was sent !')
-                const toast = await this.toast.create({
-                  message : 'msg sent to ' + sim,
-                  duration: 3000
-                });
-        
-                  toast.present();
-                
-            }
-            catch(e){
-              // alert('Text was not sent !')
-              const toast = await this.toast.create({
-                message : 'Text was not sent !.. error: ' + e,
-                duration: 3000
-              });
-        
-                toast.present();
-              }
-          }
-        }
-      ]
-    });
-
-    await alert.present();
+  async getCoreCodes(event:any,item:any){
+    this.alertCtrlEvent(event,item,'Confirm','Request codes from module?',
+    'getCoreCodes','Yes','Cancel');
   }
 
-  async setOpenGate(){
-    var options:SmsOptions={
-      replaceLineBreaks:false,
-      android:{
-        intent:''
-      }
-    }
-    const sim =  await localStorage.getItem('my-core-sim');
-
-    let alert = await this.alertCtrl.create({
-      header: 'Confirm',
-      message: 'Open gate with code?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'icon-color',
-          handler: () => {
-          }
-        },
-        {
-          text: 'Yes',
-          cssClass: 'icon-color',
-          handler: async data => {
-            try{
-              await this.sms.send(sim,'setOpenCode,gate',options);
-                const toast = await this.toast.create({
-                  message : 'msg sent to ' + sim,
-                  duration: 3000
-                });
-                  toast.present();
-            }
-            catch(e){
-              const toast = await this.toast.create({
-                message : 'Text was not sent !.. error: ' + e,
-                duration: 3000
-              });
-                toast.present();
-              }
-          }
-        }
-      ]
-    });
-    await alert.present();
+  async setOpenGate(event:any,item:any){
+    this.alertCtrlEvent(event,item,'Confirm','Open gate with code?','setOpenGate','Yes','Cancel')
   }
 
-  async setOpenMagnet(){
-    var options:SmsOptions={
-      replaceLineBreaks:false,
-      android:{
-        intent:''
-      }
-    }
-    const sim =  await localStorage.getItem('my-core-sim');
-    let alert = await this.alertCtrl.create({
-      header: 'Confirm',
-      message: 'Open magnet with code?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'icon-color',
-          handler: () => {
-          }
-        },
-        {
-          text: 'Yes',
-          cssClass: 'icon-color',
-          handler: async data => {
-            try{
-              await this.sms.send(sim,'setOpenCode,magnet',options);
-                const toast = await this.toast.create({
-                  message : 'msg sent to ' + sim,
-                  duration: 3000
-                });
-                  toast.present();
-            }
-            catch(e){
-              const toast = await this.toast.create({
-                message : 'Text was not sent !.. error: ' + e,
-                duration: 3000
-              });
-                toast.present();
-              }
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-
+  async setOpenMagnet(event:any,item:any){
+    this.alertCtrlEvent(event,item,'Confirm','Open magnet with code?','setOpenMagnet','Yes','Cancel');
   }
 
-  async setKeypad(keypad:string){
-    var options:SmsOptions={
-      replaceLineBreaks:false,
-      android:{
-        intent:''
-      }
-    }
-    const sim =  await localStorage.getItem('my-core-sim');
-    let alert = await this.alertCtrl.create({
-      header: 'Confirm',
-      message: 'Set keypad ' + keypad + ' ?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'icon-color',
-          handler: () => {
-          }
-        },
-        {
-          text: 'Yes',
-          cssClass: 'icon-color',
-          handler: async data => {
-            try{
-              await this.sms.send(sim,'setKeypad,' + keypad,options);
-                const toast = await this.toast.create({
-                  message : 'msg sent to ' + sim,
-                  duration: 3000
-                });
-                  toast.present();
-            }
-            catch(e){
-              const toast = await this.toast.create({
-                message : 'Text was not sent !.. error: ' + e,
-                duration: 3000
-              });
-                toast.present();
-              }
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-
+  async setKeypad(event:any,item:any,keypad:string){
+    item['keyPadName'] = keypad;
+    this.alertCtrlEvent(event,item,'Confirm','Set keypad ' + keypad + ' ?','setKeypad','Yes','Cancel');
   }
-
+  async simChange(event:any,item:any){
+   this.alertCtrlEvent(event,item,'Confirm','New sim: '+ this.sim + ' ?', 'simChange', 'Yes','Cancel');
+ }
 
   async setupCode(visitorId:string){}
-
-      // ---- Animation controller  ----------------------------------
 
   async collectUsers(coreId:string,core:string) {
     const modal = await this.modalController.create({
@@ -425,65 +159,20 @@ export class AdminPage implements OnInit {
     });
 
     modal.onDidDismiss()
-    // .then(async (data) =>{
-    //   if(data.data) {
-    //     this.getCores();
-    //   }
-    // });
-  
     modal.present();
   }
 
-  async chgStatusCore(event:any,coreStatus:any, id:string, name:string) {
+  async chgStatusCore(event:any,item:any) {
     let element = <HTMLInputElement> document.getElementById("disableToggle");
     let titleMsg = 'Disable ';
-    console.log('event -->' ,event)
-    console.log('coreStatus --> ', coreStatus)
 
     if(event.target.checked)
     {
       titleMsg = 'Enable ';
     }
-    if(event.target.checked != coreStatus){
-      let alert = await this.alertCtrl.create({
-        header: 'Confirm',
-        message: titleMsg + '[ ' + name + ' ] core ?',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            cssClass: 'icon-color',
-            handler: () => {
-              element.checked = !event.target.checked;
-            }
-          },
-          {
-            text: 'Ok',
-            cssClass: 'icon-color',
-            handler: async data => {
-              if(event.target.checked){
-                await this.api.postData('api/cores/enable/',{'coreId' : id}).then(async (onResolve) =>{
-                  await this.getCores();
-                },
-                (onReject) =>{
-                  console.log('Can not enable core, ', onReject);
-                });
-              }else{
-                console.log('api/cores/disable/',{'coreId': id})
-                await this.api.postData('api/cores/disable/',{'coreId' : id}).then(async (onResolve) =>{
-                  await this.getCores();
-                },
-                (onReject) =>{
-                  console.log('Can not disable core, ', onReject);
-                });
-              }
-                
-            }
-          }
-        ]
-      });
-
-    await alert.present();
+    if(event.target.checked != item.enable){
+      this.alertCtrlEvent(event,item,'Confirm', titleMsg + ' ' + item.name + ' ?',
+       'chgStatusCore', 'Yes', 'Cancel')
     }
   }
 
@@ -538,21 +227,160 @@ export class AdminPage implements OnInit {
 
 toggleSectionRoutines(){
   this.routineOpen = !this.routineOpen
-  
 }
-
 
 // end region
 
-    // -------   toast control alerts    ---------------------
+// region sim Section Routine -------------------------------
+toggleSectionSim(){
+  this.simSectionOpen = !this.simSectionOpen
+}
+
+// endregion   --------------------------------------------
+
+//region -------   toast,alert controlers region   ---------------------
     toastEvent(msg:string){
       this.myToast = this.toast.create({
         message:msg,
-        duration:2000
+        duration:3000
       }).then((toastData) =>{
         console.log(toastData);
         toastData.present();
       });
     }
 
+  async alertCtrlEvent(event:any,item:any,titleMsg:string,Message:string,option:string, txtConfirm:string, txtCancel:string){
+    let element = <HTMLInputElement> document.getElementById("disableToggle");
+    var options:SmsOptions={
+      replaceLineBreaks:false,
+      android:{
+        intent:''
+      }
+    } 
+
+    let alert = await this.alertCtrl.create({
+      header: titleMsg,
+      message: Message,
+      buttons: [
+        {
+          text: txtCancel,
+          role: 'cancel',
+          cssClass: 'icon-color',
+          handler: () => {
+            switch(option){
+              case 'chgStatusCore':
+                element.checked = !event.target.checked;
+                break;
+              default:
+                break;
+            }
+          }
+        },
+        {
+          text: txtConfirm,
+          cssClass: 'icon-color',
+          handler: async data => {
+            switch(option){
+              case 'chgStatusCore':
+                if(event.target.checked){
+                  await this.api.postData('api/cores/enable/' + this.userId,{'coreId' : item._id}).then(async (onResolve) =>{
+                    await this.getCores();
+                  },
+                  (onReject) =>{
+                    console.log('Can not enable core, ', JSON.stringify(onReject));
+                  });
+                }else{
+                  console.log('api/cores/disable/',{'coreId': item._id})
+                  await this.api.postData('api/cores/disable/' + this.userId,{'coreId' : item._id}).then(async (onResolve) =>{
+                    await this.getCores();
+                  },
+                  (onReject) =>{
+                    console.log('Cannot disable core, error: ', JSON.stringify(onReject));
+                  });
+                }
+              break;
+              case 'simChange':
+                try{
+                  if (this.sim.length >= 10 ){
+                    console.log('chgSim API params --> ' ,this.userId + ',' + item._id + ',' + this.sim);
+                    await this.api.postData('api/cores/chgSim/' + this.userId ,{'coreId':item._id, 'newSim':this.sim}).then(async (result) => {
+                      this.getCores();
+                      this.simSectionOpen = false;
+                    }, error => {
+                      console.log('chgSim API error: ' + JSON.stringify(error));
+                      this.toastEvent('chgSim API error: ' + JSON.stringify(error));
+                    });
+      
+                    this.toastEvent('sim changed to ' + this.sim);
+                  }else{
+                    this.toastEvent('Invalid format');
+                  }
+      
+                }catch(e){
+                  this.toastEvent('Sim not changed, error: ' + JSON.stringify(e));
+                }
+                break;
+              case 'getSIMstatus':
+                try{
+                  await this.sms.send(this.core_sim,'status,sim',options);
+                  this.toastEvent('msg sent to ' + this.core_sim);
+                }catch(e){
+                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                }
+                break;
+              case 'ModuleRST':
+                try{
+                    await this.sms.send(item.Sim,'rst,sim',options);
+                    this.toastEvent('msg sent to ' + item.Sim);
+                }catch(e){
+                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                }
+                break;
+              case 'getCoreCodes':
+                try{
+                  await this.sms.send(item.Sim,'active_codes,sim',options);
+                  this.toastEvent('msg sent to ' + item.Sim);
+                }
+                catch(e){
+                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                  }
+                break;
+              case 'setOpenGate':
+                try{
+                  await this.sms.send(item.Sim,'setOpenCode,gate',options);
+                  this.toastEvent('msg sent to ' + item.Sim);
+                }
+                catch(e){
+                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                  }
+                break;
+              case 'setOpenMagnet':
+                try{
+                  await this.sms.send(item.Sim,'setOpenCode,magnet',options);
+                  this.toastEvent('msg sent to ' + item.Sim);
+                }
+                catch(e){
+                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+              }
+              break;
+              case 'setKeypad':
+                try{
+                  await this.sms.send(item.Sim,'setKeypad,' + item.keyPadName,options);
+                  this.toastEvent('msg sent to ' + item.Sim);  
+                }
+                catch(e){
+                    this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                  }
+                break;
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+  }
+
+//endregion
 }
