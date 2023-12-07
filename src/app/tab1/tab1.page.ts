@@ -213,24 +213,6 @@ async collectInfo(){
     Utils.cleanLocalStorage();
   }
 
-  loadCodes() {
-    // this.api.getCodeList().subscribe(res => {
-    //   this.codes = res.values;
-    //   console.log(JSON.stringify(this.codes));
-    // });
-    
-      this.api.getData('/api/codes').subscribe(result =>{
-          alert(JSON.stringify(result));
-      });
-
-
-  // console.log('to feed html..' + this.api.getCodeList().(res => {
-  //     this.codes = res.values;
-  //     console.log(JSON.stringify(this.codes));
-  //   })
-
-  }
-
   push_notifications(codeId:Number){
     this.toastEvent('Process code ' + codeId,2000);
     
