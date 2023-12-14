@@ -12,7 +12,7 @@ export const environment = {
   },
   cloud : {
     // server_url : "http://100.24.58.74/"
-    server_url : "http://192.168.1.185:5000/"
+    server_url : "http://192.168.1.185:5500/"
     // socket_url : "ws://192.168.1.154:5000/",
   }
 };

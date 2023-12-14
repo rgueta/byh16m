@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams,ToastController } from "@ionic/angular";
+import { ModalController, NavParams,ToastController, AlertController } from "@ionic/angular";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { DatabaseService } from "../../services/database.service";
 
@@ -17,7 +17,8 @@ export class RequestsPage implements OnInit {
     private modalController:ModalController,
     private navParams:NavParams,
     private api:DatabaseService,
-    private toast:ToastController
+    private toast:ToastController,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
@@ -49,18 +50,28 @@ export class RequestsPage implements OnInit {
 
   sendRequest(){
 
-    this.api.post_pwdRST('api/pwdResetReq/' + this.email.value).subscribe(async result => {
+    // this.api.post_pwdRST('api/pwdResetReq/' + this.email.value).subscribe(async result => {
+      this.api.postData('api/pwdResetReq/' + this.email.value, null).then(async result => {  
       // this.api.post_pwdRST('api/pwdResetReq/email/').subscribe(async result => {
-        console.log('psswordRST_request result -- >', result);
-        this.toastEvent('Reciviras un correo para recuperar tu contraseña ..',5000)
+        console.log('psswordRST_request result -- > ', result);
+        console.log('Object.value [1] -- > ', Object.values(result)[1]);
+
+        if(Object.values(result)[1] == 'Locked'){
+          this.showAlert('Alerta','', 'Este usuario esta bloqueado', ['Ok']);
+        }else{
+          this.showAlert('Alerta','', 
+            'Reciviras un correo para recuperar tu contraseña', ['Ok']);
+        }
+        
       },err =>{
-        console.log('psswordRST_request Error -- >', err);
-        this.toastEvent('No se envio el correo, el correo no esta relacionado a una cuenta  ..',5000)
+        console.log('pwdRST_request Error -- >', err);
+        this.showAlert('Alerta','', 
+            'El correo no esta relacionado a una cuenta', ['Ok']);
       });
 
   }
 
-   // -------   toast control alerts    ---------------------
+   // -------   toast and alert control alerts    ---------------------
    toastEvent(msg:string,time:number){
     this.myToast = this.toast.create({
       message:msg,
@@ -69,6 +80,17 @@ export class RequestsPage implements OnInit {
       console.log(toastData);
       toastData.present();
     });
+  }
+
+  async showAlert(Header:string, subHeader:string, msg:string, btns:any) {
+    const alert = await this.alertCtrl.create({
+      header: Header,
+      subHeader: subHeader,
+      message: msg,
+      buttons: btns,
+    });
+  
+    await alert.present();
   }
 
 

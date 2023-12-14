@@ -17,6 +17,7 @@ const USER_ROLES = 'my-roles';
 const USER_ROLE = 'my-role';
 const VISITORS = 'visitors';
 const DEVICE_UUID = 'device-uuid';
+const DEVICE_PKG = 'device-pkg';
 
 
 @Component({
@@ -103,7 +104,9 @@ export class LoginPage implements OnInit {
 
     await Device.getInfo().then(async DeviceInfo => {
       this.device_info = DeviceInfo;
-      console.log('this.device_info --> ',await this.device_info)
+      await localStorage.setItem(DEVICE_PKG, await JSON.stringify(this.device_info));
+      console.log('this.device_info, --> ',await JSON.stringify(this.device_info));
+
 
       Device.getId().then(async (deviceId:any) =>{
         await localStorage.setItem(DEVICE_UUID, await (deviceId['identifier']));

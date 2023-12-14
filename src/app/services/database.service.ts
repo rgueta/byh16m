@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from "../../environments/environment";
 import { BehaviorSubject,from,of,Observable, throwError } from "rxjs";
 import { tap, switchMap } from "rxjs/operators";
-import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHandler, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
 import { Utils } from "../tools/tools";
 
@@ -192,13 +192,16 @@ async postData(collection:String,data:any){
   }
   }
 
-   return new Promise((resolve, reject) => {this.http.post(this.REST_API_SERVER + collection , data, options)
+   return new Promise((resolve, reject) => 
+    {this.http.post(this.REST_API_SERVER + collection , data, options)
     .subscribe(res => {
       resolve(res);
     }, error => {
       reject(error)
     });
-  })    
+  })
+
+
 }
 
 async postRegisterData(url:String,data:any){

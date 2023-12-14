@@ -75,7 +75,8 @@ export class UsersPage implements OnInit {
             handler: async data => {
               const adminId = localStorage.getItem('my-userId');
               if(event.target.checked){
-                await this.api.postData('api/users/lock/' + adminId + '/' + id, {'neighborId' : id}).then(async (onResolve) =>{
+                await this.api.postData('api/users/lock/' + adminId + '/' + id, 
+                  {'neighborId' : id}).then(async (onResolve) =>{
                   await this.getUsers();
                 },
                 (onReject) =>{
