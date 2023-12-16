@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from './../../services/authentication.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from "../../../environments/environment";
-import { AlertController, LoadingController, isPlatform, ModalController} from "@ionic/angular";
+import { AlertController, LoadingController, isPlatform, 
+  ModalController, Platform} from "@ionic/angular";
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { Device } from "@capacitor/device";
 import { Utils } from 'src/app/tools/tools';
@@ -38,11 +39,12 @@ export class LoginPage implements OnInit {
     return this.credentials.get('pwd');
   }
   
-  device_info:any;
+ device_info:any;
 
  private  REST_API_SERVER = environment.cloud.server_url;
  public version = '';
  net_status:any;
+ device_uuid:string='';
 
   constructor(
     private fb: FormBuilder,
@@ -53,7 +55,8 @@ export class LoginPage implements OnInit {
     private alertController: AlertController,
     private modalController:ModalController,
     private SIM : Sim,
-    private network: Network
+    private network: Network,
+    private platform: Platform
 
   ) { 
 
@@ -87,35 +90,48 @@ export class LoginPage implements OnInit {
 
     Utils.cleanLocalStorage();
     this.init();
-    
     this.version = environment.app.version;
 
-    if(isPlatform('cordova') || isPlatform('ios')){
+    if(isPlatform('cordova')){
+      console.log('Soy plataforma cordova')
+    }else if(isPlatform('ios')){
+      console.log('Soy plataforma ios')
+    }else if(isPlatform('ipad')){
+      console.log('Soy plataforma ios')
+    }else if(isPlatform('iphone')){
+      console.log('Soy plataforma ios')
+    }else if(isPlatform('desktop')){
+      console.log('Soy plataforma desktop')
       this.lockToPortrait();
     }else if(isPlatform('android')){
+      console.log('Soy plataforma android')
       this.isAndroid = true;
     }
 
     this.credentials = new FormGroup({
-      email: new FormControl('neighbor2@gmail.com', [Validators.required, Validators.email]),
-      pwd: new FormControl('1234', [Validators.required, Validators.minLength(4)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      pwd: new FormControl('', [Validators.required, Validators.minLength(4)]),
     });
 
-
     await Device.getInfo().then(async DeviceInfo => {
-      this.device_info = DeviceInfo;
-      await localStorage.setItem(DEVICE_PKG, await JSON.stringify(this.device_info));
-      console.log('this.device_info, --> ',await JSON.stringify(this.device_info));
+      this.device_info = await JSON.parse(JSON.stringify(DeviceInfo));
 
-
-      Device.getId().then(async (deviceId:any) =>{
+      // get device uuid
+      await Device.getId().then(async (deviceId:any) =>{
         await localStorage.setItem(DEVICE_UUID, await (deviceId['identifier']));
-       })
-      
+        this.device_uuid = await (deviceId['identifier']);
+       });
+
+       this.device_info.uuid = await this.device_uuid;
+       await localStorage.setItem(DEVICE_PKG, await JSON.stringify(this.device_info));
   
        if (this.device_info.platform === 'android') {
          try {
-           console.log('soy android OK');
+            delete this.device_info.memUsed
+            delete this.device_info.diskFree
+            delete this.device_info.diskTotal
+            delete this.device_info.realDiskFree
+            delete this.device_info.realDiskTotal
          } catch (e) {
            console.log('soy android con Error: ', e);
        }
@@ -123,6 +139,12 @@ export class LoginPage implements OnInit {
        console.log('no soy android');
      }
     });
+
+    if (this.device_uuid == 'd006607d903ca175'){
+      await this.credentials.get('email').setValue ('neighbor2@gmail.com');
+      await this.credentials.get('pwd').setValue ('1234');
+    }
+
   }
 
   async init(): Promise<void> {

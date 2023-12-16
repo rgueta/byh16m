@@ -3,6 +3,9 @@ import { ModalController, NavParams,ToastController, AlertController } from "@io
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { DatabaseService } from "../../services/database.service";
 
+
+const DEVICE_PKG = 'device-pkg';
+
 @Component({
   selector: 'app-requests',
   templateUrl: './requests.page.html',
@@ -12,6 +15,7 @@ export class RequestsPage implements OnInit {
   title: string ;
   validator: FormGroup;
   myToast:any;
+  devicePkg:any;
 
   constructor(
     private modalController:ModalController,
@@ -22,6 +26,8 @@ export class RequestsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.devicePkg = localStorage.getItem('device-pkg');
+
     switch(this.navParams.data['request']){
       case 'UnblockAccount':
         this.title = 'Desbloquear usuario';
@@ -51,7 +57,7 @@ export class RequestsPage implements OnInit {
   sendRequest(){
 
     // this.api.post_pwdRST('api/pwdResetReq/' + this.email.value).subscribe(async result => {
-      this.api.postData('api/pwdResetReq/' + this.email.value, null).then(async result => {  
+      this.api.postData('api/pwdResetReq/' + this.email.value, this.devicePkg).then(async result => {  
       // this.api.post_pwdRST('api/pwdResetReq/email/').subscribe(async result => {
         console.log('psswordRST_request result -- > ', result);
         console.log('Object.value [1] -- > ', Object.values(result)[1]);

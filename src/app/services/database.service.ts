@@ -183,7 +183,6 @@ getData_key(collection:String,data:any){
 
 async postData(collection:String,data:any){
   const token = await localStorage.getItem(TOKEN_KEY);
-  console.log('Data to api -->', data);
 
   let  options = {
     headers : {
