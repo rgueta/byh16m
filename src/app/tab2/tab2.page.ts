@@ -58,8 +58,8 @@ export class Tab2Page {
     console.log('Start date --> ', this.start);
     console.log('End date --> ', this.end);
 
-      await this.api.getData_key('api/codeEvent/' + this.myUserId + '/' +
-      this.Core_sim + '/' + this.start + '/' + this.end,this.myToken).subscribe(async result =>{
+      await this.api.getData('api/codeEvent/' + this.myUserId + '/' +
+      this.Core_sim + '/' + this.start + '/' + this.end).subscribe(async result =>{
       
       this.EventsList = await result;
       
