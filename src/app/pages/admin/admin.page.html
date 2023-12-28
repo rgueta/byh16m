@@ -1,16 +1,16 @@
 
-<ion-header>
-  <ion-toolbar slot="start" class="ion-text-center">
-     <ion-item class="wrap-input">
+<ion-header [translucent]="true">
+  <ion-toolbar slot="start" class="wrap-input">
+     <ion-item>
       <ion-buttons slot="start">  
         <ion-menu-button auto-hide="false" color="dark" menu="adminMenu"></ion-menu-button>   
-      </ion-buttons> 
-      <ion-title>Administration</ion-title>
+      </ion-buttons>
+      <ion-title class="title">Administration</ion-title>
     </ion-item>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [fullscreen]="true">
 <!-- Menu -->
 
   <ion-menu class="main-manu" side="start" menuId="adminMenu" contentId="menu">

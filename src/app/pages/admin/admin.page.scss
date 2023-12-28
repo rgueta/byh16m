@@ -1,3 +1,14 @@
+
+.wrap-input{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: yellow;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+}
+
 .itemWrapper{
     display: inline;
     width: 100%;
@@ -36,15 +47,10 @@
 .accordion-list{
     --ion-item-background: #fff;
     .section, .section-active, .section-expired{
-    border-radius: 5px;
-//  margin-top: 5px;
-//  margin-bottom: 5px;
-
-   max-width: 95% !important;
-   margin-left: auto;
-   margin-right: auto;
-    // margin-bottom: 4px;
-    --min-height:58px;
+        border-radius: 5px;
+        max-width: 95% !important;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     ion-icon{
