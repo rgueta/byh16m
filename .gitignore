@@ -55,6 +55,9 @@ yarn-error.log
 .history/*
 
 
+# splash screens and icons
+/resources
+
 # Miscellaneous
 /.angular
 /.angular/cache
