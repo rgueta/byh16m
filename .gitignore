@@ -56,7 +56,7 @@ yarn-error.log
 
 
 # splash screens and icons
-/resources/*
+/resources
 
 # Miscellaneous
 /.angular
