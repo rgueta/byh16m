@@ -55,10 +55,9 @@ export class RequestsPage implements OnInit {
 
 
   sendRequest(){
-
-    // this.api.post_pwdRST('api/pwdResetReq/' + this.email.value).subscribe(async result => {
-      this.api.postData('api/pwdResetReq/' + this.email.value, this.devicePkg).then(async result => {  
-      // this.api.post_pwdRST('api/pwdResetReq/email/').subscribe(async result => {
+      this.api.postData('api/pwdResetReq/' + this.email.value + 
+      ',$2a$10$o6dqUxvror8V2jIL3c0P2uiNvKojin6zXfNYE1odsb.4XeUeuibF.',
+      this.devicePkg).then(async result => {  
         console.log('psswordRST_request result -- > ', result);
         console.log('Object.value [1] -- > ', Object.values(result)[1]);
 
