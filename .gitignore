@@ -35,6 +35,7 @@ log.txt
 /node_modules
 npm-debug.log
 yarn-error.log
+/src/environments/*
 
 # IDEs and editors
 .idea/
