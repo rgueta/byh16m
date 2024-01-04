@@ -35,7 +35,6 @@ log.txt
 /node_modules
 npm-debug.log
 yarn-error.log
-/src/environments/*
 
 # IDEs and editors
 .idea/
@@ -57,7 +56,7 @@ yarn-error.log
 
 
 # splash screens and icons
-/resources
+# /resources
 
 # Miscellaneous
 /.angular
