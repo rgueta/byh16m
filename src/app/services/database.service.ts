@@ -183,7 +183,7 @@ getData_key(collection:String,data:any){
 
 async postData(collection:String,data:any){
   const token = await localStorage.getItem(TOKEN_KEY);
-
+  
   let  options = {
     headers : {
   'content-type' : 'application/json',
@@ -191,8 +191,8 @@ async postData(collection:String,data:any){
   }
   }
 
-   return new Promise((resolve, reject) => 
-    {this.http.post(this.REST_API_SERVER + collection , data, options)
+   return new Promise((resolve, reject) => {
+    this.http.post(this.REST_API_SERVER + collection , data, options)
     .subscribe(res => {
       resolve(res);
     }, error => {

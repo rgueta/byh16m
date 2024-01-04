@@ -55,11 +55,10 @@ export class RequestsPage implements OnInit {
 
 
   sendRequest(){
-      this.api.postData('api/pwdResetReq/' + this.email.value + 
-      ',$2a$10$o6dqUxvror8V2jIL3c0P2uiNvKojin6zXfNYE1odsb.4XeUeuibF.',
+      this.api.postData('api/pwdResetReq/' + this.email.value,
       this.devicePkg).then(async result => {  
-        console.log('psswordRST_request result -- > ', result);
-        console.log('Object.value [1] -- > ', Object.values(result)[1]);
+        // console.log('psswordRST_request result -- > ', result);
+        // console.log('Object.value [1] -- > ', Object.values(result)[1]);
 
         if(Object.values(result)[1] == 'Locked'){
           this.showAlert('Alerta','', 'Este usuario esta bloqueado', ['Ok']);
