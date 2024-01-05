@@ -8,6 +8,12 @@
       </div>
       <div class="column middle">
         <ion-title>{{coreName}}</ion-title>
+        <div class="doorsButton-toggle">
+        <ion-label (click)="toggleButtons()">{{visible ? 'Ocultar' : 'Visualizar'}}</ion-label>
+        <ion-icon  [name]="visible ? 'chevron-up-outline' : 'chevron-down-outline'" 
+         (click)="toggleButtons()" style="padding-left: 5px;"></ion-icon>
+         
+      </div>
       </div>
       <div class="column right">
         <ion-buttons slot="end">
@@ -16,12 +22,7 @@
           </ion-button>
         </ion-buttons>
       </div>
-      <div class="doorsButton-toggle">
-        <ion-label (click)="toggleButtons()">{{visible ? 'Ocultar' : 'Visualizar'}}</ion-label>
-        <ion-icon  [name]="visible ? 'chevron-up-outline' : 'chevron-down-outline'" 
-         (click)="toggleButtons()" style="padding-left: 5px;"></ion-icon>
-         
-      </div>
+      
   </ion-toolbar>
 </ion-header>
 
