@@ -15,6 +15,26 @@
     width: 100%;
   }
 
+  .column {
+    float: left;
+    padding:.3rem 0 .3rem .2rem;
+  }
+
+  .left{
+    width: 25%;
+    padding: .3rem 0 .3rem .4rem;
+    // background-color: beige;
+  }
+
+  .middle {
+    padding: 1rem 0 0.5rem 0;
+    width: 50%;
+    ion-title{
+        font-size: 5vw;
+        text-align: center;
+    }
+  }
+
 .closeButton{
     font-size: 3em;
     // position:relative;
