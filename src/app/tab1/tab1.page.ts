@@ -1,7 +1,7 @@
 import { Component ,Input, OnInit} from '@angular/core';
 import { ModalController, ToastController ,
   AnimationController, isPlatform, getPlatforms,
-  PopoverController} from '@ionic/angular';
+  PopoverController, AlertController} from '@ionic/angular';
 import type { ToastOptions } from "@ionic/angular";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 // import { Sim } from "@ionic-native/sim/ngx"; 
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { VisitorsPage } from '../modals/visitors/visitors.page';
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { ScheduleOptions, LocalNotifications } from "@capacitor/local-notifications";
-import {Utils } from "../tools/tools";
+import { Utils } from "../tools/tools";
 import { FamilyPage } from "../modals/family/family.page";
 import { RequestsPage } from "../modals/requests/requests.page";
 
@@ -32,7 +32,7 @@ export class Tab1Page implements OnInit {
   @Input() sim:string;
   myToast:any;
   myRoles:any;
-  public SoyAdmin=false;
+  public SoyAdmin: boolean = false;
   isAndroid:any;
   currentUser = '';
   public version = '';
@@ -55,7 +55,8 @@ export class Tab1Page implements OnInit {
     private router: Router,
     private screenOrientation: ScreenOrientation,
     // private SIM : Sim,
-    private popoverCtrl:PopoverController) { }
+    private popoverCtrl:PopoverController,
+    public alertCtrl: AlertController) { }
   
   async ionViewWillEnter(){
       if(localStorage.getItem('IsAdmin') === 'true'){
@@ -208,9 +209,7 @@ async collectInfo(){
 
 
   async logout(){
-    await this.api.logout();
-    this.router.navigateByUrl('/',{replaceUrl:true});
-    Utils.cleanLocalStorage();
+    await this.showAlert('','', 'Deseas salir ?','btns', 'Si', 'No')
   }
 
   push_notifications(codeId:Number){
@@ -388,6 +387,33 @@ async scheduleBasic(msg:any){
 // #endregion  ---------------------------------------------
 
 // -------   toast control alerts    ---------------------
+
+async showAlert(Header:string, subHeader:string, msg:string, btns:any,
+  txtConfirm:string, txtCancel:string) {
+  const alert = await this.alertCtrl.create({
+    header: Header,
+    subHeader: subHeader,
+    message: msg,
+    buttons: [{
+      text:txtCancel,
+      role: 'cancel'
+    },
+    {
+      text:txtConfirm,
+      handler: async () =>{
+        await this.api.logout();
+        this.router.navigateByUrl('/',{replaceUrl:true});
+        Utils.cleanLocalStorage();
+
+            }
+    
+    }]
+  });
+
+  await alert.present();
+}
+
+
 toastEvent(msg:string,duration:number){
   this.myToast = this.toast.create({
     message:msg,

@@ -16,11 +16,21 @@
       </div>
       </div>
       <div class="column right">
-        <ion-buttons slot="end">
-          <ion-button id="popover-button">
-            <ion-icon  name="ellipsis-vertical-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
+        <span [hidden] = '!SoyAdmin' >
+          <ion-buttons slot="end">
+            <ion-button id="popover-button">
+              <ion-icon  name="ellipsis-vertical-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </span>
+        
+        <span [hidden] = 'SoyAdmin'>
+          <ion-buttons slot="end">
+            <ion-button (click)="logout()">
+              <ion-icon  name="exit-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </span>
       </div>
       
   </ion-toolbar>
