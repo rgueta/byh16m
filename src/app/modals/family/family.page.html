@@ -1,9 +1,17 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="title">Familia</ion-title>
-    <ion-buttons class="closeButton" slot="start">
-      <ion-icon class="icon_exit" (click)='closeModal()' name='arrow-back-circle-outline' >Cerrar</ion-icon>
-    </ion-buttons>
+      <div class='column left'>
+        <div>
+          <ion-buttons slot="start">
+            <ion-icon class="icon_exit" (click)='closeModal()' 
+            name='arrow-back-circle-outline' >Cerrar</ion-icon>
+          </ion-buttons>
+      </div>
+
+    </div>
+    <div class="column middle">
+      <ion-title class="title">Familia</ion-title>
+    </div>
   </ion-toolbar>
 </ion-header>
 
