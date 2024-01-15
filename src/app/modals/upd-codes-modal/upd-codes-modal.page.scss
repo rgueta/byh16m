@@ -22,8 +22,8 @@ ion-modal {
 
   .title{
     display:flex;
-    flex-direction: column;
-    margin-left: -20px;
+    flex-direction: row;
+    align-items: center;
     width: 100%;
   }
 
@@ -48,7 +48,7 @@ ion-modal {
     }
 
     .ios{
-        margin-top:-20px;
+        margin-top:20px;
     }
   }
 
