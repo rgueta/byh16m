@@ -36,6 +36,13 @@ ion-button{
     padding-right: 10px;
 }
 
+.title{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+
 .column {
     float: left;
     padding:.3rem 0 .3rem .2rem;
