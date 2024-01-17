@@ -12,14 +12,14 @@ import { RequestsPage } from "../../modals/requests/requests.page";
 // import localNotification from "../../tools/localNotification";
 import { Sim } from "@ionic-native/sim/ngx"; 
 import { Network } from "@ionic-native/network/ngx";
-
+import { DatabaseService } from "../../services/database.service"
 
 const USER_ROLES = 'my-roles';
 const USER_ROLE = 'my-role';
 const VISITORS = 'visitors';
 const DEVICE_UUID = 'device-uuid';
 const DEVICE_PKG = 'device-pkg';
-
+const ADMIN_DEVICE = 'admin_device';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +29,7 @@ const DEVICE_PKG = 'device-pkg';
 export class LoginPage implements OnInit {
   isAndroid:any;
   credentials: FormGroup;
+  configApp : {};
 
   // Easy access for form fields
    get email() {
@@ -56,7 +57,8 @@ export class LoginPage implements OnInit {
     private modalController:ModalController,
     private SIM : Sim,
     private network: Network,
-    private platform: Platform
+    private platform: Platform,
+    private api : DatabaseService,
 
   ) { 
 
@@ -86,6 +88,9 @@ export class LoginPage implements OnInit {
   }
 
   async ngOnInit() {
+
+    this.getConfigApp();
+
     console.log('Actual connection: ' + this.network.type)
 
     Utils.cleanLocalStorage();
@@ -140,11 +145,14 @@ export class LoginPage implements OnInit {
      }
     });
 
-    if (this.device_uuid == 'd006607d903ca175'){
-      await this.credentials.get('email').setValue ('neighbor2@gmail.com');
-      await this.credentials.get('pwd').setValue ('1234');
-    }
-
+    // if (this.device_uuid == 'd006607d903ca175'){
+      const admin_device = localStorage.getItem(ADMIN_DEVICE);
+      
+      if (admin_device.indexOf(this.device_uuid)){
+        await this.credentials.get('email').setValue ('neighbor2@gmail.com');
+        await this.credentials.get('pwd').setValue ('1234');
+      }
+    // }
   }
 
   async init(): Promise<void> {
@@ -162,6 +170,13 @@ export class LoginPage implements OnInit {
         )
       }
     });   
+ }
+
+ // get Config App ----
+ async getConfigApp(){
+     await this.api.getData("api/config/").subscribe(async (result:any) =>{
+      await localStorage.setItem(ADMIN_DEVICE,await result[0].admin_device);
+    });
  }
 
   lockToPortrait(){
