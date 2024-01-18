@@ -46,6 +46,7 @@ export class LoginPage implements OnInit {
  public version = '';
  net_status:any;
  device_uuid:string='';
+ admin_device:any;
 
   constructor(
     private fb: FormBuilder,
@@ -144,15 +145,12 @@ export class LoginPage implements OnInit {
        console.log('no soy android');
      }
     });
-
-    // if (this.device_uuid == 'd006607d903ca175'){
-      const admin_device = localStorage.getItem(ADMIN_DEVICE);
       
-      if (admin_device.indexOf(this.device_uuid)){
+      // if (this.admin_device.includes(this.device_uuid)){
+      if (1 == 1){
         await this.credentials.get('email').setValue ('neighbor2@gmail.com');
         await this.credentials.get('pwd').setValue ('1234');
       }
-    // }
   }
 
   async init(): Promise<void> {
@@ -175,6 +173,7 @@ export class LoginPage implements OnInit {
  // get Config App ----
  async getConfigApp(){
      await this.api.getData("api/config/").subscribe(async (result:any) =>{
+      this.admin_device = result[0].admin_device;
       await localStorage.setItem(ADMIN_DEVICE,await result[0].admin_device);
     });
  }
