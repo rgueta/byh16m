@@ -37,12 +37,6 @@
 
 <ion-content [fullscreen]="true">
 
-  <!-- <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large" class="ion-text-center">BYTHEG</ion-title>
-    </ion-toolbar>
-  </ion-header> -->
-
   <!-- fab placed to the bottom end -->
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
@@ -86,7 +80,7 @@
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
-  <div class="info">
+  <div id = "infoSection" class="info">
     <ion-card class="" *ngFor="let item of localInfo; let i = index;">
       <ion-card-header>
         <ion-card-title>{{item.title}}</ion-card-title>
@@ -105,8 +99,3 @@
 
 
 </ion-content>
-<!-- <ion-footer>
-  <ion-toolbar>
-    <ion-button class="logout" expand="full" (click)="logout()">Logout</ion-button>
-  </ion-toolbar>
-</ion-footer> -->

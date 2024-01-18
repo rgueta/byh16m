@@ -41,6 +41,7 @@ export class Tab1Page implements OnInit {
   userId : string;
   id : number = 0;
   public visible : boolean = true;
+  infoPanel : any;
   
   REST_API_SERVER = environment.cloud.server_url;
 
@@ -145,6 +146,9 @@ export class Tab1Page implements OnInit {
       this.collectInfo();
     }
 
+    this.infoPanel = document.getElementById("infoSection");
+    this.infoPanel.style.marginTop = "115px";
+
   }
 
 //   async init(): Promise<void> {
@@ -188,6 +192,13 @@ export class Tab1Page implements OnInit {
 
 toggleButtons(){
   this.visible = !this.visible;
+  
+  if(this.visible){
+    this.infoPanel.style.marginTop = "115px";
+  }else{
+    this.infoPanel.style.marginTop = "0px";
+  }
+
 }
 
 async presentToast(opts: ToastOptions) {
