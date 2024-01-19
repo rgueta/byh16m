@@ -1,9 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="title"> Information</ion-title>
-    <ion-buttons class="modalcloseButton" slot="end">
-      <ion-icon (click)='closeModal()' name='close-circle' >Cerrar</ion-icon>
-    </ion-buttons>
+    <ion-item class="wrap-input">
+      <ion-title class="title"> Information</ion-title>
+      <ion-buttons class="modalcloseButton" slot="start">
+        <ion-icon (click)='closeModal()' name='close-circle' >Cerrar</ion-icon>
+      </ion-buttons>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 
@@ -89,7 +91,7 @@
         <ion-item>
           <ion-thumbnail  class="auxuwiMargen" >
             <!-- <ion-img  class="auxuwiMargin" [src]="imageFileName" alt="Ionic File"></ion-img> -->
-            <img  class="auxuwiMargin" src="{{imageFileName}}" alt="Ionic File">
+            <img  class="auxuwiMargin" src="{{imageFileName}}">
           </ion-thumbnail>
         </ion-item>
 
