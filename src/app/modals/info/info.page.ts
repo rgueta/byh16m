@@ -20,7 +20,7 @@ export class InfoPage implements OnInit {
   imageURI:any;
   imageFileName:any;
   myToast:any;
-  userId = {};
+  userId : string;
   localTitle : String;
   localDescription : String;
   localUrl : String;
@@ -79,42 +79,43 @@ export class InfoPage implements OnInit {
   
 //#region select location  -------------------------------------------
   async collectCountries(){
-    await this.api.getData('api/countries/').subscribe(async countriesResult =>{
+    await this.api.getData('api/countries/' + this.userId).subscribe(async countriesResult =>{
       this.countriesList = await countriesResult;
     });
   }
 
   async collectStates(country:any){
-    await this.api.getData('api/states/' + country).subscribe(async statesResult =>{
+    await this.api.getData('api/states/' + country + '/' + this.userId).subscribe(async statesResult =>{
       this.statesList = await statesResult;
 
     })
   }
 
   async collectCities(state:any){
-    await this.api.getData('api/cities/' + this.localCountry +',' + state).subscribe(async citiesResult =>{
+    await this.api.getData('api/cities/' + 
+      this.localCountry + '/' + state + '/' + this.userId).subscribe(async citiesResult =>{
       this.citiesList = await citiesResult;
     })
   }
 
   async collectDivisions(city:any){
     await this.api.getData('api/divisions/'  
-      + this.localCountry +',' + this.localState + ',' + city).subscribe(async divisionsResult =>{
+      + this.localCountry + '/' + this.localState + '/' + city + '/' + this.userId).subscribe(async divisionsResult =>{
       this.divisionsList = await divisionsResult;
     })
   }
 
   async collectCpus(division:any){
-    await this.api.getData('api/cpus/'
-    + this.localCountry +',' + this.localState + ',' 
-    + this.localCity + ',' + parseInt(division)).subscribe(async cpusResult =>{
+    await this.api.getData('api/cpus/basic/'
+    + this.localCountry + '/' + this.localState + '/' 
+    + this.localCity + '/' + parseInt(division) + '/' + this.userId).subscribe(async cpusResult =>{
       this.cpusList = await cpusResult;
     })
   }
   async collectCores(cpu:any){
     await this.api.getData('api/cores/light/'
-    + this.localCountry +',' + this.localState + ',' + this.localCity + ',' 
-    + this.localDivision + ',' + cpu).subscribe(async coresResult =>{
+    + this.localCountry + '/' + this.localState + '/' + this.localCity + '/' 
+    + this.localDivision + '/' + cpu + '/' + this.userId).subscribe(async coresResult =>{
       this.coresList = await coresResult;
     })
   }
@@ -154,7 +155,6 @@ export class InfoPage implements OnInit {
     this.localCore = core;
     this.imgFolder = this.localCountry + '.' + this.localState + '.' + this.localCity + '.'
       + this.localDivision + '.' + this.localCpu + '.' + this.localCore
-    console.log('img Folder --> ', this.imgFolder);
   }
 
   //#endregion select location  -------------------------------------------
