@@ -76,8 +76,7 @@
 
   
       <ion-button id="frmCtrl_image" class="tamamataMargen titleBlue" expand="block"
-      [disabled]="RegisterForm.invalid" (click)="getImage()">Get Image</ion-button>
-
+        [disabled]="RegisterForm.invalid" (click)="getImage()">Get Image</ion-button>
     </form>  
 
     <ion-item *ngIf="imageFileName">
@@ -89,7 +88,8 @@
       <div *ngIf="imageFileName">
         <ion-item>
           <ion-thumbnail  class="auxuwiMargen" >
-            <ion-img  class="auxuwiMargin" [src]="imageFileName" alt="Ionic File"></ion-img>
+            <!-- <ion-img  class="auxuwiMargin" [src]="imageFileName" alt="Ionic File"></ion-img> -->
+            <img  class="auxuwiMargin" src="{{imageFileName}}" alt="Ionic File">
           </ion-thumbnail>
         </ion-item>
 
