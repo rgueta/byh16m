@@ -215,11 +215,11 @@ export class InfoPage implements OnInit {
     }
   }
 
-  async uploadFile(file: LocalFile) {
-    const response = await fetch(file.data);
+  async uploadFile() {
+    const response = await fetch(this.localImg);
     const blob = await response.blob();
     const formData = new FormData();
-    formData.append('file', blob, file.name);
+    formData.append('file', blob, this.localImg);
     this.uploadData(formData);
   }
 
@@ -228,9 +228,9 @@ export class InfoPage implements OnInit {
       message: 'Uploading image... ',
     });
 
-    //use your own API
+    // use your own API
     this.api.postFile("api/info/" + 
-      this.userId, this.localImg ).then(async resp =>{
+      this.userId, formData ).then(async resp =>{
         console.log('resp --> ', resp);
       });
 
