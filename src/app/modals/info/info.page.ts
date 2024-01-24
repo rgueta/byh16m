@@ -63,8 +63,6 @@ export class InfoPage implements OnInit {
       });
      }
 
-   
-
   async ngOnInit() {
     this.localTitle = 'Aqui va el titulo..';
     this.userId = localStorage.getItem('my-userId');
@@ -76,8 +74,6 @@ export class InfoPage implements OnInit {
     this.collectInfo();
   }
 
-
-  
 //#region select location  -------------------------------------------
   async collectCountries(){
     await this.api.getData('api/countries/' + this.userId).subscribe(async countriesResult =>{
