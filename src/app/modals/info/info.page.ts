@@ -12,19 +12,12 @@ import { finalize } from 'rxjs';
 
 const USERID = 'my-userId';
 
-interface LocalFile{
-  name:string;
-  path:string;
-  data:string;
-}
-
 @Component({
   selector: 'app-info',
   templateUrl: './info.page.html',
   styleUrls: ['./info.page.scss'],
 })
 export class InfoPage implements OnInit {
-  image: LocalFile[] = [];
   RegisterForm : FormGroup;
   imageURI:any;
   imageFileName:any;
