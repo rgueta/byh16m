@@ -201,26 +201,6 @@ async postData(collection:String,data:any){
   })
 }
 
-async postFile(collection:String,data:any){
-  const token = await localStorage.getItem(TOKEN_KEY);
-  
-  let  options = {
-    headers : {
-  'content-type' : 'multipart/form-data',
-  'authorization' : `Bearer ${token}`,
-  }
-  }
-
-   return new Promise((resolve, reject) => {
-    this.http.post(this.REST_API_SERVER + collection , data, options)
-    .subscribe(res => {
-      resolve(res);
-    }, error => {
-      reject(error)
-    });
-  })
-}
-
 async postRegisterData(url:String,data:any){
   const token = localStorage.getItem(TOKEN_KEY);
   

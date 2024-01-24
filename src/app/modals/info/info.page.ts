@@ -45,8 +45,6 @@ export class InfoPage implements OnInit {
 
   constructor(
     private modalController : ModalController,
-    // private transfer: FileTransfer,
-    // private camera: Camera,
     public loadingCtrl: LoadingController,
     public toast: ToastController,
     private api : DatabaseService,
@@ -173,6 +171,11 @@ export class InfoPage implements OnInit {
         this.imageFileName = Capacitor.convertFileSrc(this.localImg.path);
         this.localDescription = String(this.imageFileName);
         this.localUrl = String(this.imageFileName);
+
+        console.log('this.imageFileName --> ', this.imageFileName);
+        console.log('this.localDescription --> ', this.localDescription);
+        console.log('this.localUri --> ', this.localUrl);
+
       }
 
 
@@ -185,7 +188,7 @@ export class InfoPage implements OnInit {
     const response = await fetch(this.localImg);
     const blob = await response.blob();
     const formData = new FormData();
-    formData.append('file', blob, this.localImg);
+    formData.append('image', blob, this.imageFileName);
     this.uploadData(formData);
   }
 
@@ -195,7 +198,7 @@ export class InfoPage implements OnInit {
     });
 
     // use your own API
-    this.api.postFile("api/info/" + 
+    this.api.postData("api/info/" + 
       this.userId, formData ).then(async resp =>{
         console.log('resp --> ', resp);
       });
