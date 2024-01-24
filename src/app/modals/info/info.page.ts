@@ -166,26 +166,6 @@ export class InfoPage implements OnInit {
 
 //#region Image section ------------------------------------------------
 
-  // async getImage() {
-  //   const options: CameraOptions = {
-  //     quality: 50,
-  //     mediaType: this.camera.MediaType.PICTURE,
-  //     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-  //     encodingType: this.camera.EncodingType.JPEG,
-  //     destinationType: this.camera.DestinationType.FILE_URI,
-  //   }
-  
-  //   await this.camera.getPicture(options).then(async (imageData) => {
-  //     this.imageURI = imageData;
-  //     this.imageFileName = Capacitor.convertFileSrc(imageData);
-  //     this.localUrl = String(this.imageFileName);
-  //     this.localDescription = String(this.imageFileName);
-  //   }, (err) => {
-  //     console.log('Error --> ',err);
-  //     this.toastEvent(err);
-  //   });
-  // }
-
   async getImage(){
     try{
       this.localImg = await Camera.getPhoto({
@@ -228,58 +208,6 @@ export class InfoPage implements OnInit {
       });
 
   }
-
-  // async uploadFile() {
-  //   let loader = await this.loadingCtrl.create({
-  //     message: "Uploading...",
-  //     duration: 4000,
-  //     cssClass:'loader-css-class',
-  //     backdropDismiss:true
-  //   }).then(res => {
-  //     res.present();
-  //     res.onDidDismiss().then((response) => {
-  //       console.log('Loader dismissed', response);
-  //     });
-
-  //     setTimeout(() =>{
-  //       this.loadingCtrl.dismiss();
-  //     },5000);
-  //   });
-
-    
-  //   const fileTransfer: FileTransferObject = this.transfer.create();
-
-  //   let options: FileUploadOptions = {
-  //     fileKey: 'image',
-  //     // fileName: 'image.jpg',
-  //     chunkedMode: false,
-  //     // mimeType: "multipart/form-data",
-  //     mimeType: "image/jpeg",
-  //     params:{'title': this.localTitle, 'url' : this.localUrl, 
-  //       'description' : this.localDescription, 'locationFolder': this.imgFolder},
-  //     headers: {}
-  //   };
-  //   //'http://192.168.1.173:5000/api/info/' 
-
-  //   // console.log('Image path --> ', this.REST_API_SERVER + "api/info/" +
-  //   // this.userId)
-
-  //   console.log('Image options params', options.params)
-    
-  //   fileTransfer.upload(this.imageURI, this.REST_API_SERVER + "api/info/" +
-  //     this.userId, options)
-  //     .then((data) => {
-  //     setTimeout(() =>{
-        
-  //     })
-  //     this.toastEvent("Image uploaded successfully");
-  //   }, (err) => {
-  //     console.log(err);
-  //     // loader.dismiss();
-  //     this.toastEvent(err);
-  //   });
-
-  // }
 
   //#endregion Image section ------------------------------------------------
   async collectInfo(){
