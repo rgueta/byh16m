@@ -2,13 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, LoadingController, ToastController } from "@ionic/angular";
 // import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 // import { File } from '@ionic-native/file/ngx';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+// import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Capacitor } from "@capacitor/core";
+import { Camera, CameraResultType, CameraSource, Photo } from "@capacitor/camera";
 import { DatabaseService } from "../../services/database.service";
 import { environment } from "../../../environments/environment";
 import { Validators, FormControl, FormBuilder, FormGroup} from "@angular/forms";
+import { finalize } from 'rxjs';
 
 const USERID = 'my-userId';
+
+interface LocalFile{
+  name:string;
+  path:string;
+  data:string;
+}
 
 @Component({
   selector: 'app-info',
@@ -16,6 +24,7 @@ const USERID = 'my-userId';
   styleUrls: ['./info.page.scss'],
 })
 export class InfoPage implements OnInit {
+  image: LocalFile[] = [];
   RegisterForm : FormGroup;
   imageURI:any;
   imageFileName:any;
@@ -40,12 +49,14 @@ export class InfoPage implements OnInit {
   public imgFolder : String;
   public localInfo:any;
 
+  localImg : any;
+
   REST_API_SERVER = environment.cloud.server_url;
 
   constructor(
     private modalController : ModalController,
     // private transfer: FileTransfer,
-    private camera: Camera,
+    // private camera: Camera,
     public loadingCtrl: LoadingController,
     public toast: ToastController,
     private api : DatabaseService,
@@ -162,27 +173,68 @@ export class InfoPage implements OnInit {
 
 //#region Image section ------------------------------------------------
 
-  async getImage() {
-    const options: CameraOptions = {
-      quality: 50,
-      mediaType: this.camera.MediaType.PICTURE,
-      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      encodingType: this.camera.EncodingType.JPEG,
-      destinationType: this.camera.DestinationType.FILE_URI,
-    }
+  // async getImage() {
+  //   const options: CameraOptions = {
+  //     quality: 50,
+  //     mediaType: this.camera.MediaType.PICTURE,
+  //     sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+  //     encodingType: this.camera.EncodingType.JPEG,
+  //     destinationType: this.camera.DestinationType.FILE_URI,
+  //   }
   
-    await this.camera.getPicture(options).then(async (imageData) => {
-      this.imageURI = imageData;
-      this.imageFileName = Capacitor.convertFileSrc(imageData);
-      this.localUrl = String(this.imageFileName);
-      this.localDescription = String(this.imageFileName);
-    }, (err) => {
-      console.log('Error --> ',err);
-      this.toastEvent(err);
-    });
+  //   await this.camera.getPicture(options).then(async (imageData) => {
+  //     this.imageURI = imageData;
+  //     this.imageFileName = Capacitor.convertFileSrc(imageData);
+  //     this.localUrl = String(this.imageFileName);
+  //     this.localDescription = String(this.imageFileName);
+  //   }, (err) => {
+  //     console.log('Error --> ',err);
+  //     this.toastEvent(err);
+  //   });
+  // }
+
+  async getImage(){
+    try{
+      this.localImg = await Camera.getPhoto({
+        quality:50,
+        allowEditing:false,
+        resultType:CameraResultType.Uri,
+        source:CameraSource.Photos
+      });
+
+      if(this.localImg){
+        console.log('image -> ',this.localImg);
+        this.imageFileName = Capacitor.convertFileSrc(this.localImg.path);
+        this.localDescription = String(this.imageFileName);
+        this.localUrl = String(this.imageFileName);
+      }
+
+
+    }catch(e){
+      console.log('Error getImage: ', e);
+    }
   }
 
-  async uploadFile() {}
+  async uploadFile(file: LocalFile) {
+    const response = await fetch(file.data);
+    const blob = await response.blob();
+    const formData = new FormData();
+    formData.append('file', blob, file.name);
+    this.uploadData(formData);
+  }
+
+  async uploadData(formData: FormData){
+    const loading = await this.loadingCtrl.create({
+      message: 'Uploading image... ',
+    });
+
+    //use your own API
+    this.api.postFile("api/info/" + 
+      this.userId, this.localImg ).then(async resp =>{
+        console.log('resp --> ', resp);
+      });
+
+  }
 
   // async uploadFile() {
   //   let loader = await this.loadingCtrl.create({
