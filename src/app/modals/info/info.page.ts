@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, LoadingController, ToastController } from "@ionic/angular";
-// import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-// import { File } from '@ionic-native/file/ngx';
-// import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { DatabaseService } from "../../services/database.service";
