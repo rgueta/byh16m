@@ -4,7 +4,7 @@ import { ModalController, LoadingController, ToastController } from "@ionic/angu
 // import { File } from '@ionic-native/file/ngx';
 // import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { Capacitor } from "@capacitor/core";
-import { Camera, CameraResultType, CameraSource, Photo } from "@capacitor/camera";
+import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { DatabaseService } from "../../services/database.service";
 import { environment } from "../../../environments/environment";
 import { Validators, FormControl, FormBuilder, FormGroup} from "@angular/forms";
