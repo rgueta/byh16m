@@ -189,6 +189,7 @@ export class InfoPage implements OnInit {
     const blob = await response.blob();
     const formData = new FormData();
     formData.append('image', blob, this.imageFileName);
+
     this.uploadData(formData);
   }
 
@@ -197,9 +198,13 @@ export class InfoPage implements OnInit {
       message: 'Uploading image... ',
     });
 
+    let params:{} = {'userId': this.userId,'title': this.localTitle, 'url' : this.localUrl, 
+          'description' : this.localDescription, 'locationFolder': this.imgFolder}
+
+    // let params:{} = {'userId': this.userId}
+
     // use your own API
-    this.api.postData("api/info/" + 
-      this.userId, formData ).then(async resp =>{
+    this.api.postDataInfo("api/info", formData, params ).then(async resp =>{
         console.log('resp --> ', resp);
       });
 
