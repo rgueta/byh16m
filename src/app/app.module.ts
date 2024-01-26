@@ -13,7 +13,8 @@ import { SMS } from "@ionic-native/sms/ngx";
 import { Sim } from "@ionic-native/sim/ngx";
 import { UpdCodesModalPageRoutingModule } from "./modals/upd-codes-modal/upd-codes-modal-routing.module";
 import { Network } from "@ionic-native/network/ngx";
-import { Camera } from '@ionic-native/camera/ngx';
+// import { Camera } from '@ionic-native/camera/ngx';
+// import { Camera } from "@capacitor/camera";
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,7 +30,7 @@ import { Camera } from '@ionic-native/camera/ngx';
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-     ScreenOrientation,SMS,Sim,Network, Camera
+     ScreenOrientation,SMS,Sim,Network
     ],
   bootstrap: [AppComponent],
 })
