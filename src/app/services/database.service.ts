@@ -206,7 +206,7 @@ async postDataInfo(collection:String,data:any, params:{}){
   
   let  options = {
     headers : {
-      'content-type' : 'application/json',
+      'content-type' : 'multipart/form-data',
       'authorization' : `Bearer ${token}`,
       },
     params: params
