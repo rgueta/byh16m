@@ -5,7 +5,8 @@ import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { DatabaseService } from "../../services/database.service";
 import { environment } from "../../../environments/environment";
 import { Validators, FormControl, FormBuilder, FormGroup} from "@angular/forms";
-import { finalize } from 'rxjs';
+import { finalize, lastValueFrom } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
 
 const USERID = 'my-userId';
 
@@ -40,6 +41,7 @@ export class InfoPage implements OnInit {
   public localInfo:any;
 
   localImg : any;
+  image : any;
 
   REST_API_SERVER = environment.cloud.server_url;
 
@@ -49,6 +51,7 @@ export class InfoPage implements OnInit {
     public toast: ToastController,
     private api : DatabaseService,
     // public formBuilder : FormBuilder
+    private http: HttpClient
     ) {
 
       this.RegisterForm = new FormGroup({
@@ -162,29 +165,66 @@ export class InfoPage implements OnInit {
       this.localImg = await Camera.getPhoto({
         quality:50,
         allowEditing:false,
-        resultType:CameraResultType.Uri,
+        resultType:CameraResultType.DataUrl,
         source:CameraSource.Photos
       });
 
       if(this.localImg){
-        console.log('image -> ',this.localImg);
-        this.imageFileName = Capacitor.convertFileSrc(this.localImg.path);
-        this.localDescription = String(this.imageFileName);
-        this.localUrl = String(this.imageFileName);
+        // console.log('image -> ',this.localImg);
+        this.imageFileName = Capacitor.convertFileSrc(this.localImg.dataUrl);
+        this.localDescription = 'Description';
+        this.localUrl = 'Local Url';
 
         console.log('this.imageFileName --> ', this.imageFileName);
         console.log('this.localDescription --> ', this.localDescription);
         console.log('this.localUri --> ', this.localUrl);
-
       }
-
-
     }catch(e){
       console.log('Error getImage: ', e);
     }
   }
 
   async uploadFile() {
+    this.image = this.localImg.dataUrl;
+    const blob = this.dataURLtoBlob(this.localImg.dataUrl);
+    var imageFile = new File([blob], 'profile.jpg', {type: 'image/jpg'});
+
+
+    console.log('imageFile --> ',blob);
+
+    let formData = new FormData();
+    formData.append('image', blob, 'profile.jpg');
+    
+    const loading = await this.loadingCtrl.create({
+      message: 'Uploading image... ',
+    });
+
+
+    
+    let params:{} = {'userId': this.userId,'title': this.localTitle, 'url' : this.localUrl, 
+          'description' : this.localDescription, 'locationFolder': this.imgFolder}
+
+    // use your own API
+    // this.api.postDataInfo("api/info", formData, params ).then(async resp =>{
+    //     console.log('resp --> ', resp);
+    //   });
+
+    let  options = {
+      headers : {
+        'content-type' : 'application/json'
+        },
+      params: params
+    }
+
+    const data$ = await this.http.post<any>(this.REST_API_SERVER + 'api/info/' + this.userId, formData, options);
+    // const data$ = await this.http.post<any>(this.REST_API_SERVER + 'api/info', formData);
+    const res = await lastValueFrom(data$);
+
+    console.log(res)
+
+  }
+
+  async uploadFile_() {
     const response = await fetch(this.localImg);
     const blob = await response.blob();
     const formData = new FormData();
@@ -209,6 +249,16 @@ export class InfoPage implements OnInit {
       });
 
   }
+
+  dataURLtoBlob(dataurl:any){
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], {type:mime});
+  }
+
 
   //#endregion Image section ------------------------------------------------
   async collectInfo(){
