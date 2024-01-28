@@ -43,6 +43,7 @@ export class InfoPage implements OnInit {
   localImg : any;
   image : any;
 
+  ImageSize:any;
   pinFormatter:any;
 
   REST_API_SERVER = environment.cloud.server_url;
@@ -160,12 +161,16 @@ export class InfoPage implements OnInit {
   //#endregion select location  -------------------------------------------
 
 
+  async rangeChange(event:any){
+    this.ImageSize = await event.detail.value;
+  }
+
 //#region Image section ------------------------------------------------
 
   async getImage(){
     try{
       this.localImg = await Camera.getPhoto({
-        quality:30,
+        quality:this.ImageSize,
         allowEditing:false,
         resultType:CameraResultType.DataUrl,
         source:CameraSource.Photos

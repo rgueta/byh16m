@@ -79,8 +79,15 @@
 
     <ion-item>
         <ion-label class='labelInput' floating>File size:</ion-label>
-        <ion-range class="range" aria-label="Range with pin" [pin]="true" [snaps]="true"
-        [pinFormatter]="pinFormatter" [min]="0" [max]="10"></ion-range>
+        <ion-range class="range" aria-label="Range with pin" debounce="500"
+        [pin]="true" [snaps]="true" (ionChange)="rangeChange($event)"
+        [pinFormatter]="pinFormatter" [min]="0" [max]="100" step="10"
+        [value]="{ upper: 100 }"
+        >
+
+        <ion-icon slot="start" size="small" name="image-outline"></ion-icon>
+        <ion-icon slot="end" name="image-outline"></ion-icon>
+      </ion-range>
         <!-- <ion-range aria-label="Range with ticks" [ticks]="true"
         [snaps]="true" [min]="0" [max]="10"></ion-range> -->
     </ion-item>
