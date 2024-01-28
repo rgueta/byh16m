@@ -43,6 +43,8 @@ export class InfoPage implements OnInit {
   localImg : any;
   image : any;
 
+  pinFormatter:any;
+
   REST_API_SERVER = environment.cloud.server_url;
 
   constructor(
@@ -174,10 +176,6 @@ export class InfoPage implements OnInit {
         this.imageFileName = Capacitor.convertFileSrc(this.localImg.dataUrl);
         this.localDescription = 'Description';
         this.localUrl = 'Local Url';
-
-        console.log('this.imageFileName --> ', this.imageFileName);
-        console.log('this.localDescription --> ', this.localDescription);
-        console.log('this.localUri --> ', this.localUrl);
       }
     }catch(e){
       console.log('Error getImage: ', e);

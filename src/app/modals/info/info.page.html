@@ -77,10 +77,19 @@
       (click)="getImage()">Get Image</ion-button>
     </ion-item> -->
 
+    <ion-item>
+        <ion-label class='labelInput' floating>File size:</ion-label>
+        <ion-range class="range" aria-label="Range with pin" [pin]="true" [snaps]="true"
+        [pinFormatter]="pinFormatter" [min]="0" [max]="10"></ion-range>
+        <!-- <ion-range aria-label="Range with ticks" [ticks]="true"
+        [snaps]="true" [min]="0" [max]="10"></ion-range> -->
+    </ion-item>
   
       <ion-button id="frmCtrl_image" class="tamamataMargen titleBlue" expand="block"
         [disabled]="RegisterForm.invalid" (click)="getImage()">Get Image</ion-button>
     </form>  
+
+    
 
     <ion-item *ngIf="imageFileName">
       <ion-input type="text" class="ion-text-wrap" [ngModel]="localTitle"
