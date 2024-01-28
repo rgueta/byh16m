@@ -163,7 +163,7 @@ export class InfoPage implements OnInit {
   async getImage(){
     try{
       this.localImg = await Camera.getPhoto({
-        quality:50,
+        quality:30,
         allowEditing:false,
         resultType:CameraResultType.DataUrl,
         source:CameraSource.Photos
