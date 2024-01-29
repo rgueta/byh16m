@@ -1,15 +1,19 @@
 <ion-header>
   <ion-toolbar>
     <!-- <ion-item class="wrap-input"> -->
+      <div class="column left">
+        <div>
+          <ion-buttons slot="start">
+            <ion-icon class="icon_exit" (click)='closeModal()' 
+              name='arrow-back-circle-outline'>Cerrar</ion-icon>
+          </ion-buttons>
+        </div>  
+      </div>
+
       <div class="column middle">
-       <ion-title class="title"> Information</ion-title>
+       <ion-title> Information</ion-title>
       </div>
-      <div slot="start">
-        <ion-buttons class="modalcloseButton" >
-          <ion-icon (click)='closeModal()' 
-            name='arrow-back-circle-outline'>Cerrar</ion-icon>
-        </ion-buttons>
-      </div>
+     
     <!-- </ion-item> -->
   </ion-toolbar>
 </ion-header>
