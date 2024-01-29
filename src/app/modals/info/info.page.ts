@@ -193,8 +193,6 @@ export class InfoPage implements OnInit {
     var imageFile = new File([blob], 'profile.jpg', {type: 'image/jpg'});
 
 
-    console.log('imageFile --> ',blob);
-
     let formData = new FormData();
     formData.append('image', blob, 'profile.jpg');
     
@@ -202,15 +200,10 @@ export class InfoPage implements OnInit {
       message: 'Uploading image... ',
     });
 
-
-    
     let params:{} = {'userId': this.userId,'title': this.localTitle, 'url' : this.localUrl, 
           'description' : this.localDescription, 'locationFolder': this.imgFolder}
 
     // use your own API
-    // this.api.postDataInfo("api/info", formData, params ).then(async resp =>{
-    //     console.log('resp --> ', resp);
-    //   });
 
     let  options = {
       headers : {
@@ -220,20 +213,10 @@ export class InfoPage implements OnInit {
     }
 
     const data$ = await this.http.post<any>(this.REST_API_SERVER + 'api/info/' + this.userId, formData, options);
-    // const data$ = await this.http.post<any>(this.REST_API_SERVER + 'api/info', formData);
     const res = await lastValueFrom(data$);
 
     console.log(res)
 
-  }
-
-  async uploadFile_() {
-    const response = await fetch(this.localImg);
-    const blob = await response.blob();
-    const formData = new FormData();
-    formData.append('image', blob, this.imageFileName);
-
-    this.uploadData(formData);
   }
 
   async uploadData(formData: FormData){
