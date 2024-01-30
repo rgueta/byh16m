@@ -12,9 +12,6 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { SMS } from "@ionic-native/sms/ngx";
 import { Sim } from "@ionic-native/sim/ngx";
 import { UpdCodesModalPageRoutingModule } from "./modals/upd-codes-modal/upd-codes-modal-routing.module";
-import { Network } from "@ionic-native/network/ngx";
-// import { Camera } from '@ionic-native/camera/ngx';
-// import { Camera } from "@capacitor/camera";
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,7 +27,7 @@ import { Network } from "@ionic-native/network/ngx";
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-     ScreenOrientation,SMS,Sim,Network
+     ScreenOrientation,SMS,Sim
     ],
   bootstrap: [AppComponent],
 })

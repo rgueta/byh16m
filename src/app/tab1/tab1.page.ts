@@ -10,7 +10,7 @@ import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
 import { VisitorsPage } from '../modals/visitors/visitors.page';
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
-import { ScheduleOptions, LocalNotifications } from "@capacitor/local-notifications";
+import { LocalNotifications } from "@capacitor/local-notifications";
 import { Utils } from "../tools/tools";
 import { FamilyPage } from "../modals/family/family.page";
 import { RequestsPage } from "../modals/requests/requests.page";

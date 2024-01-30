@@ -11,7 +11,6 @@ import { Utils } from 'src/app/tools/tools';
 import { RequestsPage } from "../../modals/requests/requests.page";
 // import localNotification from "../../tools/localNotification";
 import { Sim } from "@ionic-native/sim/ngx"; 
-import { Network } from "@ionic-native/network/ngx";
 import { DatabaseService } from "../../services/database.service"
 
 const USER_ROLES = 'my-roles';
@@ -57,42 +56,14 @@ export class LoginPage implements OnInit {
     private alertController: AlertController,
     private modalController:ModalController,
     private SIM : Sim,
-    private network: Network,
     private platform: Platform,
     private api : DatabaseService,
 
-  ) { 
-
-  
-
-    this.net_status = this.network.onDisconnect().subscribe((status) => {
-
-      console.log('Disconnected ' + this.network.type);
-      console.log('type of ' + typeof this.network.type);
-
-      console.log('net_status--> ' + JSON.stringify(this.net_status));
-
-      if(this.network.type === ''){
-        console.log('No data connection!')
-      }
-
-    })
-
-    this.net_status = this.network.onConnect().subscribe((status) => {
-      console.log('Connected ' + this.network.type);
-      if(this.network.type === 'wifi'){
-        console.log('Connection by TELNOR');
-      }
-
-      console.log('net_status--> ' + JSON.stringify(this.net_status));
-    })
-  }
+  ) { }
 
   async ngOnInit() {
 
     this.getConfigApp();
-
-    console.log('Actual connection: ' + this.network.type)
 
     Utils.cleanLocalStorage();
     this.init();
