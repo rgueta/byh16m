@@ -68,6 +68,8 @@ export class LoginPage implements OnInit {
 
   async ngOnInit() {
 
+    // #region Network status -------------------
+
     if(Network){
       console.log('Network detection.')
       Network.getStatus().then((status) => {
@@ -98,6 +100,8 @@ export class LoginPage implements OnInit {
       console.log('Network detection.')
       console.log('Network status:',  this.networkStatus);
     };
+
+    //#endregion --------------------------------------------------------
 
     this.getConfigApp();
 
@@ -193,7 +197,6 @@ export class LoginPage implements OnInit {
 
     if (!this.networkStatus.connected){
       this.showAlert('','','Favor de activa el acceso a la red',['Cerrar'])
-      // console.log('Favor de activa el acceso a la red');
       return
     }
 

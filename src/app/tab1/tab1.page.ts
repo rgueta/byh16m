@@ -14,6 +14,7 @@ import { LocalNotifications } from "@capacitor/local-notifications";
 import { Utils } from "../tools/tools";
 import { FamilyPage } from "../modals/family/family.page";
 import { RequestsPage } from "../modals/requests/requests.page";
+import { Network, ConnectionStatus } from "@capacitor/network";
 
 import {
   ActionPerformed, PushNotificationSchema, PushNotifications, Token,
@@ -46,6 +47,7 @@ export class Tab1Page implements OnInit {
   REST_API_SERVER = environment.cloud.server_url;
 
   iosOrAndroid: boolean;
+  networkStatus: ConnectionStatus;
 
   constructor(
     private sms: SMS,
@@ -71,6 +73,42 @@ export class Tab1Page implements OnInit {
     const sim = await localStorage.getItem('my-core-sim');
     this.userId = await localStorage.getItem('my-userId');
     this.coreName = await localStorage.getItem('core-name')
+
+
+     // #region Network status -------------------
+
+     if(Network){
+      console.log('Network detection.')
+      Network.getStatus().then((status) => {
+        this.networkStatus = status;
+      });
+    }
+
+    // Check nerwork connection
+    Network.addListener('networkStatusChange', netStatus => {
+      const {connected, connectionType} = netStatus
+      this.networkStatus =  netStatus;
+
+      //'wifi' | 'cellular' | 'none' | 'unknown'
+     const networkType = connectionType;
+     
+     console.log('Network status changed', this.networkStatus);
+     console.log('networkType:', networkType);
+
+    });
+
+    const logCurrentNetworkStatus = async () => {
+      // const status = await Network.getStatus();
+
+      Network.getStatus().then((status) => {
+            this.networkStatus=status;
+          });
+    
+      console.log('Network detection.')
+      console.log('Network status:',  this.networkStatus);
+    };
+
+    //#endregion --------------------------------------------------------
 
     // -----------------firebase Push notification
     PushNotifications.requestPermissions().then(resul => {
@@ -220,7 +258,7 @@ async collectInfo(){
 
 
   async logout(){
-    await this.showAlert('','', 'Deseas salir ?','btns', 'Si', 'No')
+    await this.showAlert('','', 'Deseas salir ?','btns', 'Si', 'No');
   }
 
   push_notifications(codeId:Number){
@@ -236,7 +274,16 @@ async collectInfo(){
     modal.present()
   }
 
-  sendOpening(Door : string){
+  sendOpening(Door:string){
+    console.log('sendOpening...');
+    console.log('NEt status--> ', this.networkStatus);
+    if(!this.networkStatus.connected){
+      this.showAlertBasic('Aviso','',
+      'Activar el acceso a la red',['Cerrar']);
+    }
+  }
+
+  sendOpening_(Door : string){
     if(Door == ''){
       // return 0;
     }else{
@@ -419,6 +466,17 @@ async showAlert(Header:string, subHeader:string, msg:string, btns:any,
             }
     
     }]
+  });
+
+  await alert.present();
+}
+
+async showAlertBasic(Header:string, subHeader:string, msg:string, btns:any) {
+  const alert = await this.alertCtrl.create({
+    header: Header,
+    subHeader: subHeader,
+    message: msg,
+    buttons: btns
   });
 
   await alert.present();
