@@ -12,6 +12,7 @@ import { RequestsPage } from "../../modals/requests/requests.page";
 // import localNotification from "../../tools/localNotification";
 import { Sim } from "@ionic-native/sim/ngx"; 
 import { DatabaseService } from "../../services/database.service"
+import { Network, ConnectionStatus } from "@capacitor/network";
 
 const USER_ROLES = 'my-roles';
 const USER_ROLE = 'my-role';
@@ -26,6 +27,7 @@ const ADMIN_DEVICE = 'admin_device';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  networkStatus: ConnectionStatus;
   isAndroid:any;
   credentials: FormGroup;
   configApp : {};
@@ -57,11 +59,45 @@ export class LoginPage implements OnInit {
     private modalController:ModalController,
     private SIM : Sim,
     private platform: Platform,
-    private api : DatabaseService,
+    private api : DatabaseService
 
-  ) { }
+  ) {
+
+   }
+   
 
   async ngOnInit() {
+
+    if(Network){
+      console.log('Network detection.')
+      Network.getStatus().then((status) => {
+        this.networkStatus = status;
+      });
+    }
+
+    // Check nerwork connection
+    Network.addListener('networkStatusChange', netStatus => {
+      const {connected, connectionType} = netStatus
+      this.networkStatus =  netStatus;
+
+      //'wifi' | 'cellular' | 'none' | 'unknown'
+     const networkType = connectionType;
+     
+     console.log('Network status changed', this.networkStatus);
+     console.log('networkType:', networkType);
+
+    });
+
+    const logCurrentNetworkStatus = async () => {
+      // const status = await Network.getStatus();
+
+      Network.getStatus().then((status) => {
+            this.networkStatus=status;
+          });
+    
+      console.log('Network detection.')
+      console.log('Network status:',  this.networkStatus);
+    };
 
     this.getConfigApp();
 
@@ -154,6 +190,13 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
+
+    if (!this.networkStatus.connected){
+      this.showAlert('','','Favor de activa el acceso a la red',['Cerrar'])
+      // console.log('Favor de activa el acceso a la red');
+      return
+    }
+
     const loading = await this.loadingController.create();
     await loading.present();
     this.authService.login(this.credentials.value).subscribe(
@@ -274,6 +317,15 @@ async openStore(){
   this.router.navigate(['/store']);
 }
 
+async showAlert(Header:string, subHeader:string, msg:string, btns:any) {
+  const alert = await this.alertController.create({
+    header: Header,
+    subHeader: subHeader,
+    message: msg,
+    buttons: btns,
+  });
 
+  await alert.present();
+}
 
 }
