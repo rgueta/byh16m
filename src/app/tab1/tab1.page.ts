@@ -4,7 +4,6 @@ import { ModalController, ToastController ,
   PopoverController, AlertController} from '@ionic/angular';
 import type { ToastOptions } from "@ionic/angular";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
-// import { Sim } from "@ionic-native/sim/ngx"; 
 import { environment } from "../../environments/environment";
 import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
@@ -276,10 +275,13 @@ async collectInfo(){
 
   sendOpening(Door:string){
     console.log('sendOpening...');
+    Network.getStatus().then((status) => {
+      this.networkStatus = status;
+    });
     console.log('NEt status--> ', this.networkStatus);
     if(!this.networkStatus.connected){
       this.showAlertBasic('Aviso','',
-      'Activar el acceso a la red',['Cerrar']);
+      'No hay acceso a la red',['Cerrar']);
     }
   }
 
