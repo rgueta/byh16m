@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AlertController } from "@ionic/angular";
+import { AlertController,ToastController } from "@ionic/angular";
 
 @Injectable({
   providedIn: 'root'
@@ -7,11 +7,13 @@ import { AlertController } from "@ionic/angular";
 export class ToolsService {
 
   constructor(
-    private alertCtrl :AlertController
+    private alertCtrl :AlertController,
+    private toast: ToastController,
   ) { }
 
 
-  async showAlertBasic(Header:string, subHeader:string, msg:string, btns:any) {
+  async showAlertBasic(Header:string, subHeader:string,
+    msg:string, btns:any) {
     const alert = await this.alertCtrl.create({
       header: Header,
       subHeader: subHeader,
@@ -20,5 +22,15 @@ export class ToolsService {
     });
   
     await alert.present();
+  }
+
+  toastEvent(msg:string,duration:number,btns:any){
+    this.toast.create({
+      message:msg,
+      duration:duration,
+      buttons: btns
+    }).then((toastData) =>{
+      toastData.present();
+    });
   }
 }

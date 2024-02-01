@@ -1,8 +1,6 @@
 import { Component ,Input, OnInit} from '@angular/core';
-import { ModalController, ToastController ,
-  AnimationController, isPlatform, getPlatforms,
+import { ModalController ,AnimationController, isPlatform,
   PopoverController, AlertController} from '@ionic/angular';
-import type { ToastOptions } from "@ionic/angular";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { environment } from "../../environments/environment";
 import { DatabaseService } from '../services/database.service';
@@ -19,6 +17,7 @@ import {
   ActionPerformed, PushNotificationSchema, PushNotifications, Token,
 } from '@capacitor/push-notifications';
 import { FCM } from "@capacitor-community/fcm";
+import { ToolsService } from "../services/tools.service";
 
 @Component({
   selector: 'app-tab1',
@@ -50,7 +49,6 @@ export class Tab1Page implements OnInit {
 
   constructor(
     private sms: SMS,
-    private toast: ToastController,
     public modalController: ModalController,
     private api: DatabaseService,
     public animationController : AnimationController,
@@ -58,7 +56,8 @@ export class Tab1Page implements OnInit {
     private screenOrientation: ScreenOrientation,
     // private SIM : Sim,
     private popoverCtrl:PopoverController,
-    public alertCtrl: AlertController) { }
+    public alertCtrl: AlertController,
+    private toolService: ToolsService) { }
   
   async ionViewWillEnter(){
       if(localStorage.getItem('IsAdmin') === 'true'){
@@ -114,7 +113,7 @@ export class Tab1Page implements OnInit {
       if(resul.receive === 'granted'){
         PushNotifications.register();
       }else{
-        this.toastEvent('Push notification not granted..!',2000);
+        this.toolService.toastEvent('Push notification not granted..!',0,['Ok']);
       }
     });
 
@@ -142,8 +141,7 @@ export class Tab1Page implements OnInit {
     PushNotifications.addListener(
       'pushNotificationReceived',
       (notification: PushNotificationSchema) => {
-        // this.toastEvent(JSON.stringify(notification.body));
-        this.toastEvent(notification.body,10000);
+        this.toolService.toastEvent(notification.body,0,['Ok']);
       },
     );
 
@@ -170,13 +168,7 @@ export class Tab1Page implements OnInit {
     // getting info data
     if(environment.app.debugging){
       console.log('collect Info jumped, because debugging!');
-      await this.presentToast({
-        message : 'collect Info jumped, because debugging!',
-        duration: 10000,
-        buttons:[
-          {text: 'Ok'}
-        ]
-      });
+      await this.toolService.toastEvent('collect Info jumped, because debugging!',0,['Ok']);
     }else{
       this.collectInfo();
     }
@@ -236,13 +228,6 @@ toggleButtons(){
 
 }
 
-async presentToast(opts: ToastOptions) {
-  const toast = await this.toast.create(opts);
-
-  await toast.present();
-}
-
-
 async collectInfo(){
  await this.api.getData('api/info/' + this.userId).subscribe(async result => {
     this.localInfo = await result;
@@ -259,7 +244,7 @@ async collectInfo(){
   }
 
   push_notifications(codeId:Number){
-    this.toastEvent('Process code ' + codeId,2000);
+    this.toolService.toastEvent('Process code ' + codeId,0, ['Ok']);
     
   }
 
@@ -289,10 +274,7 @@ async openUrl(url:string){
 
 async sendSMS(){
   if(this.msg == ''){
-    const toast = await this.toast.create({
-      message : 'Message empty !',
-      duration: 3000
-    });
+    this.toolService.toastEvent('Message empty !',0,['Ok'])
     return;
   }
   var options:SmsOptions={
@@ -317,17 +299,13 @@ async sendSMS(){
       this.api.postData('api/twilio/open/' + 
       this.userId + '/' + this.msg + '/' + this.sim,'')
     }
-      const toast = await this.toast.create({
-        message : 'Text [ ' + JSON.stringify(this.msg) +  ' ] was sent !',
-        duration: 3000
-      });
-        toast.present();
   }
   catch(e){
-    this.showAlertBasic('Aviso','Ocurrio una excepción revisar:',
+    this.toolService.showAlertBasic('Aviso','Ocurrio una excepción revisar:',
       `1. Acceso a la red<br>` +
       `2. Permiso para envio de sms`,['Cerrar']);
-    }
+    
+  }
 }
 
 async fcmNotification(){
@@ -450,31 +428,6 @@ async showAlert(Header:string, subHeader:string, msg:string, btns:any,
   });
 
   await alert.present();
-}
-
-async showAlertBasic(Header:string, subHeader:string, msg:string, btns:any) {
-  const alert = await this.alertCtrl.create({
-    header: Header,
-    subHeader: subHeader,
-    message:  msg,
-    buttons: btns
-  });
-
-  await alert.present();
-}
-
-
-toastEvent(msg:string,duration:number){
-  this.myToast = this.toast.create({
-    message:msg,
-    duration:duration,
-    buttons:[
-      {text: 'Ok'}
-    ]
-  }).then((toastData) =>{
-    console.log(toastData);
-    toastData.present();
-  });
 }
 
 }

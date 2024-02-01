@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { DatabaseService } from '../services/database.service';
-import { ToastController } from "@ionic/angular";
 import {Utils} from '../tools/tools';
 import { ToolsService } from "../services/tools.service";
 
@@ -8,7 +7,6 @@ const USERID = 'my-userId';
 const REFRESH_TOKEN_KEY = 'my-refresh-token';
 const TOKEN_KEY = 'my-token';
 const CORE_SIM = 'my-core-sim';
-
 
 @Component({
   selector: 'app-tab2',
@@ -32,7 +30,6 @@ export class Tab2Page {
 
   constructor(
     public api : DatabaseService,
-    private toast : ToastController,
     private tools:ToolsService
   ) { }
 
@@ -59,27 +56,24 @@ export class Tab2Page {
     this.end = await Utils.convDate(this.end);
 
     try{
-      await this.api.getData('api/codeEvent/' + this.myUserId + '/' +
-      this.Core_sim + '/' + this.start + '/' + this.end).subscribe(async result =>{
+      await this.api.getData('api/codeEvent/' + 
+        this.myUserId + '/' + this.Core_sim + 
+        '/' + this.start + '/' + 
+        this.end).subscribe(async result =>{
       
-      this.EventsList = await result;
+        this.EventsList = await result;
       
-      if(this.EventsList.length > 0){
-        this.EventsList.forEach(async (item:any) =>{
-          let d = new Date(item.createdAt.replace('Z',''));
-          item.createdAt = await new Date(d.setMinutes(d.getMinutes() 
-          - d.getTimezoneOffset()));
-        });
+        if(this.EventsList.length > 0){
+          this.EventsList.forEach(async (item:any) =>{
+            let d = new Date(item.createdAt.replace('Z',''));
+            item.createdAt = await new Date(d.setMinutes(d.getMinutes() 
+            - d.getTimezoneOffset()));
+          });
 
-      this.EventsList[0].open = true;
-      }else{
-        const toast = await this.toast.create({
-          message : 'No hay eventos para esta fecha',
-          // position : 'top',
-          duration : 3000
-        });
-        toast.present();
-      }
+        this.EventsList[0].open = true;
+        }else{
+          this.tools.toastEvent('No hay eventos para esta fecha',0,['Ok'])
+        }
     
       });
     }catch(e){
@@ -111,18 +105,5 @@ export class Tab2Page {
       .map((item:any) => item.open = false);
     }
   }
-
-   // -------   toast control alerts    ---------------------
-   toastEvent(msg:string){
-    this.myToast = this.toast.create({
-      message:msg,
-      duration:2000
-    }).then((toastData) =>{
-      console.log(toastData);
-      toastData.present();
-    });
-  }
-
-
 
 }
