@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DatabaseService } from '../services/database.service';
 import { ToastController } from "@ionic/angular";
 import {Utils} from '../tools/tools';
+import { ToolsService } from "../services/tools.service";
 
 const USERID = 'my-userId';
 const REFRESH_TOKEN_KEY = 'my-refresh-token';
@@ -14,6 +15,7 @@ const CORE_SIM = 'my-core-sim';
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss']
 })
+
 export class Tab2Page {
   start: any = new Date();
   end: any = new Date();
@@ -30,7 +32,8 @@ export class Tab2Page {
 
   constructor(
     public api : DatabaseService,
-    private toast : ToastController
+    private toast : ToastController,
+    private tools:ToolsService
   ) { }
 
 
@@ -55,9 +58,7 @@ export class Tab2Page {
     this.start = await Utils.convDate(this.start);
     this.end = await Utils.convDate(this.end);
 
-    console.log('Start date --> ', this.start);
-    console.log('End date --> ', this.end);
-
+    try{
       await this.api.getData('api/codeEvent/' + this.myUserId + '/' +
       this.Core_sim + '/' + this.start + '/' + this.end).subscribe(async result =>{
       
@@ -66,14 +67,12 @@ export class Tab2Page {
       if(this.EventsList.length > 0){
         this.EventsList.forEach(async (item:any) =>{
           let d = new Date(item.createdAt.replace('Z',''));
-          item.createdAt = await new Date(d.setMinutes(d.getMinutes() - d.getTimezoneOffset()));
+          item.createdAt = await new Date(d.setMinutes(d.getMinutes() 
+          - d.getTimezoneOffset()));
         });
 
-        console.log('------------ Si hay eventos ---------------- ');
-        this.EventsList[0].open = true;
-        console.log('EventsList --> ',this.EventsList)
+      this.EventsList[0].open = true;
       }else{
-        console.log('------------ No hay eventos ---------------- ');
         const toast = await this.toast.create({
           message : 'No hay eventos para esta fecha',
           // position : 'top',
@@ -81,7 +80,14 @@ export class Tab2Page {
         });
         toast.present();
       }
-    });
+    
+      });
+    }catch(e){
+      this.tools.showAlertBasic('Aviso','Ocurrio una excepción revisar:',
+      `1. Acceso a la red<br>` +
+      `2. Permiso para envio de sms`,['Cerrar']);
+
+    }
   }
 
   async setupCode(visitorId:string){

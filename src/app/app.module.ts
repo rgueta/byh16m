@@ -23,8 +23,7 @@ import { UpdCodesModalPageRoutingModule } from
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    UpdCodesModalPageRoutingModule,
-    
+    UpdCodesModalPageRoutingModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

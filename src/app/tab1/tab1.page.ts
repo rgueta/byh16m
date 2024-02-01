@@ -161,8 +161,6 @@ export class Tab1Page implements OnInit {
 
 // this.init();
     this.version = environment.app.version;
-
-    console.log('getPlatform --> ', JSON.stringify(getPlatforms()));
     if(isPlatform('cordova') || isPlatform('ios')){
       this.lockToPortrait();
     }else if(isPlatform('android')){
