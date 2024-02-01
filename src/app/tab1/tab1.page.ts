@@ -329,8 +329,6 @@ async sendSMS(){
     if(use_twilio == 'false'){
       await this.sms.send(this.sim,this.msg,options);
     }else{
-      console.log('url -- >   api/twilio/open/' + this.userId + '/' + 
-      this.msg + '/' + this.sim);
       this.api.postData('api/twilio/open/' + 
       this.userId + '/' + this.msg + '/' + this.sim,'')
     }
@@ -341,16 +339,9 @@ async sendSMS(){
         toast.present();
   }
   catch(e){
-    this.showAlertBasic('Aviso','Revisar:',
+    this.showAlertBasic('Aviso','Ocurrio una excepción revisar:',
       `1. Acceso a la red<br>` +
-      `2. Permiso para envio de sms<br><br>` +
-      `Error: ${e}`,['Cerrar']);
-    
-    // const toast = await this.toast.create({
-    //   message : 'Comando no se envio : ' + JSON.stringify(e),
-    //   duration: 3000
-    // });
-    //   toast.present();
+      `2. Permiso para envio de sms`,['Cerrar']);
     }
 }
 
