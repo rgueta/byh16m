@@ -273,20 +273,7 @@ async collectInfo(){
     modal.present()
   }
 
-  sendOpening(Door:string){
-    console.log('sendOpening...');
-    Network.getStatus().then((status) => {
-      this.networkStatus = status;
-    });
-    console.log('NEt status--> ', this.networkStatus);
-    if(!this.networkStatus.connected){
-      this.showAlertBasic('Aviso','Revisar:',
-      `1. Acceso a la red<br>` +
-      `2. Permiso para envio de sms`,['Cerrar']);
-    }
-  }
-
-  sendOpening_(Door : string){
+  sendOpening(Door : string){
     if(Door == ''){
       // return 0;
     }else{
