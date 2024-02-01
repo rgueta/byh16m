@@ -280,8 +280,9 @@ async collectInfo(){
     });
     console.log('NEt status--> ', this.networkStatus);
     if(!this.networkStatus.connected){
-      this.showAlertBasic('Aviso','',
-      'No hay acceso a la red',['Cerrar']);
+      this.showAlertBasic('Aviso','Revisar:',
+      `1. Acceso a la red<br>` +
+      `2. Permiso para envio de sms`,['Cerrar']);
     }
   }
 
@@ -326,7 +327,6 @@ async sendSMS(){
 
   try{
     if(use_twilio == 'false'){
-      console.log('send clicked..')
       await this.sms.send(this.sim,this.msg,options);
     }else{
       console.log('url -- >   api/twilio/open/' + this.userId + '/' + 
@@ -334,7 +334,6 @@ async sendSMS(){
       this.api.postData('api/twilio/open/' + 
       this.userId + '/' + this.msg + '/' + this.sim,'')
     }
-    
       const toast = await this.toast.create({
         message : 'Text [ ' + JSON.stringify(this.msg) +  ' ] was sent !',
         duration: 3000
@@ -342,12 +341,16 @@ async sendSMS(){
         toast.present();
   }
   catch(e){
-    console.log('Text was not sent --> ', JSON.stringify(e));
-    const toast = await this.toast.create({
-      message : 'Comando no se envio : ' + JSON.stringify(e),
-      duration: 3000
-    });
-      toast.present();
+    this.showAlertBasic('Aviso','Revisar:',
+      `1. Acceso a la red<br>` +
+      `2. Permiso para envio de sms<br><br>` +
+      `Error: ${e}`,['Cerrar']);
+    
+    // const toast = await this.toast.create({
+    //   message : 'Comando no se envio : ' + JSON.stringify(e),
+    //   duration: 3000
+    // });
+    //   toast.present();
     }
 }
 
@@ -477,7 +480,7 @@ async showAlertBasic(Header:string, subHeader:string, msg:string, btns:any) {
   const alert = await this.alertCtrl.create({
     header: Header,
     subHeader: subHeader,
-    message: msg,
+    message:  msg,
     buttons: btns
   });
 

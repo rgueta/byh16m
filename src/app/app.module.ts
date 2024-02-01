@@ -18,12 +18,13 @@ import { UpdCodesModalPageRoutingModule } from
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({ innerHTMLTemplatesEnabled: true }),
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    UpdCodesModalPageRoutingModule
+    UpdCodesModalPageRoutingModule,
+    
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
