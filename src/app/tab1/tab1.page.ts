@@ -19,6 +19,8 @@ import {
 import { FCM } from "@capacitor-community/fcm";
 import { ToolsService } from "../services/tools.service";
 
+const netStatus = 'netStatus';
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -93,6 +95,8 @@ export class Tab1Page implements OnInit {
      console.log('Network status changed', this.networkStatus);
      console.log('networkType:', networkType);
 
+     localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
+
     });
 
     const logCurrentNetworkStatus = async () => {
@@ -104,6 +108,7 @@ export class Tab1Page implements OnInit {
     
       console.log('Network detection.')
       console.log('Network status:',  this.networkStatus);
+      localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
     };
 
     //#endregion --------------------------------------------------------

@@ -9,10 +9,10 @@ import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { Device } from "@capacitor/device";
 import { Utils } from 'src/app/tools/tools';
 import { RequestsPage } from "../../modals/requests/requests.page";
-// import localNotification from "../../tools/localNotification";
 import { Sim } from "@ionic-native/sim/ngx"; 
 import { DatabaseService } from "../../services/database.service"
 import { Network, ConnectionStatus } from "@capacitor/network";
+import { PluginListenerHandle } from '@capacitor/core';
 
 const USER_ROLES = 'my-roles';
 const USER_ROLE = 'my-role';
@@ -20,6 +20,7 @@ const VISITORS = 'visitors';
 const DEVICE_UUID = 'device-uuid';
 const DEVICE_PKG = 'device-pkg';
 const ADMIN_DEVICE = 'admin_device';
+const netStatus = 'netStatus';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,10 @@ const ADMIN_DEVICE = 'admin_device';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  networkListener: PluginListenerHandle;
   networkStatus: ConnectionStatus;
+  cnnStatus:boolean;
+
   isAndroid:any;
   credentials: FormGroup;
   configApp : {};
@@ -48,6 +52,7 @@ export class LoginPage implements OnInit {
  net_status:any;
  device_uuid:string='';
  admin_device:any;
+ 
 
   constructor(
     private fb: FormBuilder,
@@ -61,48 +66,60 @@ export class LoginPage implements OnInit {
     private platform: Platform,
     private api : DatabaseService
 
-  ) {
-
-   }
+  ) {}
    
-
-  async ngOnInit() {
+  async ngOnInit_() {
 
     // #region Network status -------------------
 
-    if(Network){
-      console.log('Network detection.')
-      Network.getStatus().then((status) => {
-        this.networkStatus = status;
-      });
-    }
+    // if(Network){
+
+    //   // console.log('Network detection.')
+    //   // Network.getStatus().then(async (status) => {
+    //   //   this.networkStatus = await status;
+
+    //   // });
+
+    //   localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
+    //   console.log('Network status', this.networkStatus);
+    // }
 
     // Check nerwork connection
-    Network.addListener('networkStatusChange', netStatus => {
-      const {connected, connectionType} = netStatus
-      this.networkStatus =  netStatus;
+    this.networkListener = await Network.addListener('networkStatusChange', status => {
+      this.networkStatus = status;
+      console.log('Network status changed --> ', status);
+    
+    // const {connected, connectionType} = status;
+    //   this.networkStatus =  status;
 
-      //'wifi' | 'cellular' | 'none' | 'unknown'
-     const networkType = connectionType;
+    //   //'wifi' | 'cellular' | 'none' | 'unknown'
+    //  const networkType = connectionType;
      
-     console.log('Network status changed', this.networkStatus);
-     console.log('networkType:', networkType);
+    //  console.log('Network status changed', this.networkStatus);
+    //  console.log('networkType:', networkType);
 
     });
 
-    const logCurrentNetworkStatus = async () => {
-      // const status = await Network.getStatus();
+    const status = await Network.getStatus();
+    this.changeNetStatus(status);
+    console.log('Network status:', this.cnnStatus)
 
-      Network.getStatus().then((status) => {
-            this.networkStatus=status;
-          });
+    // const logCurrentNetworkStatus = async () => {
+    //   // const status = await Network.getStatus();
+
+    //   Network.getStatus().then((status) => {
+    //         this.networkStatus=status;
+    //       });
     
-      console.log('Network detection.')
-      console.log('Network status:',  this.networkStatus);
-    };
+    //   console.log('Network detection.')
+    //   console.log('Network status:',  this.networkStatus);
+    // };
 
     //#endregion --------------------------------------------------------
+  }
 
+  
+  async ngOnInit() {
     this.getConfigApp();
 
     Utils.cleanLocalStorage();
@@ -162,6 +179,10 @@ export class LoginPage implements OnInit {
         await this.credentials.get('email').setValue ('neighbor2@gmail.com');
         await this.credentials.get('pwd').setValue ('1234');
       }
+  }
+
+  changeNetStatus(status:ConnectionStatus){
+    this.cnnStatus = status?.connected
   }
 
   async init(): Promise<void> {

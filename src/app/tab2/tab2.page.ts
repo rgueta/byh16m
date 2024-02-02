@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../services/database.service';
 import {Utils} from '../tools/tools';
 import { ToolsService } from "../services/tools.service";
+import { Network, ConnectionStatus } from "@capacitor/network";
 
 const USERID = 'my-userId';
 const REFRESH_TOKEN_KEY = 'my-refresh-token';
 const TOKEN_KEY = 'my-token';
 const CORE_SIM = 'my-core-sim';
+const netStatus = 'netStatus';
 
 @Component({
   selector: 'app-tab2',
@@ -14,7 +16,7 @@ const CORE_SIM = 'my-core-sim';
   styleUrls: ['tab2.page.scss']
 })
 
-export class Tab2Page {
+export class Tab2Page implements OnInit {
   start: any = new Date();
   end: any = new Date();
   
@@ -28,10 +30,47 @@ export class Tab2Page {
   myToast:any;
   myUserId:any;
 
+  networkStatus: ConnectionStatus;
+
   constructor(
     public api : DatabaseService,
     private tools:ToolsService
   ) { }
+
+  async ngOnInit(): Promise<void> {
+
+          // Check nerwork connection
+    Network.addListener('networkStatusChange', netStatus => {
+      const {connected, connectionType} = netStatus
+      this.networkStatus =  netStatus;
+
+      //'wifi' | 'cellular' | 'none' | 'unknown'
+     const networkType = connectionType;
+     
+     console.log('Network status changed', this.networkStatus);
+     console.log('networkType:', networkType);
+     localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
+
+    });
+
+    const logCurrentNetworkStatus = async () => {
+      // const status = await Network.getStatus();
+
+      Network.getStatus().then((status) => {
+            this.networkStatus=status;
+          });
+    
+      console.log('Network detection.')
+      console.log('Network status:',  this.networkStatus);
+      localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
+    };
+
+
+
+
+    //#endregion --------------------------------------------------------
+
+  }
 
 
   async ionViewWillEnter() {
@@ -47,6 +86,16 @@ export class Tab2Page {
   }
 
   async getEvents($event:any){
+
+    const netStatus = JSON.parse(localStorage.getItem('netStatus'));
+    console.log('networkStatus --> ', netStatus);
+    if(!netStatus.connected){
+      this.tools.toastEvent(`Revisar: <br><rb>` +
+      `1. Acceso a la red<br>` +
+      `2. Permiso para envio de sms`,0,['Ok']);
+      return;
+    }
+
     this.start = await new Date($event);
     this.end = await new Date($event);
     await this.start.setHours(0,0,0,0);
