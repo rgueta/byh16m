@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../services/database.service';
 import {Utils} from '../tools/tools';
 import { ToolsService } from "../services/tools.service";
-import { Network, ConnectionStatus } from "@capacitor/network";
 
 const USERID = 'my-userId';
 const REFRESH_TOKEN_KEY = 'my-refresh-token';
@@ -30,46 +29,12 @@ export class Tab2Page implements OnInit {
   myToast:any;
   myUserId:any;
 
-  networkStatus: ConnectionStatus;
-
   constructor(
     public api : DatabaseService,
     private tools:ToolsService
   ) { }
 
   async ngOnInit(): Promise<void> {
-
-          // Check nerwork connection
-    Network.addListener('networkStatusChange', netStatus => {
-      const {connected, connectionType} = netStatus
-      this.networkStatus =  netStatus;
-
-      //'wifi' | 'cellular' | 'none' | 'unknown'
-     const networkType = connectionType;
-     
-     console.log('Network status changed', this.networkStatus);
-     console.log('networkType:', networkType);
-     localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
-
-    });
-
-    const logCurrentNetworkStatus = async () => {
-      // const status = await Network.getStatus();
-
-      Network.getStatus().then((status) => {
-            this.networkStatus=status;
-          });
-    
-      console.log('Network detection.')
-      console.log('Network status:',  this.networkStatus);
-      localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
-    };
-
-
-
-
-    //#endregion --------------------------------------------------------
-
   }
 
 

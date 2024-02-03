@@ -4,15 +4,14 @@ import { AuthenticationService } from './../../services/authentication.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from "../../../environments/environment";
 import { AlertController, LoadingController, isPlatform, 
-  ModalController, Platform} from "@ionic/angular";
+  ModalController, Platform, ToastController} from "@ionic/angular";
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { Device } from "@capacitor/device";
 import { Utils } from 'src/app/tools/tools';
 import { RequestsPage } from "../../modals/requests/requests.page";
 import { Sim } from "@ionic-native/sim/ngx"; 
 import { DatabaseService } from "../../services/database.service"
-import { Network, ConnectionStatus } from "@capacitor/network";
-import { PluginListenerHandle } from '@capacitor/core';
+import { ToolsService } from 'src/app/services/tools.service';
 
 const USER_ROLES = 'my-roles';
 const USER_ROLE = 'my-role';
@@ -28,9 +27,7 @@ const netStatus = 'netStatus';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  networkListener: PluginListenerHandle;
-  networkStatus: ConnectionStatus;
-  netStatus : boolean;
+
 
   isAndroid:any;
   credentials: FormGroup;
@@ -52,6 +49,7 @@ export class LoginPage implements OnInit {
  net_status:any;
  device_uuid:string='';
  admin_device:any;
+ public myToast:any;
  
 
   constructor(
@@ -64,91 +62,12 @@ export class LoginPage implements OnInit {
     private modalController:ModalController,
     private SIM : Sim,
     private platform: Platform,
-    private api : DatabaseService
+    private api : DatabaseService,
+    public toolService:ToolsService,
+    public toast: ToastController,
 
-  ) {
-    this.checkNetwork();
-  }
-
-
-  async checkNetwork(){
-    this.networkListener = Network.addListener('networkStatusChange',
-     (status) => {
-      console.log('Network status changed', status);
-      if(status.connected == false){
-        console.log('platform ready... network Not connected');
-      }else{
-        console.log('platform ready... network connected');
-      }
-    });
-
-    const status = await Network.getStatus();
-    console.log('Network status 1: ', status);
-    this.changeNetStatus(status);
-    console.log('Network status 2: ', this.netStatus);
-    
-    this.platform.ready().then(() => {
-    // this.navCtrl.navigateRoot(['login'], {});
-      console.log('platform ready...');
-    });
-    
-  }
-   
-   changeNetStatus(status:any){
-    this.netStatus = status?.connected;
-   }
-   
-  async ngOnInit_() {
-
-    // #region Network status -------------------
-
-    // if(Network){
-
-    //   // console.log('Network detection.')
-    //   // Network.getStatus().then(async (status) => {
-    //   //   this.networkStatus = await status;
-
-    //   // });
-
-    //   localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
-    //   console.log('Network status', this.networkStatus);
-    // }
-
-    // Check nerwork connection
-    this.networkListener = await Network.addListener('networkStatusChange', status => {
-      this.networkStatus = status;
-      console.log('Network status changed --> ', status);
-    
-    // const {connected, connectionType} = status;
-    //   this.networkStatus =  status;
-
-    //   //'wifi' | 'cellular' | 'none' | 'unknown'
-    //  const networkType = connectionType;
+  ) { }
      
-    //  console.log('Network status changed', this.networkStatus);
-    //  console.log('networkType:', networkType);
-
-    });
-
-    const status = await Network.getStatus();
-    this.changeNetStatus(status);
-    console.log('Network status:', this.netStatus)
-
-    // const logCurrentNetworkStatus = async () => {
-    //   // const status = await Network.getStatus();
-
-    //   Network.getStatus().then((status) => {
-    //         this.networkStatus=status;
-    //       });
-    
-    //   console.log('Network detection.')
-    //   console.log('Network status:',  this.networkStatus);
-    // };
-
-    //#endregion --------------------------------------------------------
-  }
-
-  
   async ngOnInit() {
     this.getConfigApp();
 
@@ -242,12 +161,6 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
-
-    if (!this.networkStatus.connected){
-      this.showAlert('','','Favor de activa el acceso a la red',['Cerrar'])
-      return
-    }
-
     const loading = await this.loadingController.create();
     await loading.present();
     this.authService.login(this.credentials.value).subscribe(
@@ -368,6 +281,9 @@ async openStore(){
   this.router.navigate(['/store']);
 }
 
+
+// -------------- Notifications ---------------------------
+
 async showAlert(Header:string, subHeader:string, msg:string, btns:any) {
   const alert = await this.alertController.create({
     header: Header,
@@ -378,5 +294,15 @@ async showAlert(Header:string, subHeader:string, msg:string, btns:any) {
 
   await alert.present();
 }
+
+// toastEvent(msg:string,duration:number,btns:any){
+//   const toast : any = toast.create({
+//     message:msg,
+//     duration:duration,
+//     buttons: btns
+//   });
+//   this.toast.present();
+
+// }
 
 }

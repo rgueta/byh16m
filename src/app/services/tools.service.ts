@@ -24,13 +24,22 @@ export class ToolsService {
     await alert.present();
   }
 
-  toastEvent(msg:string,duration:number,btns:any){
-    this.toast.create({
+  async toastEvent(msg:string,duration:number,btns:any){
+    const myToast = await this.toast.create({
       message:msg,
       duration:duration,
       buttons: btns
-    }).then((toastData) =>{
-      toastData.present();
     });
+      myToast.present();
   }
+
+  // toastEvent(msg:string,duration:number,btns:any){
+  //   this.toast.create({
+  //     message:msg,
+  //     duration:duration,
+  //     buttons: btns
+  //   }).then((toastData) =>{
+  //     toastData.present();
+  //   });
+  // }
 }

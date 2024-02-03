@@ -74,45 +74,6 @@ export class Tab1Page implements OnInit {
     this.userId = await localStorage.getItem('my-userId');
     this.coreName = await localStorage.getItem('core-name')
 
-
-     // #region Network status -------------------
-
-     if(Network){
-      console.log('Network detection.')
-      Network.getStatus().then((status) => {
-        this.networkStatus = status;
-      });
-    }
-
-    // Check nerwork connection
-    Network.addListener('networkStatusChange', netStatus => {
-      const {connected, connectionType} = netStatus
-      this.networkStatus =  netStatus;
-
-      //'wifi' | 'cellular' | 'none' | 'unknown'
-     const networkType = connectionType;
-     
-     console.log('Network status changed', this.networkStatus);
-     console.log('networkType:', networkType);
-
-     localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
-
-    });
-
-    const logCurrentNetworkStatus = async () => {
-      // const status = await Network.getStatus();
-
-      Network.getStatus().then((status) => {
-            this.networkStatus=status;
-          });
-    
-      console.log('Network detection.')
-      console.log('Network status:',  this.networkStatus);
-      localStorage.setItem('netStatus',JSON.stringify(this.networkStatus));
-    };
-
-    //#endregion --------------------------------------------------------
-
     // -----------------firebase Push notification
     PushNotifications.requestPermissions().then(resul => {
       if(resul.receive === 'granted'){
