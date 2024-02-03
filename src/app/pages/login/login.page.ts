@@ -30,7 +30,7 @@ const netStatus = 'netStatus';
 export class LoginPage implements OnInit {
   networkListener: PluginListenerHandle;
   networkStatus: ConnectionStatus;
-  cnnStatus:boolean;
+  netStatus : boolean;
 
   isAndroid:any;
   credentials: FormGroup;
@@ -66,7 +66,37 @@ export class LoginPage implements OnInit {
     private platform: Platform,
     private api : DatabaseService
 
-  ) {}
+  ) {
+    this.checkNetwork();
+  }
+
+
+  async checkNetwork(){
+    this.networkListener = Network.addListener('networkStatusChange',
+     (status) => {
+      console.log('Network status changed', status);
+      if(status.connected == false){
+        console.log('platform ready... network Not connected');
+      }else{
+        console.log('platform ready... network connected');
+      }
+    });
+
+    const status = await Network.getStatus();
+    console.log('Network status 1: ', status);
+    this.changeNetStatus(status);
+    console.log('Network status 2: ', this.netStatus);
+    
+    this.platform.ready().then(() => {
+    // this.navCtrl.navigateRoot(['login'], {});
+      console.log('platform ready...');
+    });
+    
+  }
+   
+   changeNetStatus(status:any){
+    this.netStatus = status?.connected;
+   }
    
   async ngOnInit_() {
 
@@ -102,7 +132,7 @@ export class LoginPage implements OnInit {
 
     const status = await Network.getStatus();
     this.changeNetStatus(status);
-    console.log('Network status:', this.cnnStatus)
+    console.log('Network status:', this.netStatus)
 
     // const logCurrentNetworkStatus = async () => {
     //   // const status = await Network.getStatus();
@@ -181,9 +211,6 @@ export class LoginPage implements OnInit {
       }
   }
 
-  changeNetStatus(status:ConnectionStatus){
-    this.cnnStatus = status?.connected
-  }
 
   async init(): Promise<void> {
     await this.SIM.hasReadPermission().then(async allowed =>{
