@@ -11,15 +11,12 @@ import { LocalNotifications } from "@capacitor/local-notifications";
 import { Utils } from "../tools/tools";
 import { FamilyPage } from "../modals/family/family.page";
 import { RequestsPage } from "../modals/requests/requests.page";
-import { Network, ConnectionStatus } from "@capacitor/network";
 
 import {
   ActionPerformed, PushNotificationSchema, PushNotifications, Token,
 } from '@capacitor/push-notifications';
 import { FCM } from "@capacitor-community/fcm";
 import { ToolsService } from "../services/tools.service";
-
-const netStatus = 'netStatus';
 
 @Component({
   selector: 'app-tab1',
@@ -47,7 +44,6 @@ export class Tab1Page implements OnInit {
   REST_API_SERVER = environment.cloud.server_url;
 
   iosOrAndroid: boolean;
-  networkStatus: ConnectionStatus;
 
   constructor(
     private sms: SMS,

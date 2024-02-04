@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { IonicModule, IonicRouteStrategy, ToastController } from '@ionic/angular';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule,ReactiveFormsModule } from "@angular/forms";
@@ -13,7 +13,6 @@ import { SMS } from "@ionic-native/sms/ngx";
 import { Sim } from "@ionic-native/sim/ngx";
 import { UpdCodesModalPageRoutingModule } from 
 "./modals/upd-codes-modal/upd-codes-modal-routing.module";
-import { ToolsService } from "./services/tools.service";
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,7 +28,7 @@ import { ToolsService } from "./services/tools.service";
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-     ScreenOrientation,SMS,Sim, ToastController, ToolsService
+     ScreenOrientation,SMS,Sim
     ],
   bootstrap: [AppComponent],
 })

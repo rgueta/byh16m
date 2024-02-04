@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import { Network, ConnectionStatus } from "@capacitor/network";
-// import { PluginListenerHandle } from "@capacitor/core";
-import { ToolsService } from "src/app/services/tools.service";
-import { ToastController } from "@ionic/angular";
 
 @Component({
   selector: 'app-root',
@@ -10,12 +7,9 @@ import { ToastController } from "@ionic/angular";
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  // networkListener: PluginListenerHandle;
   networkStatus: ConnectionStatus;
   netStatus : boolean;
   constructor(
-    public toolService:ToolsService,
-    public toast:ToastController
   ) {
     this.checkNetwork()
   }

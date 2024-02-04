@@ -4,7 +4,7 @@ import { AuthenticationService } from './../../services/authentication.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from "../../../environments/environment";
 import { AlertController, LoadingController, isPlatform, 
-  ModalController, Platform, ToastController} from "@ionic/angular";
+  ModalController, Platform} from "@ionic/angular";
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { Device } from "@capacitor/device";
 import { Utils } from 'src/app/tools/tools';
@@ -27,8 +27,6 @@ const netStatus = 'netStatus';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
-
   isAndroid:any;
   credentials: FormGroup;
   configApp : {};
@@ -64,11 +62,11 @@ export class LoginPage implements OnInit {
     private platform: Platform,
     private api : DatabaseService,
     public toolService:ToolsService,
-    public toast: ToastController,
 
   ) { }
      
   async ngOnInit() {
+
     this.getConfigApp();
 
     Utils.cleanLocalStorage();
