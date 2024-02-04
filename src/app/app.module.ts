@@ -13,6 +13,7 @@ import { SMS } from "@ionic-native/sms/ngx";
 import { Sim } from "@ionic-native/sim/ngx";
 import { UpdCodesModalPageRoutingModule } from 
 "./modals/upd-codes-modal/upd-codes-modal-routing.module";
+import { ToolsService } from "./services/tools.service";
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +29,7 @@ import { UpdCodesModalPageRoutingModule } from
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-     ScreenOrientation,SMS,Sim, ToastController
+     ScreenOrientation,SMS,Sim, ToastController, ToolsService
     ],
   bootstrap: [AppComponent],
 })
