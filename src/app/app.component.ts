@@ -29,7 +29,7 @@ export class AppComponent {
       this.netStatus = status?.connected;
       console.log('cnn Status: ', this.netStatus);
 
-      if(!this.netStatus){
+      if(!this.netStatus && status?.connectionType != 'none'){
         alert('No hay acceso a la red \n');
       }
     });
