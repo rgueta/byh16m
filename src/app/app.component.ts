@@ -21,16 +21,18 @@ export class AppComponent {
   }
 
 
+
   async checkNetwork(){
       
-    Network.addListener('networkStatusChange',
+    await Network.addListener('networkStatusChange',
     async (status) => {
       console.log('network Status changed: ', status);
-      this.netStatus = status?.connected;
+      this.netStatus = await status?.connected;
       console.log('cnn Status: ', this.netStatus);
 
-      if(!this.netStatus && status?.connectionType != 'none'){
-        alert('No hay acceso a la red \n');
+      if(!this.netStatus && status?.connectionType != 'cellular'){
+        // const type = await status?.connectionType != 'none' ? status?.connectionType : ''
+        alert('Se perdio acceso a la red ');
       }
     });
 
@@ -45,4 +47,33 @@ export class AppComponent {
     this.netStatus = status?.connected;
   }
 
+  async checkNetwork_(){
+    await Network.addListener('networkStatusChange', async (status) => {
+      // console.log('Network status changed', status);
+      const cnnStatus = await Network.getStatus();
+      if(!cnnStatus?.connected){
+        console.log('Network status 2: ', cnnStatus);
+        alert('Se perdio el acceso\n a la red ' + cnnStatus?.connectionType );
+      }
+    });
+
+    // const status = await Network.getStatus();
+    // console.log('Network status 1: ', status);
+    // this.changeNetStatus(status);
+    // console.log('cnn status 2: ', this.netStatus);
+    
+    // const logCurrentNetworkStatus = async () => {
+    //   const status = await Network.getStatus();
+    
+    //   console.log('Network status:', status);
+    // };
+
+
+    // console.log('que es: ', logCurrentNetworkStatus);
+
+    // let dbgMsg = 'websocket.service constructor() ';
+    // dbgMsg += 'logCurrentNetworkStatus(): ';
+    // dbgMsg += JSON.stringify(logCurrentNetworkStatus());
+    // console.debug(dbgMsg);
+  }
 }
