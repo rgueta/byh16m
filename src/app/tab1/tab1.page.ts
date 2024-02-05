@@ -75,7 +75,7 @@ export class Tab1Page implements OnInit {
       if(resul.receive === 'granted'){
         PushNotifications.register();
       }else{
-        this.toolService.toastEvent('Push notification not granted..!',0,['Ok']);
+        this.toolService.toastAlert('Push notification not granted..!',0,['Ok']);
       }
     });
 
@@ -103,7 +103,7 @@ export class Tab1Page implements OnInit {
     PushNotifications.addListener(
       'pushNotificationReceived',
       (notification: PushNotificationSchema) => {
-        this.toolService.toastEvent(notification.body,0,['Ok']);
+        this.toolService.toastAlert(notification.body,0,['Ok']);
       },
     );
 
@@ -130,7 +130,7 @@ export class Tab1Page implements OnInit {
     // getting info data
     if(environment.app.debugging){
       console.log('collect Info jumped, because debugging!');
-      await this.toolService.toastEvent('collect Info jumped, because debugging!',0,['Ok']);
+      await this.toolService.toastAlert('collect Info jumped, because debugging!',0,['Ok']);
     }else{
       this.collectInfo();
     }
@@ -206,7 +206,7 @@ async collectInfo(){
   }
 
   push_notifications(codeId:Number){
-    this.toolService.toastEvent('Process code ' + codeId,0, ['Ok']);
+    this.toolService.toastAlert('Process code ' + codeId,0, ['Ok']);
     
   }
 
@@ -236,7 +236,7 @@ async openUrl(url:string){
 
 async sendSMS(){
   if(this.msg == ''){
-    this.toolService.toastEvent('Message empty !',0,['Ok'])
+    this.toolService.toastAlert('Message empty !',0,['Ok'])
     return;
   }
   var options:SmsOptions={

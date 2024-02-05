@@ -67,6 +67,7 @@ export class LoginPage implements OnInit {
      
   async ngOnInit() {
 
+    
     this.getConfigApp();
 
     Utils.cleanLocalStorage();
@@ -159,6 +160,14 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
+    const status = await JSON.parse(localStorage.getItem('netStatus'));
+    console.log('locaStorage cnnStatus --> ' + localStorage.getItem('netStatus'));
+    if(!status?.connected)
+    {
+      await this.toolService.toastAlert('No hay acceso a la red',0,['Ok']);
+      return;
+    }
+
     const loading = await this.loadingController.create();
     await loading.present();
     this.authService.login(this.credentials.value).subscribe(

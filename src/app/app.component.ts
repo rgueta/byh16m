@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { Network, ConnectionStatus } from "@capacitor/network";
+// import { PluginListenerHandle } from "@capacitor/core";
+import { ToolsService } from "./services/tools.service";
+
+const netStatus = 'netStatus';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +11,13 @@ import { Network, ConnectionStatus } from "@capacitor/network";
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
+  // networkListener: PluginListenerHandle;
   networkStatus: ConnectionStatus;
   netStatus : boolean;
   constructor(
+    private toolService:ToolsService
   ) {
+    localStorage.clear();
     this.checkNetwork()
   }
 
@@ -18,56 +25,32 @@ export class AppComponent {
 
   async checkNetwork(){
       
-    await Network.addListener('networkStatusChange',
+  //  this.networkListener = 
+   await Network.addListener('networkStatusChange',
     async (status) => {
       console.log('network Status changed: ', status);
       this.netStatus = await status?.connected;
       console.log('cnn Status: ', this.netStatus);
 
-      if(!this.netStatus && status?.connectionType != 'cellular'){
-        // const type = await status?.connectionType != 'none' ? status?.connectionType : ''
-        alert('Se perdio acceso a la red ');
-      }
+      await localStorage.setItem('netStatus',JSON.stringify(status));
+
+      // if(!this.netStatus && status?.connectionType != 'cellular'){
+      //   // const type = await status?.connectionType != 'none' ? status?.connectionType : ''
+      //   // await this.toolService.toastAlert('Se perdio acceso a la red',0,['Ok']);
+      // }else if(this.netStatus ){
+        
+      // }
     });
 
-    // const status = await Network.getStatus();
+    const status = await Network.getStatus();
     // console.log('Network status 1: ', status);
-    // this.changeNetStatus(status);
+    this.changeNetStatus(status);
     // console.log('cnn status: ', this.netStatus);
     
   }
   
-  changeNetStatus(status:any){
+  async changeNetStatus(status:any){
+    await localStorage.setItem('netStatus',JSON.stringify(status));
     this.netStatus = status?.connected;
-  }
-
-  async checkNetwork_(){
-    await Network.addListener('networkStatusChange', async (status) => {
-      // console.log('Network status changed', status);
-      const cnnStatus = await Network.getStatus();
-      if(!cnnStatus?.connected){
-        console.log('Network status 2: ', cnnStatus);
-        alert('Se perdio el acceso\n a la red ' + cnnStatus?.connectionType );
-      }
-    });
-
-    // const status = await Network.getStatus();
-    // console.log('Network status 1: ', status);
-    // this.changeNetStatus(status);
-    // console.log('cnn status 2: ', this.netStatus);
-    
-    // const logCurrentNetworkStatus = async () => {
-    //   const status = await Network.getStatus();
-    
-    //   console.log('Network status:', status);
-    // };
-
-
-    // console.log('que es: ', logCurrentNetworkStatus);
-
-    // let dbgMsg = 'websocket.service constructor() ';
-    // dbgMsg += 'logCurrentNetworkStatus(): ';
-    // dbgMsg += JSON.stringify(logCurrentNetworkStatus());
-    // console.debug(dbgMsg);
   }
 }

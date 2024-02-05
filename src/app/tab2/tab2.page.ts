@@ -31,7 +31,7 @@ export class Tab2Page implements OnInit {
 
   constructor(
     public api : DatabaseService,
-    private tools:ToolsService
+    private toolsService:ToolsService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -55,7 +55,7 @@ export class Tab2Page implements OnInit {
     const netStatus = JSON.parse(localStorage.getItem('netStatus'));
     console.log('networkStatus --> ', netStatus);
     if(!netStatus.connected){
-      this.tools.toastEvent(`Revisar: <br><rb>` +
+      this.toolsService.toastAlert(`Revisar: <br><rb>` +
       `1. Acceso a la red<br>` +
       `2. Permiso para envio de sms`,0,['Ok']);
       return;
@@ -86,12 +86,12 @@ export class Tab2Page implements OnInit {
 
         this.EventsList[0].open = true;
         }else{
-          this.tools.toastEvent('No hay eventos para esta fecha',0,['Ok'])
+          this.toolsService.toastAlert('No hay eventos para esta fecha',0,['Ok'])
         }
     
       });
     }catch(e){
-      this.tools.showAlertBasic('Aviso','Ocurrio una excepción revisar:',
+      this.toolsService.showAlertBasic('Aviso','Ocurrio una excepción revisar:',
       `1. Acceso a la red<br>` +
       `2. Permiso para envio de sms`,['Cerrar']);
 

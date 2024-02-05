@@ -8,7 +8,7 @@ export class ToolsService {
 
   constructor(
     private alertCtrl :AlertController,
-    private toast: ToastController,
+    public toast: ToastController,
   ) { }
 
 
@@ -24,7 +24,7 @@ export class ToolsService {
     await alert.present();
   }
 
-  async toastEvent(msg:string,duration:number,btns:any){
+  async toastAlert(msg:string,duration:number,btns:any){
     const myToast = await this.toast.create({
       message:msg,
       duration:duration,
