@@ -18,6 +18,8 @@ import {
 import { FCM } from "@capacitor-community/fcm";
 import { ToolsService } from "../services/tools.service";
 
+const netStatus = 'netStatus';
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -191,9 +193,14 @@ toggleButtons(){
 }
 
 async collectInfo(){
- await this.api.getData('api/info/' + this.userId).subscribe(async result => {
-    this.localInfo = await result;
-  });
+  const cnnStatus = JSON.parse(localStorage.getItem('netStatus'));
+  if(cnnStatus?.connected){
+    await this.api.getData('api/info/' + this.userId).subscribe(async result => {
+        this.localInfo = await result;
+      });
+  }else{
+    this.toolService.toastAlert('No hay acceso a internet',0,['Ok'])
+  }
 
 }
   lockToPortrait(){
@@ -256,6 +263,7 @@ async sendSMS(){
 
   try{
     if(use_twilio == 'false'){
+      console.log('Aqui llegue..!');
       await this.sms.send(this.sim,this.msg,options);
     }else{
       this.api.postData('api/twilio/open/' + 
@@ -264,8 +272,7 @@ async sendSMS(){
   }
   catch(e){
     this.toolService.showAlertBasic('Aviso','Ocurrio una excepción revisar:',
-      `1. Acceso a la red<br>` +
-      `2. Permiso para envio de sms`,['Cerrar']);
+      `Error: ${e}`,['Cerrar']);
     
   }
 }
