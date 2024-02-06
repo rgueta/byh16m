@@ -5,7 +5,7 @@
 export const environment = {
   production: 'false',
   app : {
-    version: "1.0.0",
+    version: "1.0.1",
     Description: "Main tab data information feed",
     debugging: false,
     debugging_send_sms: false
