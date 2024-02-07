@@ -161,7 +161,8 @@ export class LoginPage implements OnInit {
 
     if(! await this.toolService.verifyNetStatus())
     {
-      await this.toolService.toastAlert('No hay acceso a internet',0,['Ok'],'middle');
+      await this.toolService.toastAlert('No hay acceso a internet',
+      0,['Ok'],'middle');
       return;
     }
 

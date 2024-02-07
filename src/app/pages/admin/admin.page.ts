@@ -48,8 +48,6 @@ export class AdminPage implements OnInit {
     this.core_sim = await localStorage.getItem('my-core-sim');
     this.userId = await localStorage.getItem('my-userId');
     this.emailToVisitor = await (localStorage.getItem('emailToVisitor') === 'true');
-
-    console.log('emailToVisitor value --> ', this.emailToVisitor);
     this.getCores();
   }
 
@@ -277,93 +275,108 @@ toggleSectionSim(){
             switch(option){
               case 'chgStatusCore':
                 if(event.target.checked){
-                  await this.api.postData('api/cores/enable/' + this.userId,{'coreId' : item._id}).then(async (onResolve) =>{
-                    await this.getCores();
-                  },
-                  (onReject) =>{
-                    console.log('Can not enable core, ', JSON.stringify(onReject));
-                  });
+                  if(await this.toolService.verifyNetStatus()){
+                    await this.api.postData('api/cores/enable/' + 
+                      this.userId,{'coreId' : item._id}).then(async (onResolve) =>{
+                      await this.getCores();
+                    },
+                    (onReject) =>{
+                      this.toolService.toastAlert('Can not enable core, error: <br>' + 
+                        JSON.stringify(onReject),0,['Ok'],'bottom');
+                    });
+                  }else{
+                    this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+                  }
                 }else{
-                  console.log('api/cores/disable/',{'coreId': item._id})
-                  await this.api.postData('api/cores/disable/' + this.userId,{'coreId' : item._id}).then(async (onResolve) =>{
+                    if(await this.toolService.verifyNetStatus()){
+                      await this.api.postData('api/cores/disable/' + 
+                      this.userId,{'coreId' : item._id}).then(async (onResolve) =>{
                     await this.getCores();
-                  },
-                  (onReject) =>{
-                    console.log('Cannot disable core, error: ', JSON.stringify(onReject));
-                  });
+                    },
+                    (onReject) =>{
+                      this.toolService.toastAlert('Cannot disable core, error: <br>' + 
+                        JSON.stringify(onReject),0,['Ok'],'bottom');
+                    });
+                  }else{
+                    this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+                  }
                 }
               break;
               case 'simChange':
                 try{
                   if (this.sim.length >= 10 ){
-                    console.log('chgSim API params --> ' ,this.userId + ',' + item._id + ',' + this.sim);
-                    await this.api.postData('api/cores/chgSim/' + this.userId ,{'coreId':item._id, 'newSim':this.sim}).then(async (result) => {
-                      this.getCores();
-                      this.simSectionOpen = false;
-                    }, error => {
-                      this.toolService.toastAlert('chgSim API error: ' + JSON.stringify(error),0,['Ok'],'bottom');
-                    });
-    
-                    this.toolService.toastAlert('Sim changed to ' + this.sim,0, ['Ok'], 'bottom')
+                    if(await this.toolService.verifyNetStatus()){
+                      await this.api.postData('api/cores/chgSim/' + this.userId ,
+                        {'coreId':item._id, 'newSim':this.sim}).then(async (result) => {
+                        this.getCores();
+                        this.simSectionOpen = false;
+                        this.toolService.toastAlert('Sim cambiado ' + this.sim,0, ['Ok'], 'bottom')
+                      }, error => {
+                        this.toolService.toastAlert('chgSim API error: <br>' +
+                        JSON.stringify(error),0,['Ok'],'bottom');
+                      });
+                    }else{
+                      this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+                    }
                   }else{
-                    this.toolService.toastAlert('Invalid format',0, ['Ok'], 'bottom')
+                    this.toolService.toastAlert('Formato Invalido',0, ['Ok'], 'bottom')
                   }
       
                 }catch(e){
-                  this.toolService.toastAlert('Sim not changed, error: ' 
+                  this.toolService.toastAlert('Sim no cambiado, error:<br>' 
                     + JSON.stringify(e),0, ['Ok'], 'bottom');
                 }
                 break;
               case 'getSIMstatus':
                 try{
                   await this.sms.send(this.core_sim,'status,sim',options);
-                  this.toolService.toastAlert('Msg. sent to ' + this.core_sim,0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');
                 }catch(e){
-                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('No se envio, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
                 }
                 break;
               case 'ModuleRST':
                 try{
                     await this.sms.send(item.Sim,'rst,sim',options);
-                    this.toolService.toastAlert('Msg sent to ' + item.Sim,0, ['Ok'], 'bottom');
+                    this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
                 }catch(e){
-                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
                 }
                 break;
               case 'getCoreCodes':
                 try{
                   await this.sms.send(item.Sim,'active_codes,sim',options);
-                  this.toolService.toastAlert('msg sent to ' + item.Sim,0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
                 }
                 catch(e){
-                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('Msg. no enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                 break;
               case 'setOpenGate':
                 try{
                   await this.sms.send(item.Sim,'setOpenCode,gate',options);
-                  this.toolService.toastAlert('msg sent to ' + item.Sim,0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
                 }
                 catch(e){
-                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                 break;
               case 'setOpenMagnet':
                 try{
                   await this.sms.send(item.Sim,'setOpenCode,magnet',options);
-                  this.toolService.toastAlert('msg sent to ' + item.Sim,0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
                 }
                 catch(e){
-                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
               }
               break;
               case 'setKeypad':
                 try{
                   await this.sms.send(item.Sim,'setKeypad,' + item.keyPadName,options);
-                  this.toolService.toastAlert('msg sent to ' + item.Sim,0, ['Ok'], 'bottom');  
+                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');  
                 }
                 catch(e){
-                    this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                    this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                 break;
             }
