@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
-import { ToastController, ModalController,
+import { ModalController,
          AnimationController } from '@ionic/angular';
 import { UpdCodesModalPage } from '../../modals/upd-codes-modal/upd-codes-modal.page';
 import { Utils } from '../../tools/tools';
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { environment } from 'src/environments/environment';
+import { ToolsService } from "../../services/tools.service";
 
 @Component({
   selector: 'app-codes',
@@ -28,10 +29,11 @@ export class CodesPage implements OnInit {
   load_codes : true;
 
   constructor(public api : DatabaseService,
-              public toast:ToastController,
               public modalController: ModalController,
               public animationController : AnimationController,
-              private sms: SMS) { }
+              private sms: SMS,
+              private toolsService:ToolsService
+              ) { }
 
   async ngOnInit() {
     
@@ -77,7 +79,6 @@ export class CodesPage implements OnInit {
   }
 
   toggleSection(index:number){
-    console.log('toggleSection index--> ', index)
     this.CodeList[index].open = !this.CodeList[index].open;
     if(this.automaticClose && this.CodeList[index].open){
       this.CodeList
@@ -95,7 +96,7 @@ export class CodesPage implements OnInit {
         intent:''
       }
     }
-    // const sim =  await this.storage.get('my-core-sim');
+
     const sim =  await localStorage.getItem('my-core-sim');
 
     await Object.entries(this.CodeList).forEach(async (key,  item:any) =>{
@@ -111,38 +112,28 @@ export class CodesPage implements OnInit {
         delete pkg['email'];
 
         try{
-          await this.api.putData('api/codes/update/' +  
-                          pkg['userId'] + '/' + pkg['_id'] ,pkg)
+          if(await this.toolsService.verifyNetStatus()){
+            await this.api.putData('api/codes/update/' +  
+                            pkg['userId'] + '/' + pkg['_id'] ,pkg)
+          }else{
+            this.toolsService.toastAlert('No hay acceso a internet',0,['Ok'],'middle');
+          }
 
         }catch(err){
-            console.error('Error api putData --> ' + err);
+            this.toolsService.showAlertBasic('Aviso','Ocurrio una excepcion',
+            'Error: ' + err,['Ok'])
         }
       }
     });
     
    
     try{
-
-      // await this.sms.send(sim,'codigo,' + pkg[code]+ ','+ pkg['expiry'] + ',' + pkg['_id']);
-      // // alert('Text was sent !')
-        const toast = await this.toast.create({
-          message : 'Text sent to ' + sim,
-          duration: 4000
-        });
-
         this.collectCodes(); 
-        toast.present();
-          
-        
+        this.toolsService.toastAlert('Codigo enviado a '+ sim,0,['Ok'],'bottom');
     }
     catch(e:any){
-      // alert('Text was not sent !')
-      const toast = await this.toast.create({
-        message : 'Text was not sent !.. error: ' + e.message,
-        duration: 3000
-      });
-
-        toast.present();
+      this.toolsService.showAlertBasic('Aviso','Ocurrio una excepcion',
+      `Error: ` + e.message,['Ok']);
       }
 
   }
@@ -151,7 +142,9 @@ export class CodesPage implements OnInit {
     // var pkg : {};
     var pkg = {'code':'','_id':'','initial':'','expiry':''};
 
-    console.log('Resend code --> ', 'codigo : ' + code +' ,Initial : '+ Initial + ' ,Expiry : ' + Expiry + ', _id : ' + visitorId)
+    console.log('Resend code --> ', 'codigo : ' + code + 
+    ' ,Initial : ' + Initial + ' ,Expiry : ' + Expiry + 
+    ', _id : ' + visitorId)
 
 
     return;
@@ -170,40 +163,26 @@ export class CodesPage implements OnInit {
     pkg['initial'] = Utils.convDate(Initial);
     pkg['expiry'] = Utils.convDate(Expiry);
 
-
-    console.log('Resend code --> ', 'codigo,' + pkg['code'] +','+ pkg['expiry'] + ',' + pkg['_id'])
-
     try{
       if(environment.app.debugging_send_sms){
         await this.sms.send(sim,'codigo,' + pkg['code'] +','+ pkg['expiry'] + ',' + pkg['_id']);
-          const toast = await this.toast.create({
-            message : 'Text was sent !',
-            duration: 4000
-          });
 
           this.collectCodes(); 
-          toast.present();
+          this.toolsService.toastAlert('Texto fue enviado',0,['Ok'],'middle');
       }  
         
     }
     catch(e:any){
-      // alert('Text was not sent !')
-      const toast = await this.toast.create({
-        message : 'Text was not sent !.. error: ' + e.message,
-        duration: 3000
-      });
-
-        toast.present();
+      this.toolsService.showAlertBasic('Aviso','Ocurrio una excepcion',
+      'Error: ' + e,['Ok']);
       }
 
   }
 
   async onChangeExpiry(codeId:string,initial:any,expiry:any){
-    console.log('OnChange event ptriggered');
-    // this.initial = new Date(initial);
-    // console.log('initital: ' + initial + ', expiry: ' + expiry)
     if(new Date(expiry) <= this.initial){
-      alert('Tiempo final debe ser meyor al tiempo inicial');
+      this.toolsService.showAlertBasic('','',
+        'Tiempo final debe ser meyor al tiempo inicial',['Cerrar']);
       return;
     }else{
       this.expiry = new Date(expiry);
@@ -212,40 +191,26 @@ export class CodesPage implements OnInit {
 
         var arrFound = this.CodeList.find((item:any,i:number) =>{
           if (item['_id'] == codeId){
-            
-            console.log('Si te encontre -->', item['code'])
-            console.log('Del CodeList -->', this.CodeList[i]['code'])
             this.CodeList[i].changed = true;
           }
         })
 
         this.codeEnabled = true;
       }
-    console.log('Initial : ' + this.initial + '\nExpiry :  ' + this.expiry + '\nDiff hrs. ' + this.diff);
     }
   }
 
   async onChangeInitial(initial:any,expiry:any){
     console.log('onChangeInitial -> ' + initial)
     if(new Date(initial) >= expiry){
-      alert('Tiempo inicial debe ser menor al tiempo final');
+      this.toolsService.showAlertBasic('','',
+        'Tiempo inicial debe ser menor al tiempo final',['Cerrar']);
       return;
     }else{
       this.initial = new Date(initial);
       // this.diff =  await (Math.abs(this.initial.getTime() - this.expiry.getTime()) / 3600000).toFixed(1);
       console.log('Initial : ' + Utils.convDate(this.initial) + '\nExpiry :  ' + Utils.convDate(this.expiry) + '\nDiff hrs. ' + this.diff);
     }
-  }
-
-  // -------   toast control alerts    ---------------------
-  toastEvent(msg:string){
-    this.myToast = this.toast.create({
-      message:msg,
-      duration:2000
-    }).then((toastData) =>{
-      console.log(toastData);
-      toastData.present();
-    });
   }
 
         // ---- Animation controller  ----------------------------------

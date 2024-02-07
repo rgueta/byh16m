@@ -52,12 +52,8 @@ export class Tab2Page implements OnInit {
 
   async getEvents($event:any){
 
-    const netStatus = JSON.parse(localStorage.getItem('netStatus'));
-    console.log('networkStatus --> ', netStatus);
-    if(!netStatus.connected){
-      this.toolsService.toastAlert(`Revisar: <br><rb>` +
-      `1. Acceso a la red<br>` +
-      `2. Permiso para envio de sms`,0,['Ok']);
+    if(! await this.toolsService.verifyNetStatus()){
+      this.toolsService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
       return;
     }
 
@@ -86,7 +82,7 @@ export class Tab2Page implements OnInit {
 
         this.EventsList[0].open = true;
         }else{
-          this.toolsService.toastAlert('No hay eventos para esta fecha',0,['Ok'])
+          this.toolsService.toastAlert('No hay eventos para esta fecha',0,['Ok'],'middle')
         }
     
       });

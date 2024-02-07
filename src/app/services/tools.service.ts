@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AlertController,ToastController } from "@ionic/angular";
 
+const netStatus = 'netStatus';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,22 +26,26 @@ export class ToolsService {
     await alert.present();
   }
 
-  async toastAlert(msg:string,duration:number,btns:any){
+  async toastAlert(msg:string,duration:number,btns:any,
+      position: 'top' |'middle'| 'bottom'){
     const myToast = await this.toast.create({
       message:msg,
       duration:duration,
-      buttons: btns
+      buttons: btns,
+      position:position
     });
       myToast.present();
   }
 
-  // toastEvent(msg:string,duration:number,btns:any){
-  //   this.toast.create({
-  //     message:msg,
-  //     duration:duration,
-  //     buttons: btns
-  //   }).then((toastData) =>{
-  //     toastData.present();
-  //   });
-  // }
+  async verifyNetStatus(){
+    const cnnStatus = await JSON.parse(localStorage.getItem('netStatus'));
+    console.log('verifyNetStatus', cnnStatus);
+    if(!cnnStatus?.connected)
+    {
+      return false;
+    }else{
+      return true;
+    }
+  }
+
 }

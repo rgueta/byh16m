@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { ModalController, AnimationController,ToastController, AlertController } from "@ionic/angular";
+import { ModalController, AnimationController, AlertController } from "@ionic/angular";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { DatabaseService } from '../services/database.service';
 import { VisitorsPage } from '../modals/visitors/visitors.page';
 import { Utils } from "../tools/tools";
+import { ToolsService } from "../services/tools.service";
 
 
 @Component({
@@ -24,8 +25,8 @@ export class Tab4Page {
         public modalController : ModalController,
         public api : DatabaseService,
         private sms: SMS,
-        private toast: ToastController,
-        public alertCtrl : AlertController
+        private toolService: ToolsService,
+        private alertCtrl:AlertController
   ) {}
 
  async ngOnInit() {
@@ -70,13 +71,13 @@ export class Tab4Page {
             text:'Si',
             handler:async () => {
               try{
-                console.log('Se borrara --> ', this.VisitorsList[index]);
                 this.VisitorsList.splice(index,1)
                 localStorage.setItem('visitors',JSON.stringify(this.VisitorsList));
                 this.VisitorsList[0].open = true;
               }
               catch(e){
-                alert('No se pudo borrar');
+                this.toolService.showAlertBasic('Aviso','Ocurrio una excepcion al borrar',
+                'Error: ' + e,['Cerrar']);
               }
             }
           }
@@ -131,16 +132,20 @@ export class Tab4Page {
         buttons: [{ text: 'Cancelar', role: 'cancel',handler : () =>{} },
                   { text: 'Cambiar', handler: async (data:any) => {
                         try{
+                          if(await this.toolService.verifyNetStatus()){
                           await this.api.putData('api/visitors/simple/' + 
                           this.userId + '/' + visitorId,data)
-                          .then(async resp =>{
-                              console.log('response --> ', resp)
-                          },
+                          .then(async resp =>{},
                           error => {
                             this.errorUpdate(field);
                           });
+                        }else{
+                          this.toolService.toastAlert('No hay acceso a internet',0,['Ok'],'middle')
+                        }
                         }catch(err){
-                          console.log('Can not change ' + field, err);
+                          this.toolService.showAlertBasic('Aviso',
+                          'Ocurrio una excepcion al cambiar ' + field ,
+                          'Error: '+ err, ['Cerrar']);
                         }
                       
                     }
@@ -152,7 +157,7 @@ export class Tab4Page {
 
 
   async errorUpdate(field:string){
-    alert('Cambio no realiado a ' + field);
+    this.toolService.showAlertBasic('','', 'Cambio no realiado a ' + field, ['Cerrar']);
   }
 
 

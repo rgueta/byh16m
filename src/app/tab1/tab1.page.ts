@@ -18,8 +18,6 @@ import {
 import { FCM } from "@capacitor-community/fcm";
 import { ToolsService } from "../services/tools.service";
 
-const netStatus = 'netStatus';
-
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -77,7 +75,7 @@ export class Tab1Page implements OnInit {
       if(resul.receive === 'granted'){
         PushNotifications.register();
       }else{
-        this.toolService.toastAlert('Push notification not granted..!',0,['Ok']);
+        this.toolService.toastAlert('Push notification not granted..!',0,['Ok'],'middle');
       }
     });
 
@@ -105,7 +103,7 @@ export class Tab1Page implements OnInit {
     PushNotifications.addListener(
       'pushNotificationReceived',
       (notification: PushNotificationSchema) => {
-        this.toolService.toastAlert(notification.body,0,['Ok']);
+        this.toolService.toastAlert(notification.body,0,['Ok'],'middle');
       },
     );
 
@@ -132,7 +130,7 @@ export class Tab1Page implements OnInit {
     // getting info data
     if(environment.app.debugging){
       console.log('collect Info jumped, because debugging!');
-      await this.toolService.toastAlert('collect Info jumped, because debugging!',0,['Ok']);
+      await this.toolService.toastAlert('collect Info jumped, because debugging!',0,['Ok'],'bottom');
     }else{
       this.collectInfo();
     }
@@ -193,13 +191,12 @@ toggleButtons(){
 }
 
 async collectInfo(){
-  const cnnStatus = JSON.parse(localStorage.getItem('netStatus'));
-  if(cnnStatus?.connected){
+  if(await this.toolService.verifyNetStatus()){
     await this.api.getData('api/info/' + this.userId).subscribe(async result => {
         this.localInfo = await result;
       });
   }else{
-    this.toolService.toastAlert('No hay acceso a internet',0,['Ok'])
+    this.toolService.toastAlert('No hay acceso a internet',0,['Ok'],'middle')
   }
 
 }
@@ -213,7 +210,7 @@ async collectInfo(){
   }
 
   push_notifications(codeId:Number){
-    this.toolService.toastAlert('Process code ' + codeId,0, ['Ok']);
+    this.toolService.toastAlert('Process code ' + codeId,0, ['Ok'],'bottom');
     
   }
 
@@ -243,7 +240,7 @@ async openUrl(url:string){
 
 async sendSMS(){
   if(this.msg == ''){
-    this.toolService.toastAlert('Message empty !',0,['Ok'])
+    this.toolService.toastAlert('Message empty !',0,['Ok'],'bottom')
     return;
   }
   var options:SmsOptions={
@@ -390,7 +387,6 @@ async showAlert(Header:string, subHeader:string, msg:string, btns:any,
         await this.api.logout();
         this.router.navigateByUrl('/',{replaceUrl:true});
         Utils.cleanLocalStorage();
-
             }
     
     }]

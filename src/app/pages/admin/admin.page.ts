@@ -7,6 +7,7 @@ import { DatabaseService } from '../../services/database.service';
 import { UpdCpusPage } from "../../modals/upd-cpus/upd-cpus.page";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { InfoPage } from "../../modals/info/info.page";
+import { ToolsService } from "../../services/tools.service";
 
 const TWILIO = 'twilio';
 const EMAIL_TO_VISITOR = 'emailToVisitor'
@@ -37,9 +38,10 @@ export class AdminPage implements OnInit {
         public modalController : ModalController,
         public api : DatabaseService,
         private sms: SMS,
-        private toast: ToastController,
+        // private toast: ToastController,
         public alertCtrl: AlertController,
         // public routerOutlet :IonRouterOutlet 
+        private toolService:ToolsService
     ) {}
 
   async ngOnInit() {
@@ -203,7 +205,8 @@ export class AdminPage implements OnInit {
   }
 
   async modalUpdCity(){
-    this.toastEvent('Process new city ');
+    this.toolService
+    this.toolService.toastAlert('Process new city ',0, ['Ok'], 'bottom');
   }
 
 // region Main Accordion list  --------------------------------------
@@ -238,16 +241,7 @@ toggleSectionSim(){
 
 // endregion   --------------------------------------------
 
-//region -------   toast,alert controlers region   ---------------------
-    toastEvent(msg:string){
-      this.myToast = this.toast.create({
-        message:msg,
-        duration:3000
-      }).then((toastData) =>{
-        console.log(toastData);
-        toastData.present();
-      });
-    }
+//region ------- alert controlers region   ---------------------
 
   async alertCtrlEvent(event:any,item:any,titleMsg:string,Message:string,option:string, txtConfirm:string, txtCancel:string){
     let element = <HTMLInputElement> document.getElementById("disableToggle");
@@ -307,69 +301,69 @@ toggleSectionSim(){
                       this.getCores();
                       this.simSectionOpen = false;
                     }, error => {
-                      console.log('chgSim API error: ' + JSON.stringify(error));
-                      this.toastEvent('chgSim API error: ' + JSON.stringify(error));
+                      this.toolService.toastAlert('chgSim API error: ' + JSON.stringify(error),0,['Ok'],'bottom');
                     });
-      
-                    this.toastEvent('sim changed to ' + this.sim);
+    
+                    this.toolService.toastAlert('Sim changed to ' + this.sim,0, ['Ok'], 'bottom')
                   }else{
-                    this.toastEvent('Invalid format');
+                    this.toolService.toastAlert('Invalid format',0, ['Ok'], 'bottom')
                   }
       
                 }catch(e){
-                  this.toastEvent('Sim not changed, error: ' + JSON.stringify(e));
+                  this.toolService.toastAlert('Sim not changed, error: ' 
+                    + JSON.stringify(e),0, ['Ok'], 'bottom');
                 }
                 break;
               case 'getSIMstatus':
                 try{
                   await this.sms.send(this.core_sim,'status,sim',options);
-                  this.toastEvent('msg sent to ' + this.core_sim);
+                  this.toolService.toastAlert('Msg. sent to ' + this.core_sim,0, ['Ok'], 'bottom');
                 }catch(e){
-                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
                 }
                 break;
               case 'ModuleRST':
                 try{
                     await this.sms.send(item.Sim,'rst,sim',options);
-                    this.toastEvent('msg sent to ' + item.Sim);
+                    this.toolService.toastAlert('Msg sent to ' + item.Sim,0, ['Ok'], 'bottom');
                 }catch(e){
-                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
                 }
                 break;
               case 'getCoreCodes':
                 try{
                   await this.sms.send(item.Sim,'active_codes,sim',options);
-                  this.toastEvent('msg sent to ' + item.Sim);
+                  this.toolService.toastAlert('msg sent to ' + item.Sim,0, ['Ok'], 'bottom');
                 }
                 catch(e){
-                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                 break;
               case 'setOpenGate':
                 try{
                   await this.sms.send(item.Sim,'setOpenCode,gate',options);
-                  this.toastEvent('msg sent to ' + item.Sim);
+                  this.toolService.toastAlert('msg sent to ' + item.Sim,0, ['Ok'], 'bottom');
                 }
                 catch(e){
-                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                 break;
               case 'setOpenMagnet':
                 try{
                   await this.sms.send(item.Sim,'setOpenCode,magnet',options);
-                  this.toastEvent('msg sent to ' + item.Sim);
+                  this.toolService.toastAlert('msg sent to ' + item.Sim,0, ['Ok'], 'bottom');
                 }
                 catch(e){
-                  this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                  this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
               }
               break;
               case 'setKeypad':
                 try{
                   await this.sms.send(item.Sim,'setKeypad,' + item.keyPadName,options);
-                  this.toastEvent('msg sent to ' + item.Sim);  
+                  this.toolService.toastAlert('msg sent to ' + item.Sim,0, ['Ok'], 'bottom');  
                 }
                 catch(e){
-                    this.toastEvent('Not sent, error: ' + JSON.stringify(e));
+                    this.toolService.toastAlert('Not sent, error: ' + JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                 break;
             }

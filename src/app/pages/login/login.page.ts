@@ -19,7 +19,6 @@ const VISITORS = 'visitors';
 const DEVICE_UUID = 'device-uuid';
 const DEVICE_PKG = 'device-pkg';
 const ADMIN_DEVICE = 'admin_device';
-const netStatus = 'netStatus';
 
 @Component({
   selector: 'app-login',
@@ -133,7 +132,6 @@ export class LoginPage implements OnInit {
   async init(): Promise<void> {
     await this.SIM.hasReadPermission().then(async allowed =>{
       if(!allowed){
-        console.log('Si entre init sim has read permissions')
         await this.SIM.requestReadPermission().then( 
         async () => {
             await this.SIM.getSimInfo().then(
@@ -141,7 +139,7 @@ export class LoginPage implements OnInit {
             (err) => console.log('Unable to get sim info: ', err)
           );
            },
-        () => console.log('Permission denied')
+        () => this.toolService.toastAlert('Sim Permission denied',0,['Ok'],'middle')
         )
       }
     });   
@@ -160,11 +158,10 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
-    const status = await JSON.parse(localStorage.getItem('netStatus'));
-    console.log('locaStorage cnnStatus --> ' + localStorage.getItem('netStatus'));
-    if(!status?.connected)
+
+    if(! await this.toolService.verifyNetStatus())
     {
-      await this.toolService.toastAlert('No hay acceso a la red',0,['Ok']);
+      await this.toolService.toastAlert('No hay acceso a internet',0,['Ok'],'middle');
       return;
     }
 

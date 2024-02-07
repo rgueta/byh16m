@@ -50,7 +50,6 @@ export class DatabaseService {
   // Potentially perform a logout operation inside your API
   // or simply remove all local tokens and navigate to login
 logout() {
-  console.log('YES send me to LOGOUT..!');
   return this.http.post(`${this.REST_API_SERVER}api/auth/logout`, {}).pipe(
     switchMap(_ => {
       this.currentAccessToken = null;
