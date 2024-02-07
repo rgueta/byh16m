@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController,AlertController, isPlatform,
-  ToastController, LoadingController} from '@ionic/angular';
+       LoadingController} from '@ionic/angular';
 import { Contacts, GetContactsResult } from "@capacitor-community/contacts";
 import { Utils } from "../../tools/tools";
+import { ToolsService } from "../../services/tools.service";
 
 
 
@@ -22,8 +23,9 @@ export class ContactsPage implements OnInit {
   contact = {};
   constructor(private modalController : ModalController,
               private loadingController : LoadingController,
-              private toast: ToastController,
-              public alertCtrl: AlertController,) {
+              public alertCtrl: AlertController,
+              private toolService:ToolsService
+              ) {
    }
 
   async ngOnInit() {
@@ -57,7 +59,7 @@ export class ContactsPage implements OnInit {
         });
 
       }catch(e){
-        console.log('Error to get contacts --> ', e);
+        this.toolService.toastAlert('Get contacts, error:<br>' + e,0,['Ok'],'middle');
       }
     }else{
       // IOS version ------------------------
@@ -109,17 +111,6 @@ export class ContactsPage implements OnInit {
 
   closeModal(){
     this.modalController.dismiss(this.contact);
-  }
-
-  // -------   toast control alerts    ---------------------
-  toastEvent(msg:string){
-    this.myToast = this.toast.create({
-      message:msg,
-      duration:2000
-    }).then((toastData) =>{
-      console.log(toastData);
-      toastData.present();
-    });
   }
 
 }

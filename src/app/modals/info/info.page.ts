@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, LoadingController, ToastController } from "@ionic/angular";
+import { ModalController, LoadingController } from "@ionic/angular";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
 import { DatabaseService } from "../../services/database.service";
@@ -7,6 +7,8 @@ import { environment } from "../../../environments/environment";
 import { Validators, FormControl, FormBuilder, FormGroup} from "@angular/forms";
 import { finalize, lastValueFrom } from 'rxjs';
 import { HttpClient } from "@angular/common/http";
+import { ToolsService } from "../../services/tools.service";
+
 
 const USERID = 'my-userId';
 
@@ -51,10 +53,10 @@ export class InfoPage implements OnInit {
   constructor(
     private modalController : ModalController,
     public loadingCtrl: LoadingController,
-    public toast: ToastController,
     private api : DatabaseService,
     // public formBuilder : FormBuilder
-    private http: HttpClient
+    private http: HttpClient,
+    private toolService:ToolsService
     ) {
 
       this.RegisterForm = new FormGroup({
@@ -177,7 +179,6 @@ export class InfoPage implements OnInit {
       });
 
       if(this.localImg){
-        // console.log('image -> ',this.localImg);
         this.imageFileName = Capacitor.convertFileSrc(this.localImg.dataUrl);
         this.localDescription = 'Description';
         this.localUrl = 'Local Url';
@@ -212,10 +213,13 @@ export class InfoPage implements OnInit {
       params: params
     }
 
-    const data$ = await this.http.post<any>(this.REST_API_SERVER + 'api/info/' + this.userId, formData, options);
-    const res = await lastValueFrom(data$);
-
-    console.log(res)
+    if(await this.toolService.verifyNetStatus()){
+      const data$ = await this.http.post<any>(this.REST_API_SERVER 
+        + 'api/info/' + this.userId, formData, options);
+      const res = await lastValueFrom(data$);
+    }else{
+      this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+    }  
 
   }
 
@@ -227,13 +231,13 @@ export class InfoPage implements OnInit {
     let params:{} = {'userId': this.userId,'title': this.localTitle, 'url' : this.localUrl, 
           'description' : this.localDescription, 'locationFolder': this.imgFolder}
 
-    // let params:{} = {'userId': this.userId}
-
     // use your own API
-    this.api.postDataInfo("api/info", formData, params ).then(async resp =>{
-        console.log('resp --> ', resp);
-      });
-
+    if(await this.toolService.verifyNetStatus()){
+      this.api.postDataInfo("api/info", formData, params ).then(async resp =>{
+        });
+    }else{
+      this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+    }
   }
 
   dataURLtoBlob(dataurl:any){
@@ -248,9 +252,14 @@ export class InfoPage implements OnInit {
 
   //#endregion Image section ------------------------------------------------
   async collectInfo(){
-    await this.api.getData('api/info/all/' + this.userId).subscribe(async result => {
-       this.localInfo = await result;
-     });
+    if(await this.toolService.verifyNetStatus()){
+      await this.api.getData('api/info/all/' + this.userId).subscribe(async result => {
+        this.localInfo = await result;
+      });
+
+    }else{
+      this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+    }
    }
 
   async doRefresh(event:any){
@@ -265,29 +274,28 @@ export class InfoPage implements OnInit {
     try{
 
       if(event.detail.checked && status){ //Show
-        await this.api.postData('api/info/updStatus/' + 
-          this.userId + '/' + infoId,{'disable':false}).then(async result => {
-            console.log('StatusInfo result -->',result);
-            // this.toastEvent("Info updated successfully");
-            // await this.collectInfo();
-            setTimeout(async () => {
-              await this.collectInfo();
-            }, 2000);
-          });
+        if(await this.toolService.verifyNetStatus()){
+          await this.api.postData('api/info/updStatus/' + 
+            this.userId + '/' + infoId,{'disable':false}).then(async result => {
+              setTimeout(async () => {
+                await this.collectInfo();
+              }, 2000);
+            });
+        }else{
+          this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+        }    
       }else if(event.detail.checked && !status){ // Hide
-        await this.api.postData('api/info/updStatus/' + 
-          this.userId + '/' + infoId,{'disable':true}).then(async()=>{
-            // this.toastEvent("Info updated successfully");
-            // await this.collectInfo();
-            setTimeout(async () => {
-              await this.collectInfo();
-            }, 2000);
-          });
-          
-      } 
-
-
-     
+        if(await this.toolService.verifyNetStatus()){
+          await this.api.postData('api/info/updStatus/' + 
+            this.userId + '/' + infoId,{'disable':true}).then(async()=>{
+              setTimeout(async () => {
+                await this.collectInfo();
+              }, 2000);
+            });
+        }else{
+          this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+        }  
+      }      
    }catch(e){
     
    }
@@ -295,17 +303,6 @@ export class InfoPage implements OnInit {
 
   async cancelUploadFile(){
     this.imageFileName = '';
-  }
-
-  // -------   toast control alerts    ---------------------
-  toastEvent(msg:any){
-    this.myToast = this.toast.create({
-      message:msg,
-      duration:6000
-    }).then((toastData) =>{
-      console.log(toastData);
-      toastData.present();
-    });
   }
 
   closeModal(){
