@@ -15,12 +15,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-fab vertical="top" horizontal="end" slot="fixed">
-  <ion-fab-button class="button-green" (click)="addVisitor()">
-    <ion-icon name="people"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
-
+<div>
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button class="button-green" (click)="addVisitor()">
+      <ion-icon name="people"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</div>
 
 <ion-content>
   <ion-list class="list" detail="false" lines="full" no-padding [inset]="true">
