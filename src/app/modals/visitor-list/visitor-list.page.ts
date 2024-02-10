@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController } from "@ionic/angular";
 import { Utils } from "../../tools/tools";
 import { VisitorsPage } from "../visitors/visitors.page";
+import { Contacts } from "@capacitor-community/contacts";
 
 @Component({
   selector: 'app-visitor-list',
@@ -11,6 +12,7 @@ import { VisitorsPage } from "../visitors/visitors.page";
 export class VisitorListPage implements OnInit {
   myVisitors:any;
   selectedVisitor:{}
+  permission:any;
 
   constructor(
     private modalController : ModalController,
@@ -20,6 +22,19 @@ export class VisitorListPage implements OnInit {
 
   ngOnInit() {
     this.getVisitors();
+    // this.getContacts();
+  }
+
+  async getContacts(){
+    try{
+      const permission = await Contacts.requestPermissions();
+      this.permission = permission;
+
+      console.log('Contact permission -->', permission);
+
+    }catch(e){
+      console.log(e);
+    }
   }
 
   async getVisitors(){
