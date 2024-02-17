@@ -23,7 +23,7 @@ export class VisitorsPage implements OnInit {
 
 
   myToast : any;
-  public gender = "M";
+  public gender = "H";
   // contacts: Observable<Contact[]>;
   contacts: [];
   contactSelected:any = {};
@@ -59,14 +59,17 @@ export class VisitorsPage implements OnInit {
   }
 
   async onSubmit(){
-    this.pkg = {'name':this.name,'sim':this.sim,'email':this.email, 'address': this.address,'gender': this.gender, 'date': new Date()}
+    this.pkg = {'name':this.name,'sim':this.sim,'email':this.email,
+      'address': this.address,'gender': this.gender, 'date': new Date()}
     this.appendVisitor(this.pkg);
     this.closeModal();
 
   }
 
   async onSubmit_(){
-    await this.api.postData('api/visitors/' + this.userId ,{'userId': this.userId,'name':this.name,'email':this.email,'sim':this.sim,'address':this.address,'gender':this.gender,'avatar':this.avatar}).then(async (result:any) => {
+    await this.api.postData('api/visitors/' + this.userId ,{'userId': this.userId,
+      'name':this.name,'email':this.email,'sim':this.sim,'address':this.address,
+        'gender':this.gender,'avatar':this.avatar}).then(async (result:any) => {
       console.log('omSubmit Closing modal ...!');
         await this.closeModal()
       }, err => {

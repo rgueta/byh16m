@@ -165,9 +165,9 @@ export class Tab4Page {
     let Male = false;
     let Female = false;
     let Other = false;
-    if (ActualValue == 'M'){
+    if (ActualValue == 'H'){
       Male = true;
-    }else if (ActualValue == 'F'){
+    }else if (ActualValue == 'M'){
       Female = true;
     }else{
       Other = true;
@@ -177,8 +177,8 @@ export class Tab4Page {
       header: 'Cambiar genero de ' + visitor,
       message: 'Favor de seleccionar el nuevo genero',
       backdropDismiss: true,
-      inputs: [{name:'Mujer', type:'radio', label: 'Mujer', value:'F',checked:Female},
-               {name:'Hombre',type:'radio', label: 'Hombre', value:'M' ,checked:Male},
+      inputs: [{name:'Mujer', type:'radio', label: 'Mujer', value:'M',checked:Female},
+               {name:'Hombre',type:'radio', label: 'Hombre', value:'H' ,checked:Male},
                {name:'Otro',type:'radio', label: 'Otro', value:'O' ,checked:Other}
               ],
       buttons: [{ text: 'Cancelar', role: 'cancel',handler : () =>{} },
