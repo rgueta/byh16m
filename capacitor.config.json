@@ -11,10 +11,6 @@
 		},
 		"CapacitorHttp": {
 			"enabled": true
-		},
-		"SplashScreen":{
-			"androidScaleType": "CENTER_CROP",
-			"useDialog": false
 		}
 	  }
 }
