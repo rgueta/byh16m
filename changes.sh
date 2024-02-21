@@ -1,2 +1,2 @@
 #!/bin/bash
-npx cap copy && npx cap sync && ionic build
+ionic build && npx cap sync

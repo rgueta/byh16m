@@ -72,10 +72,15 @@ export const Utils = {
         mycore_id = await localStorage.getItem('core-id');
       }
 
-      // await localStorage.clear();
+      const cnnStatus = await JSON.parse(localStorage.getItem('netStatus'));
+
+      await localStorage.clear();
       await localStorage.setItem('visitors',JSON.stringify(myVisitors));
       await localStorage.setItem('token_px', myToken_px);
       await localStorage.setItem('core-id', mycore_id);
+      await localStorage.setItem('netStatus', JSON.stringify(cnnStatus));
+
+
 
     }
 
