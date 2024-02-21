@@ -217,8 +217,13 @@ export class CodesPage implements OnInit {
 
   async addCode() {
     const modal = await this.modalController.create({
-      component: UpdCodesModalPage,
+      component: UpdCodesModalPage
     });
+
+    await modal.onDidDismiss().then((data) => {
+      this.collectCodes(); 
+    });
+
     return await modal.present();
   }
 
