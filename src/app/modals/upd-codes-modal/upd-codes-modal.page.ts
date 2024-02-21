@@ -36,6 +36,7 @@ export class UpdCodesModalPage implements OnInit {
   StrPlatform = '';
   comment = '';
   Localtoast: any;
+  codeCreated: boolean = false;  //to return callback for resfresh or not
 
   public code_expiry:any;
 
@@ -207,8 +208,8 @@ async setupCode(event:any){
   async onSubmitTemplate(){
     var dateInit = '';
     var dateFinal = '';
+    this.codeCreated = await true;
     
-
     const coreSim =  await localStorage.getItem('my-core-sim')
     const userSim =  await localStorage.getItem('my-sim')
     const coreName = await localStorage.getItem('core-name')
@@ -264,9 +265,7 @@ async setupCode(event:any){
           this.Localtoast.present();
       }
 
-       this.closeModal();
-
-      // //  this.showAlerts('Message', 'Se envio el codigo')
+      this.closeModal();
 
        },error =>{
           alert('No se pudo enviar el codigo');
@@ -276,7 +275,6 @@ async setupCode(event:any){
         console.log('Can not post data : ', err);
     }
 
-    // this.api.sendPostRequest('api/newCode',{'code':this.code,'sim':this.sim,'range':this.range});
   }
 
   async sendSMS(sim:string,text:string){
@@ -363,7 +361,7 @@ async setupCode(event:any){
   }
 
   closeModal(){
-    this.modalController.dismiss();
+    this.modalController.dismiss(this.codeCreated);
   }
 
 }

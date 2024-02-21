@@ -158,27 +158,6 @@ getData_key(collection:String,data:any){
     // });
 }
 
- post_pwdRST(url:string){
-   const headers = new HttpHeaders({
-    'Accept': 'application/json',
-    'content-type' :'application/json',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
-    });
-
-  const params = new HttpParams().append('email','ricardogueta@hotmail.com');
-  
-
-     let options = {
-      headers : headers,
-      params : params
-     }
-
-     console.log('options --> ' + JSON.stringify(options));
-
-     return this.http.post(this.REST_API_SERVER + url, options);
-}
 
 async postData(collection:String,data:any){
   const token = await localStorage.getItem(TOKEN_KEY);

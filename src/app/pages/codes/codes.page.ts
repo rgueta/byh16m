@@ -216,13 +216,17 @@ export class CodesPage implements OnInit {
         // ---- Animation controller  ----------------------------------
 
   async addCode() {
-    const modal = await this.modalController.create({
-      component: UpdCodesModalPage
+    let modal = await this.modalController.create({
+      component: UpdCodesModalPage,
     });
 
-    await modal.onDidDismiss().then((data) => {
-      this.collectCodes(); 
-    });
+    modal.onDidDismiss()
+    .then(async (data) => {
+      if(data.data){
+        console.log('Refresh data --> ', data);
+        await this.collectCodes();
+      }
+    })
 
     return await modal.present();
   }

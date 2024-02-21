@@ -45,13 +45,17 @@ ion-content {
   .middle {
     padding: 1rem 0 0.5rem 0;
     
-    width: 50%;
+    width: 90%;
     ion-title{
         font-size: 5vw;
         text-align: center;
     }
 
   }
+
+  .centralize{
+    margin-left:-60px;
+}
 
 
 
