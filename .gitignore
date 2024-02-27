@@ -11,7 +11,7 @@ $RECYCLE.BIN/
 
 *.log
 log.txt
-
+package-lock.json
 
 /.sourcemaps
 /.versions

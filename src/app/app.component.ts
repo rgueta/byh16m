@@ -17,7 +17,7 @@ export class AppComponent {
   constructor(
     private toolService:ToolsService
   ) {
-    localStorage.clear();
+    // localStorage.clear();
     this.checkNetwork()
   }
 
