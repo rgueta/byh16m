@@ -81,19 +81,14 @@ export const Utils = {
         mycore_id = await localStorage.getItem('core-id');
       }
 
-<<<<<<< HEAD
-      const cnnStatus = await JSON.parse(localStorage.getItem('netStatus'));
 
       await localStorage.clear();
-=======
-      await localStorage.clear();
       await localStorage.setItem('netStatus',JSON.stringify(netStatus));
->>>>>>> local-contacts
       await localStorage.setItem('visitors',JSON.stringify(myVisitors));
       await localStorage.setItem('token_px', myToken_px);
       await localStorage.setItem('my-refresh-token', my_refresh_token);
       await localStorage.setItem('core-id', mycore_id);
-      await localStorage.setItem('netStatus', JSON.stringify(cnnStatus));
+  
 
 
 
