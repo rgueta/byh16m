@@ -9,7 +9,8 @@
       <div class="column middle">
         <ion-title>{{coreName}}</ion-title>
         <div class="doorsButton-toggle">
-          <ion-label (click)="toggleButtons()">{{visible ? 'Ocultar' : 'Visualizar'}}</ion-label>
+          <ion-label (click)="toggleButtons()">
+            {{visible ? 'Ocultar' : 'Visualizar'}}</ion-label>
           <ion-icon  [name]="visible ? 'chevron-up-outline' : 'chevron-down-outline'" 
           (click)="toggleButtons()" style="padding-left: 5px;"></ion-icon>
        </div>
@@ -54,13 +55,18 @@
     <ion-content>
       <ion-list>
         <ion-item-group>
-          <ion-item [button]="true" [detail]="false" (click)="openFamily()">Familia</ion-item>
-          <ion-item [button]="true" [detail]="false" (click)="recoverAccount()">Recupera cuenta</ion-item>
-          <ion-item [button]="true" [detail]="false" (click)="deviceLost()">Celular perdido</ion-item>
-          <ion-item [button]="true" [detail]="false" (click)="localNotification()">Local notification</ion-item>
-          <ion-item [button]="true" [detail]="false" (click)="fcmNotification()">FCM notification</ion-item>
-          <ion-item-divider></ion-item-divider>
-          <ion-item [button]="true" [detail]="false" (click)="logout()">Log out</ion-item>
+          <ion-item [button]="true" [detail]="false" 
+            (click)="openFamily()">Familia</ion-item>
+          <ion-item [button]="true" [detail]="false" 
+            (click)="recoverAccount()">Recupera cuenta</ion-item>
+          <ion-item [button]="true" [detail]="false" 
+            (click)="deviceLost()">Celular perdido</ion-item>
+          <ion-item [button]="true" [detail]="false" 
+            (click)="localNotification()">Local notification</ion-item>
+          <ion-item [button]="true" [detail]="false" 
+            (click)="fcmNotification()">FCM notification</ion-item>
+          <ion-item id="logout1-alert" [button]="true" [detail]="false" 
+          (click)="logout()">Log out</ion-item>
         </ion-item-group>
       </ion-list>
     </ion-content>
@@ -71,9 +77,10 @@
 
     <!-- Bi-color -->
     <div slot="fixed" class="aperturas" *ngIf="visible">
-        <ion-button class="doorsButton-green"  (click)="sendOpening('open,peatonal')">Peatonal</ion-button>
-        <ion-button class="doorsButton-blue"  (click)="sendOpening('open,vehicular')">Vehicular</ion-button>
-        
+        <ion-button class="doorsButton-green" 
+          (click)="sendOpening('open,peatonal')">Peatonal</ion-button>
+        <ion-button class="doorsButton-blue" 
+          (click)="sendOpening('open,vehicular')">Vehicular</ion-button>
     </div> 
 
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
