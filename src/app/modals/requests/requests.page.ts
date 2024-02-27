@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams,ToastController, AlertController } from "@ionic/angular";
+import { ModalController, NavParams,ToastController,
+   AlertController } from "@ionic/angular";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { DatabaseService } from "../../services/database.service";
+import { Router } from "@angular/router";
 
 
 const DEVICE_PKG = 'device-pkg';
@@ -22,7 +24,8 @@ export class RequestsPage implements OnInit {
     private navParams:NavParams,
     private api:DatabaseService,
     private toast:ToastController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -66,6 +69,7 @@ export class RequestsPage implements OnInit {
           this.showAlert('Alerta','', 
             'Reciviras un correo para recuperar tu contraseña', ['Ok']);
         }
+
         
       },err =>{
         console.log('pwdRST_request Error -- >', err);
@@ -91,7 +95,12 @@ export class RequestsPage implements OnInit {
       header: Header,
       subHeader: subHeader,
       message: msg,
-      buttons: btns,
+      buttons: [{
+        text:'Ok',
+        handler: async () =>{
+          this.closeModal();
+        }
+    }],
     });
   
     await alert.present();
