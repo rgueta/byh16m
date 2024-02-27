@@ -17,6 +17,7 @@ export class AppComponent {
   constructor(
     private toolService:ToolsService
   ) {
+<<<<<<< HEAD
 
     const cnnStatus = JSON.parse(localStorage.getItem('netStatus'));
     var visitors = localStorage.getItem('visitors');
@@ -24,6 +25,9 @@ export class AppComponent {
     localStorage.setItem('visitors',visitors);
     localStorage.setItem('netStatus', JSON.stringify(cnnStatus));
 
+=======
+    // localStorage.clear();
+>>>>>>> local-contacts
     this.checkNetwork()
   }
 

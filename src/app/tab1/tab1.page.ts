@@ -5,7 +5,7 @@ import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { environment } from "../../environments/environment";
 import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
-import { VisitorsPage } from '../modals/visitors/visitors.page';
+import { VisitorListPage } from '../modals/visitor-list/visitor-list.page';
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Utils } from "../tools/tools";
@@ -297,7 +297,7 @@ async deviceLost(){
 
 async newModal(){
   const modal = await this.modalController.create({
-    component: VisitorsPage,
+    component: VisitorListPage,
     // cssClass:"my-modal"
   });
 
@@ -333,7 +333,7 @@ async modalVisitors() {
 
   
   const modal = await this.modalController.create({
-    component: VisitorsPage,
+    component: VisitorListPage,
     enterAnimation,
     leaveAnimation,
     showBackdrop:false,
