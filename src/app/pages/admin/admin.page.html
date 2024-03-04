@@ -116,15 +116,20 @@
             <strong>Routines</strong></ion-label>
           </ion-item>
           <form tappable *ngIf="routineOpen" class="detailRoutines">
-            <ion-item class="detail-item" (click)="collectUsers(item._id,item.name)">View users</ion-item>
-            <ion-item class="detail-item" (click)="modalRegister(item._id,item.name,item.location)">Add user</ion-item>
-            <ion-item class="detail-item" (click)="ModuleRST($event,item)">Reset module</ion-item>
-            <ion-item class="detail-item" (click)="getSIMstatus($event,item)">Module status</ion-item>
-            <ion-item class="detail-item" (click)="getCoreCodes($event,item)">Active codes</ion-item>
-            <ion-item class="detail-item" (click)="setOpenGate($event,item)">Code Open Gate</ion-item>
-            <ion-item class="detail-item" (click)="setOpenMagnet($event,item)">Code Open Magnet</ion-item>
-            <ion-item class="detail-item" (click)="setKeypad($event,item,'flex')">Set Keypad flex</ion-item>
-            <ion-item class="detail-item" (click)="setKeypad($event,item,'hardPlastic')">Set Keypad hard plastic</ion-item>
+            <ion-item class="detail-item" 
+              (click)="collectUsers(item._id,item.name)">View users</ion-item>
+            <ion-item class="detail-item" 
+              (click)="modalRegister(item._id,item.name,item.location)">Add user</ion-item>
+
+            <ion-item class="detail-item">byh16s routines
+              <!-- <ion-label class='labelInput' floating>Routines:</ion-label> -->
+              <ion-select class="routines" [(ngModel)]="routine_byh16s" 
+                ok-text="Seleccionar" cancel-text="Cancelar" 
+                  (ionChange)="routineSelected($event,item)">
+                <ion-select-option class="menu-routines" *ngFor="let item of routineOptions" 
+                    value = {{item.id}}>{{item.name}}</ion-select-option>
+              </ion-select>
+            </ion-item>
           </form>
         </ion-list>
 

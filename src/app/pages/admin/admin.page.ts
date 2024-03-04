@@ -20,6 +20,17 @@ const EMAIL_TO_CORE = 'emailToCore'
 })
 
 export class AdminPage implements OnInit {
+  routineOptions = [
+    {'id':0,'cmd':'ModuleRST','name':'Reset module','confirm':'Reset module ?'},
+    {'id':1,'cmd':'getSIMstatus','name':'Module status','confirm':'Request module status?'},
+    {'id':2,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
+    {'id':3,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate','name':'Code open Gate','confirm':'Open gate with code?'},
+    {'id':4,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet','name':'Code open Magnet','confirm':'Open magnet with code?'},
+    {'id':5,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex','name':'Set Keypad flex','confirm':'Set keypad flex?'},
+    {'id':6,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic','name':'Set Keypad hard plastic','confirm':'Set keypad hardPlastic?'},
+    {'id':7,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true','name':'Set debug mode','confirm':'Set debug On?'},
+    {'id':8,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false','name':'Remove debug mode','confirm':'Set debug Off?'},
+                  ]
   public CoresList:any;
   public myUserList:any;
   automaticClose = false;
@@ -32,6 +43,7 @@ export class AdminPage implements OnInit {
   public simSectionOpen = false;
   sim:string;
   public core_sim:string;
+  public routine_byh16s:string;
 
   constructor(
         public animationController : AnimationController,
@@ -119,34 +131,27 @@ export class AdminPage implements OnInit {
     return await modal.present()
   }
 
-  async getSIMstatus(event:any,item:any){
-    this.alertCtrlEvent(event, item,'Confirm', 'Request module status?',
-    'getSIMstatus', 'Yes', 'Cancel');
+  async routineSelected(event:any,item:any){
+    if(this.routineOptions[event.detail.value]['option1']){
+      item['option1'] = this.routineOptions[event.detail.value]['option1'];
+    }
+
+    if(this.routineOptions[event.detail.value]['option2']){
+      item['option2'] = this.routineOptions[event.detail.value]['option2'];
+    }
+
+    if(this.routineOptions[event.detail.value]['option3']){
+      item['option3'] = this.routineOptions[event.detail.value]['option3'];
+    }
+
+    this.alertCtrlEvent(event, item,'Confirm', 
+      this.routineOptions[event.detail.value]['confirm'],
+      this.routineOptions[event.detail.value]['cmd'], 'Yes', 'Cancel');
   }
 
-  async ModuleRST(event:any, item:any){
-   this.alertCtrlEvent(event,item,'Configm','Reset module ?','ModuleRST','Yes','Cancel')
- }
-
-  async getCoreCodes(event:any,item:any){
-    this.alertCtrlEvent(event,item,'Confirm','Request codes from module?',
-    'getCoreCodes','Yes','Cancel');
-  }
-
-  async setOpenGate(event:any,item:any){
-    this.alertCtrlEvent(event,item,'Confirm','Open gate with code?','setOpenGate','Yes','Cancel')
-  }
-
-  async setOpenMagnet(event:any,item:any){
-    this.alertCtrlEvent(event,item,'Confirm','Open magnet with code?','setOpenMagnet','Yes','Cancel');
-  }
-
-  async setKeypad(event:any,item:any,keypad:string){
-    item['keyPadName'] = keypad;
-    this.alertCtrlEvent(event,item,'Confirm','Set keypad ' + keypad + ' ?','setKeypad','Yes','Cancel');
-  }
   async simChange(event:any,item:any){
-   this.alertCtrlEvent(event,item,'Confirm','New sim: '+ this.sim + ' ?', 'simChange', 'Yes','Cancel');
+   this.alertCtrlEvent(event,item,'Confirm','New sim: '+ this.sim + 
+    ' ?', 'simChange', 'Yes','Cancel');
  }
 
   async setupCode(visitorId:string){}
@@ -170,6 +175,7 @@ export class AdminPage implements OnInit {
     {
       titleMsg = 'Enable ';
     }
+
     if(event.target.checked != item.enable){
       this.alertCtrlEvent(event,item,'Confirm', titleMsg + ' ' + item.name + ' ?',
        'chgStatusCore', 'Yes', 'Cancel')
@@ -329,7 +335,7 @@ toggleSectionSim(){
                 break;
               case 'getSIMstatus':
                 try{
-                  await this.sms.send(this.core_sim,'status,sim',options);
+                  await this.sms.send(item.Sim,'status,sim',options);
                   this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');
                 }catch(e){
                   this.toolService.toastAlert('No se envio, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
@@ -343,7 +349,7 @@ toggleSectionSim(){
                   this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
                 }
                 break;
-              case 'getCoreCodes':
+              case 'getActiveCodes':
                 try{
                   await this.sms.send(item.Sim,'active_codes,sim',options);
                   this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
@@ -352,27 +358,30 @@ toggleSectionSim(){
                   this.toolService.toastAlert('Msg. no enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                 break;
-              case 'setOpenGate':
+              case 'setOpen':
                 try{
-                  await this.sms.send(item.Sim,'setOpenCode,gate',options);
+                  await this.sms.send(item.Sim,'setOpenCode,' + item.option1, options);
                   this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
                 }
                 catch(e){
-                  this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                  this.toolService.toastAlert('No enviado, error:<br>' + 
+                    JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                 break;
-              case 'setOpenMagnet':
-                try{
-                  await this.sms.send(item.Sim,'setOpenCode,magnet',options);
-                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
-                }
-                catch(e){
-                  this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
-              }
-              break;
               case 'setKeypad':
                 try{
-                  await this.sms.send(item.Sim,'setKeypad,' + item.keyPadName,options);
+                  await this.sms.send(item.Sim,'setKeypad,' + item.option1, options);
+                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');  
+                }
+                catch(e){
+                    this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                  }
+                break;
+              case 'cfgCHG':
+                try{
+                  await this.sms.send(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
+                      + ',' + item.option3, options);
+                  
                   this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');  
                 }
                 catch(e){
