@@ -40,8 +40,6 @@ export class AdminPage implements OnInit {
       'name':'Change settings Code','confirm':'Change settingsCode ?'},
     {'id':10,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
       'name':'Change pwdRST','confirm':'Change pwdRST ?'},
-    {'id':11,'cmd':'cfgCHG','input':true,'option1':'sim','option2':'value',
-      'name':'Change sim number','confirm':'Change sim number ?'},
       
             ]
   public CoresList:any;
@@ -348,8 +346,12 @@ toggleSectionSim(){
                 try{
                   if (this.sim.length >= 10 ){
                     if(await this.toolService.verifyNetStatus()){
+                      console.log('item.Sim: ' + item.Sim)
                       await this.api.postData('api/cores/chgSim/' + this.userId ,
                         {'coreId':item._id, 'newSim':this.sim}).then(async (result) => {
+                        // Change sim on pcb
+                        await this.sms.send(item.Sim,'cfgCHG,sim,value,' + this.sim, options);
+                        this.sim = '';
                         this.getCores();
                         this.simSectionOpen = false;
                         this.toolService.toastAlert('Sim cambiado ' + this.sim,0, ['Ok'], 'bottom')
