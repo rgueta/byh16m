@@ -24,13 +24,26 @@ export class AdminPage implements OnInit {
     {'id':0,'cmd':'ModuleRST','name':'Reset module','confirm':'Reset module ?'},
     {'id':1,'cmd':'getSIMstatus','name':'Module status','confirm':'Request module status?'},
     {'id':2,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
-    {'id':3,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate','name':'Code open Gate','confirm':'Open gate with code?'},
-    {'id':4,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet','name':'Code open Magnet','confirm':'Open magnet with code?'},
-    {'id':5,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex','name':'Set Keypad flex','confirm':'Set keypad flex?'},
-    {'id':6,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic','name':'Set Keypad hard plastic','confirm':'Set keypad hardPlastic?'},
-    {'id':7,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true','name':'Set debug mode','confirm':'Set debug On?'},
-    {'id':8,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false','name':'Remove debug mode','confirm':'Set debug Off?'},
-                  ]
+    {'id':3,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
+      'name':'Code open Gate','confirm':'Open gate with code?'},
+    {'id':4,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
+      'name':'Code open Magnet','confirm':'Open magnet with code?'},
+    {'id':5,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
+      'name':'Set Keypad flex','confirm':'Set keypad flex?'},
+    {'id':6,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
+      'name':'Set Keypad hard plastic','confirm':'Set keypad hardPlastic?'},
+    {'id':7,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
+      'name':'Set debug mode','confirm':'Set debug On?'},
+    {'id':8,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
+      'name':'Remove debug mode','confirm':'Set debug Off?'},
+    {'id':9,'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
+      'name':'Change settings Code','confirm':'Change settingsCode ?'},
+    {'id':10,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
+      'name':'Change pwdRST','confirm':'Change pwdRST ?'},
+    {'id':11,'cmd':'cfgCHG','input':true,'option1':'sim','option2':'value',
+      'name':'Change sim number','confirm':'Change sim number ?'},
+      
+            ]
   public CoresList:any;
   public myUserList:any;
   automaticClose = false;
@@ -44,6 +57,7 @@ export class AdminPage implements OnInit {
   sim:string;
   public core_sim:string;
   public routine_byh16s:string;
+  input: boolean = false;
 
   constructor(
         public animationController : AnimationController,
@@ -132,6 +146,14 @@ export class AdminPage implements OnInit {
   }
 
   async routineSelected(event:any,item:any){
+    if(this.routineOptions[event.detail.value]['input']){
+      this.input = true;
+      console.log('si agregue el input, item: ', item)
+    }else{
+      this.input = false;
+      console.log('No agregue el input, item: ', item)
+    }
+
     if(this.routineOptions[event.detail.value]['option1']){
       item['option1'] = this.routineOptions[event.detail.value]['option1'];
     }
@@ -149,6 +171,7 @@ export class AdminPage implements OnInit {
       this.routineOptions[event.detail.value]['cmd'], 'Yes', 'Cancel');
   }
 
+  
   async simChange(event:any,item:any){
    this.alertCtrlEvent(event,item,'Confirm','New sim: '+ this.sim + 
     ' ?', 'simChange', 'Yes','Cancel');
@@ -256,9 +279,22 @@ toggleSectionSim(){
       }
     } 
 
+    let inputs = [{}];
+
+    if(this.input){
+      inputs.push({
+        name: 'inputValue',
+        placeholder: item.option2,
+        type:'text'
+      })
+    }else{
+      inputs = [];
+    }
+
     let alert = await this.alertCtrl.create({
       header: titleMsg,
       message: Message,
+      inputs : inputs,
       buttons: [
         {
           text: txtCancel,
@@ -379,8 +415,13 @@ toggleSectionSim(){
                 break;
               case 'cfgCHG':
                 try{
-                  await this.sms.send(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
+                  if(this.input){
+                    await this.sms.send(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
+                      + ',' + data.inputValue, options);
+                  }else{
+                      await this.sms.send(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
                       + ',' + item.option3, options);
+                  }
                   
                   this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');  
                 }
