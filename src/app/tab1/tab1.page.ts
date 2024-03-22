@@ -192,9 +192,15 @@ toggleButtons(){
 
 async collectInfo(){
   if(await this.toolService.verifyNetStatus()){
-    await this.api.getData('api/info/' + this.userId).subscribe(async result => {
+    try{
+      await this.api.getData('api/info/' + this.userId).subscribe(async result => {
         this.localInfo = await result;
       });
+      localStorage.setItem('lastInfo_updated', Date())
+    }catch(e){
+
+    }
+    
   }else{
     this.toolService.toastAlert('No hay acceso a internet',0,['Ok'],'middle')
   }
