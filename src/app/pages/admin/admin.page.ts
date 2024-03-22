@@ -21,7 +21,7 @@ const EMAIL_TO_CORE = 'emailToCore'
 
 export class AdminPage implements OnInit {
   routineOptions = [
-    {'id':0,'cmd':'ModuleRST','name':'Reset module','confirm':'Reset module ?'},
+    {'id':0,'cmd':'ModuleRST','name':'Reboot module','confirm':'Reboot module ?'},
     {'id':1,'cmd':'getSIMstatus','name':'Module status','confirm':'Request module status?'},
     {'id':2,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
     {'id':3,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
