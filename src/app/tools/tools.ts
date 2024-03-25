@@ -89,9 +89,12 @@ export const Utils = {
       await localStorage.setItem('my-refresh-token', my_refresh_token);
       await localStorage.setItem('core-id', mycore_id);
   
+    },
 
-
-
+    getTimestamp: async () => {
+      const now = new Date();
+      let timestamp = now.toISOString();
+      return timestamp;
     }
 
 }
