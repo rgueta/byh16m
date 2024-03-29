@@ -17,6 +17,7 @@ import {
 } from '@capacitor/push-notifications';
 import { FCM } from "@capacitor-community/fcm";
 import { ToolsService } from "../services/tools.service";
+import { forEach } from 'android/app/src/main/assets/public/cordova_plugins';
 
 @Component({
   selector: 'app-tab1',
@@ -24,7 +25,7 @@ import { ToolsService } from "../services/tools.service";
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit {
-  public localInfo:any;
+  public localInfo:any = [];
   public codes : [];
   @Input() msg:string;
   @Input() sim:string;
@@ -171,11 +172,19 @@ async collectInfo(){
     try{
     
       await this.api.getData('api/info/' + this.userId + 
-        '/2020-01-29T00:49:49.857Z').subscribe({
+        '/2024-01-29T00:49:49.857Z').subscribe({
           next: async result => {
-            this.localInfo = await result;
+            if(Object.keys(result).length > 0){
+              Object.entries(result).forEach(async ([key,item]) =>{
+                this.localInfo.push(item)
+            });
             debugger
-            console.log('localInfo -->', this.localInfo)
+            this.localInfo = Utils.sortJSON(this.localInfo, 'updatedAt', false)
+            console.log('localInfo updated -->', this.localInfo)
+            }else{
+              console.error('no information')
+            }
+            
           },
           error: error => {
             console.error('collect info error : ', error);
