@@ -192,23 +192,23 @@ toggleButtons(){
 
 async collectInfo(){
   let timestamp = '';
+  if(!localStorage.getItem('lastInfo_updated')){
+    timestamp = Utils.convDate(new Date());
+  }else{
+    timestamp = localStorage.getItem('lastInfo_updated');
+  }
+
   if(await this.toolService.verifyNetStatus()){
     try{
-      if(!localStorage.getItem('lastInfo_updated')){
-        const now = new Date();
-        timestamp = now.toISOString();
-      }else{
-        timestamp = localStorage.getItem('lastInfo_updated');
-      }
-      
-      await this.api.getData('api/info/' + this.userId + '/2024-01-29T00:49:49.857Z').subscribe(async result => {
+    
+      await this.api.getData('api/info/' + this.userId + 
+        '/2024-01-29T00:49:49.857Z').subscribe(async result => {
         this.localInfo = await result;
         console.log('localInfo -->', this.localInfo)
       });
      
-      localStorage.setItem('lastInfo_updated', await Utils.getTimestamp());
+      localStorage.setItem('lastInfo_updated', await Utils.convDate(new Date()));
     }catch(e){
-
     }
     
   }else{

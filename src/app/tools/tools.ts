@@ -92,9 +92,7 @@ export const Utils = {
     },
 
     getTimestamp: async () => {
-      const now = new Date();
-      let timestamp = now.toISOString();
-      return timestamp;
+      return new Date().toISOString();
     }
 
 }
