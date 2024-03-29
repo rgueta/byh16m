@@ -140,37 +140,6 @@ export class Tab1Page implements OnInit {
 
   }
 
-//   async init(): Promise<void> {
-//     await this.SIM.hasReadPermission().then(async allowed =>{
-//       if(!allowed){
-//         console.log('Si entre init sim has read permissions')
-//         await this.SIM.requestReadPermission().then( 
-//         async () => {
-//             await this.SIM.getSimInfo().then(
-//             (info) => console.log('Sim info: ', info),
-//             (err) => console.log('Unable to get sim info: ', err)
-//           );
-//            },
-//         () => console.log('Permission denied')
-//         )
-//       }
-//     });
-  
-//      const info = await Device.getInfo();
-//      console.log('tab1.page SIM info --> ' , info);
-//      localStorage.setItem(DEVICE_UUID, (await Device.getId()).uuid);
-
-//      if (info.platform === 'android') {
-//        try {
-//          console.log('soy android OK');
-//        } catch (e) {
-//          console.log('soy android con Error: ', e);
-//      }
-//    }else{
-//      console.log('no soy android');
-//    }
-//  }
-
  async doRefresh(event:any){
   this.collectInfo();
 
@@ -202,10 +171,16 @@ async collectInfo(){
     try{
     
       await this.api.getData('api/info/' + this.userId + 
-        '/2024-01-29T00:49:49.857Z').subscribe(async result => {
-        this.localInfo = await result;
-        console.log('localInfo -->', this.localInfo)
-      });
+        '/2020-01-29T00:49:49.857Z').subscribe({
+          next: async result => {
+            this.localInfo = await result;
+            debugger
+            console.log('localInfo -->', this.localInfo)
+          },
+          error: error => {
+            console.error('collect info error : ', error);
+          }
+        });
      
       localStorage.setItem('lastInfo_updated', await Utils.convDate(new Date()));
     }catch(e){
