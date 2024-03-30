@@ -17,7 +17,7 @@ import {
 } from '@capacitor/push-notifications';
 import { FCM } from "@capacitor-community/fcm";
 import { ToolsService } from "../services/tools.service";
-import { forEach } from 'android/app/src/main/assets/public/cordova_plugins';
+
 
 @Component({
   selector: 'app-tab1',
@@ -25,7 +25,7 @@ import { forEach } from 'android/app/src/main/assets/public/cordova_plugins';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit {
-  public localInfo:any = [];
+  public localInfo : any = [];
   public codes : [];
   @Input() msg:string;
   @Input() sim:string;
@@ -162,40 +162,73 @@ toggleButtons(){
 
 async collectInfo(){
   let timestamp = '';
-  if(!localStorage.getItem('lastInfo_updated')){
-    timestamp = Utils.convDate(new Date());
-  }else{
-    timestamp = localStorage.getItem('lastInfo_updated');
-  }
-
   if(await this.toolService.verifyNetStatus()){
-    try{
+
+    // get last api call variable
+    if(!localStorage.getItem('lastInfo_updated')){
+      if(this.localInfo.length == 0 && !localStorage.getItem('info')){
+        let d = new Date();
+        d.setDate(d.getDate() - 180);
+        timestamp = Utils.convDate(d);
+      }else{
+        timestamp = Utils.convDate(new Date())
+      }
     
-      await this.api.getData('api/info/' + this.userId + 
-        '/2024-01-29T00:49:49.857Z').subscribe({
+    }else{
+      timestamp = localStorage.getItem('lastInfo_updated');
+      // timestamp = '2024-01-29T00:49:49.857Z'
+    }
+  
+    if(this.localInfo.length == 0 && localStorage.getItem('info')){
+        this.localInfo = JSON.parse(localStorage.getItem('info'));
+    }
+
+    try{
+      this.api.getData('api/info/' + this.userId + '/' + timestamp).subscribe({
           next: async result => {
             if(Object.keys(result).length > 0){
-              Object.entries(result).forEach(async ([key,item]) =>{
-                this.localInfo.push(item)
-            });
-            debugger
-            this.localInfo = Utils.sortJSON(this.localInfo, 'updatedAt', false)
-            console.log('localInfo updated -->', this.localInfo)
-            }else{
-              console.error('no information')
+              
+              // get last api call variable
+              if(this.localInfo.length > 0){
+                // this.localInfo = JSON.parse(localStorage.getItem('info'));
+
+                Object.entries(result).forEach(async ([key,item]) =>{
+                  this.localInfo.push(item)
+                });
+                
+                console.log('localInfo pushed : ', await this.localInfo);
+
+              }else{
+                this.localInfo = result;
+              }
+
+              this.localInfo = await Utils.sortJsonVisitors(this.localInfo, 'updatedAt', false);
+
+              // cleanup info 
+              if(this.localInfo.length > 1000)
+              {
+                this.localInfo.splice(1000);
+              }
+
+              localStorage.setItem('info',await JSON.stringify(this.localInfo));
             }
-            
+
           },
           error: error => {
             console.error('collect info error : ', error);
           }
         });
-     
+
       localStorage.setItem('lastInfo_updated', await Utils.convDate(new Date()));
+      
     }catch(e){
+      console.error('Error api call: ', e)
     }
     
   }else{
+    if(this.localInfo.length == 0 && localStorage.getItem('info')){
+      this.localInfo = JSON.parse(localStorage.getItem('info'));
+    }
     this.toolService.toastAlert('No hay acceso a internet',0,['Ok'],'middle')
   }
 
