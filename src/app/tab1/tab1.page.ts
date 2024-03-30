@@ -166,23 +166,25 @@ async collectInfo(){
 
     // get last api call variable
     if(!localStorage.getItem('lastInfo_updated')){
-      if(this.localInfo.length == 0 && !localStorage.getItem('info')){
-        let d = new Date();
-        d.setDate(d.getDate() - 180);
-        timestamp = Utils.convDate(d);
-      }else{
-        timestamp = Utils.convDate(new Date())
-      }
-    
+        timestamp = Utils.convDate(new Date())    
     }else{
       timestamp = localStorage.getItem('lastInfo_updated');
       // timestamp = '2024-01-29T00:49:49.857Z'
+    }
+
+
+    if(this.localInfo.length == 0 && !localStorage.getItem('info')){
+      let d = new Date();
+      d.setDate(d.getDate() - 180);
+      timestamp = Utils.convDate(d);
     }
   
     if(this.localInfo.length == 0 && localStorage.getItem('info')){
         this.localInfo = JSON.parse(localStorage.getItem('info'));
     }
 
+
+    console.log('timestamp --> ' ,timestamp);
     try{
       this.api.getData('api/info/' + this.userId + '/' + timestamp).subscribe({
           next: async result => {
