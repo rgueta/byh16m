@@ -295,8 +295,10 @@ async sendSMS(){
 
   try{
     if(use_twilio == 'false'){
-      console.log('Aqui llegue..!');
-      await this.sms.send(this.sim,this.msg,options);
+      await this.sms.send(this.sim,this.msg,options)
+      .then()
+      .catch((e:any) => this.toolService.showAlertBasic('Alerta','Error',e,['Ok']));
+
     }else{
       this.api.postData('api/twilio/open/' + 
       this.userId + '/' + this.msg + '/' + this.sim,'')
