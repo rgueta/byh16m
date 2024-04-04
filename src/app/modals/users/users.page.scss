@@ -5,10 +5,17 @@
 }
 
 .title{
+    display: flex;
     margin: 0;
     padding-right: 0px;
+    width: 90%;
 }
 
 .closeButton{
     margin-right: 10px;
+}
+
+.title-wrip{
+    font-size: .8em;
+    width: 100%;
 }
