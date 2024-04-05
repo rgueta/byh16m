@@ -130,19 +130,26 @@ export class LoginPage implements OnInit {
 
 
   async init(): Promise<void> {
-    await this.SIM.hasReadPermission().then(async allowed =>{
+    await this.SIM.hasReadPermission()
+    .then(async allowed =>{  
       if(!allowed){
-        await this.SIM.requestReadPermission().then( 
-        async () => {
-            await this.SIM.getSimInfo().then(
-            (info) => console.log('Sim info: ', info),
-            (err) => console.log('Unable to get sim info: ', err)
-          );
-           },
-        () => this.toolService.toastAlert('Sim Permission denied',0,['Ok'],'middle')
+        await this.SIM.requestReadPermission()
+        .then()
+        .catch((err) => {this.toolService.toastAlert('Sim Permission denied + ' + err ,0,['Ok'],'middle')}
         )
+      }else{
+        
+        await this.SIM.getSimInfo()
+        .then((info) => {
+          console.log('Si estoy en init() allowed :', allowed)
+          console.log('Sim info: ', info)
+        })
+        .catch((err) => console.log('Unable to get sim info: ', err))
       }
-    });   
+    })
+    .catch((err) => {
+      this.toolService.toastAlert('Sim Permission denied + ' + err ,0,['Ok'],'middle')
+    });
  }
 
  // get Config App ----
