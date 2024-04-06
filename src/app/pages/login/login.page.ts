@@ -66,6 +66,26 @@ export class LoginPage implements OnInit {
      
   async ngOnInit() {
 
+    let platforms = this.platform.platforms();
+    console.log('Platforms --> ',platforms)
+
+    if (this.platform.is('android') == true){
+      console.log('Es platform --> android');
+      this.toolService.toastAlert('Soy Android ', 0,['Ok'],'middle')
+      this.isAndroid = true;
+    }else if(this.platform.is('ios')){
+      console.log('Es platform --> ios');
+    }else if(this.platform.is('ipad')){
+      console.log('Es platform --> ipad');
+    }else if(this.platform.is('iphone')){
+      console.log('Es platform --> iphone');
+    }else if(this.platform.is('desktop')){
+      console.log('Es platform --> desktop');
+      this.lockToPortrait();
+    }else if(this.platform.is('cordova')){
+      console.log('Es platform --> cordova');
+    }
+    
     
     this.getConfigApp();
 
@@ -73,21 +93,23 @@ export class LoginPage implements OnInit {
     this.init();
     this.version = environment.app.version;
 
-    if(isPlatform('cordova')){
-      console.log('Soy plataforma cordova')
-    }else if(isPlatform('ios')){
-      console.log('Soy plataforma ios')
-    }else if(isPlatform('ipad')){
-      console.log('Soy plataforma ios')
-    }else if(isPlatform('iphone')){
-      console.log('Soy plataforma ios')
-    }else if(isPlatform('desktop')){
-      console.log('Soy plataforma desktop')
-      this.lockToPortrait();
-    }else if(isPlatform('android')){
-      console.log('Soy plataforma android')
-      this.isAndroid = true;
-    }
+    // if(isPlatform('cordova')){
+    //   this.toolService.toastAlert('Soy cordova ', 0,['Ok'],'middle')
+    //   console.log('Soy plataforma cordova')
+    // }else if(isPlatform('ios')){
+    //   console.log('Soy plataforma ios')
+    // }else if(isPlatform('ipad')){
+    //   console.log('Soy plataforma ipad')
+    // }else if(isPlatform('iphone')){
+    //   console.log('Soy plataforma iphone')
+    // }else if(isPlatform('desktop')){
+    //   console.log('Soy plataforma desktop')
+    //   this.lockToPortrait();
+    // }else if(isPlatform('android')){
+    //   console.log('Soy plataforma android')
+    //   this.toolService.toastAlert('Soy Android ', 0,['Ok'],'middle')
+    //   this.isAndroid = true;
+    // }
 
     this.credentials = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
