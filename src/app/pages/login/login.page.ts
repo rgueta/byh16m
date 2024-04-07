@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from './../../services/authentication.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from "../../../environments/environment";
-import { AlertController, LoadingController, isPlatform, 
-  ModalController, Platform} from "@ionic/angular";
+import { AlertController, LoadingController,ModalController,Platform} from "@ionic/angular";
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { Device } from "@capacitor/device";
 import { Utils } from 'src/app/tools/tools';
@@ -12,6 +11,8 @@ import { RequestsPage } from "../../modals/requests/requests.page";
 import { Sim } from "@ionic-native/sim/ngx"; 
 import { DatabaseService } from "../../services/database.service"
 import { ToolsService } from 'src/app/services/tools.service';
+import { Capacitor } from "@capacitor/core";
+
 
 const USER_ROLES = 'my-roles';
 const USER_ROLE = 'my-role';
@@ -48,7 +49,6 @@ export class LoginPage implements OnInit {
  admin_device:any;
  public myToast:any;
  
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
@@ -61,55 +61,30 @@ export class LoginPage implements OnInit {
     private platform: Platform,
     private api : DatabaseService,
     public toolService:ToolsService,
-
   ) { }
      
   async ngOnInit() {
-
-    let platforms = this.platform.platforms();
-    console.log('Platforms --> ',platforms)
-
-    if (this.platform.is('android') == true){
-      console.log('Es platform --> android');
-      this.toolService.toastAlert('Soy Android ', 0,['Ok'],'middle')
+    
+    if (Capacitor.getPlatform() == 'android'){
       this.isAndroid = true;
-    }else if(this.platform.is('ios')){
+    }else if(Capacitor.getPlatform() == 'ios'){
       console.log('Es platform --> ios');
-    }else if(this.platform.is('ipad')){
+    }else if(Capacitor.getPlatform() == 'ipad'){
       console.log('Es platform --> ipad');
-    }else if(this.platform.is('iphone')){
+    }else if(Capacitor.getPlatform() == 'iphone'){
       console.log('Es platform --> iphone');
-    }else if(this.platform.is('desktop')){
-      console.log('Es platform --> desktop');
+    }else if(Capacitor.getPlatform() == 'web'){
+      console.log('Es platform --> web');
       this.lockToPortrait();
-    }else if(this.platform.is('cordova')){
+    }else if(Capacitor.getPlatform() == 'cordova'){
       console.log('Es platform --> cordova');
     }
     
     
     this.getConfigApp();
-
     Utils.cleanLocalStorage();
     this.init();
     this.version = environment.app.version;
-
-    // if(isPlatform('cordova')){
-    //   this.toolService.toastAlert('Soy cordova ', 0,['Ok'],'middle')
-    //   console.log('Soy plataforma cordova')
-    // }else if(isPlatform('ios')){
-    //   console.log('Soy plataforma ios')
-    // }else if(isPlatform('ipad')){
-    //   console.log('Soy plataforma ipad')
-    // }else if(isPlatform('iphone')){
-    //   console.log('Soy plataforma iphone')
-    // }else if(isPlatform('desktop')){
-    //   console.log('Soy plataforma desktop')
-    //   this.lockToPortrait();
-    // }else if(isPlatform('android')){
-    //   console.log('Soy plataforma android')
-    //   this.toolService.toastAlert('Soy Android ', 0,['Ok'],'middle')
-    //   this.isAndroid = true;
-    // }
 
     this.credentials = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -117,6 +92,7 @@ export class LoginPage implements OnInit {
     });
 
     await Device.getInfo().then(async DeviceInfo => {
+
       this.device_info = await JSON.parse(JSON.stringify(DeviceInfo));
 
       // get device uuid
@@ -153,25 +129,21 @@ export class LoginPage implements OnInit {
 
   async init(): Promise<void> {
     await this.SIM.hasReadPermission()
-    .then(async allowed =>{  
-      if(!allowed){
-        await this.SIM.requestReadPermission()
-        .then()
-        .catch((err) => {this.toolService.toastAlert('Sim Permission denied + ' + err ,0,['Ok'],'middle')}
-        )
-      }else{
-        
-        await this.SIM.getSimInfo()
-        .then((info) => {
-          console.log('Si estoy en init() allowed :', allowed)
-          console.log('Sim info: ', info)
-        })
-        .catch((err) => console.log('Unable to get sim info: ', err))
-      }
-    })
+    .then(async (allowed) => {
+        if(!allowed){
+          await this.SIM.requestReadPermission()
+          .then()
+          .catch((err) => { console.log('Sim Permission denied: '+ err) })
+        }else{
+          await this.SIM.getSimInfo()
+            .then((info) => {
+              console.log('Si estoy en init() allowed :', allowed)
+              console.log('Sim info: ', info)})
+            .catch((err) => console.log('Unable to get sim info: ' + err))
+        }
+      })
     .catch((err) => {
-      this.toolService.toastAlert('Sim Permission denied + ' + err ,0,['Ok'],'middle')
-    });
+      console.log('Sim Permission denied, ' + err)})
  }
 
  // get Config App ----

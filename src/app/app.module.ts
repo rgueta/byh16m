@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { FormsModule,ReactiveFormsModule } from "@angular/forms";
 import { ScreenOrientation} from "@ionic-native/screen-orientation/ngx";
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { environment } from "../environments/environment";
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { SMS } from "@ionic-native/sms/ngx";
 import { Sim } from "@ionic-native/sim/ngx";
