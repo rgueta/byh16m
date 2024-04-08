@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController,NavParams } from "@ionic/angular";
 import { DatabaseService  } from "../../services/database.service";
+import { UpdUsersPage } from "../../modals/upd-users/upd-users.page";
 
 @Component({
   selector: 'app-users',
@@ -103,6 +104,16 @@ export class UsersPage implements OnInit {
     await alert.present();
     }
   }
+
+  async newUser(){
+    const modal = await this.modalController.create({
+      component: UpdUsersPage
+    });
+    
+     await modal.present();
+  
+  }
+  
 
   removeVisitor(index:number,item:any){
 

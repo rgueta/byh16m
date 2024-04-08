@@ -9,7 +9,7 @@ import { Device } from "@capacitor/device";
 import { Utils } from 'src/app/tools/tools';
 import { RequestsPage } from "../../modals/requests/requests.page";
 import { Sim } from "@ionic-native/sim/ngx"; 
-import { DatabaseService } from "../../services/database.service"
+import { DatabaseService } from "../../services/database.service";
 import { ToolsService } from 'src/app/services/tools.service';
 import { Capacitor } from "@capacitor/core";
 
@@ -254,6 +254,9 @@ export class LoginPage implements OnInit {
     );
 }
 
+
+
+
 async lockedUser(msg:string){
   const alert = await this.alertController.create({
     // header: msgErr,
@@ -279,6 +282,7 @@ async pwdReset(){
     component: RequestsPage,
     componentProps:{request:'pwdReset'}
   });
+
    await modal.present();
 
 }

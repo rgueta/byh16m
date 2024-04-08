@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, AnimationController,
-        ToastController, AlertController} from "@ionic/angular";
+         AlertController} from "@ionic/angular";
 import { UpdCoresPage } from "../../modals/upd-cores/upd-cores.page";
 import { UsersPage } from '../../modals/users/users.page';
 import { DatabaseService } from '../../services/database.service';
@@ -8,6 +8,7 @@ import { UpdCpusPage } from "../../modals/upd-cpus/upd-cpus.page";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { InfoPage } from "../../modals/info/info.page";
 import { ToolsService } from "../../services/tools.service";
+import { UpdUsersPage } from "../../modals/upd-users/upd-users.page";
 
 const TWILIO = 'twilio';
 const EMAIL_TO_VISITOR = 'emailToVisitor'

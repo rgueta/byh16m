@@ -16,6 +16,14 @@
 
 <ion-content>
 
+  <!-- fab placed to the bottom end -->
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button class="button-green" (click)="newUser()">
+      <ion-icon name="person-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
   <ion-list *ngFor="let item of users; let i = index;" class="accordion-list" lines="none" detail="false" no-padding >
     <ion-item tappable (click)="toggleSection(i)" [ngClass]="{'section-expired' : item.expired || !item.enable, 'section' : !item.expired}">
       <ion-icon class="lock" slot="start"  name="lock-closed-outline" *ngIf="item.locked"></ion-icon>
