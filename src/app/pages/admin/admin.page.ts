@@ -41,8 +41,9 @@ export class AdminPage implements OnInit {
       'name':'Change settings Code','confirm':'Change settingsCode ?'},
     {'id':10,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
       'name':'Change pwdRST','confirm':'Change pwdRST ?'},
-      
             ]
+
+  public SourcePage:string = 'admin';
   public CoresList:any;
   public myUserList:any;
   automaticClose = false;
@@ -57,6 +58,7 @@ export class AdminPage implements OnInit {
   public core_sim:string;
   public routine_byh16s:string;
   input: boolean = false;
+  backstageList:any;
 
   constructor(
         public animationController : AnimationController,
@@ -85,6 +87,10 @@ export class AdminPage implements OnInit {
     });
   }
 
+  async getBackstage(){
+    
+  }
+
   async doRefresh(event:any){
     this.getCores();
 
@@ -97,19 +103,35 @@ export class AdminPage implements OnInit {
     await this.modalController.dismiss({'msg':'just to call onDidDismiss'});
   } 
 
-  async modalRegister(CoreId:string,CoreName:string, pathLocation:string) {
+  // async modalRegister(CoreId:string,CoreName:string, pathLocation:string) {
 
+  //   const modal = await this.modalController.create({
+  //     component: UsersPage,
+  //     componentProps:{
+  //       'CoreName':CoreName,
+  //       'CoreId': CoreId,
+  //       'pathLocation': pathLocation
+  //      }
+  //   });
+
+  //   return await modal.present();
+  // }
+
+
+  async newUser(CoreId:string,CoreName:string, pathLocation:string){
     const modal = await this.modalController.create({
-      component: UsersPage,
+      component: UpdUsersPage,
       componentProps:{
-        'CoreName':CoreName,
+        'SourcePage': this.SourcePage,
+        'CoreName': CoreName,
         'CoreId': CoreId,
         'pathLocation': pathLocation
        }
     });
-
-    return await modal.present();
-  }  
+    
+     await modal.present();
+  
+  }
 
   async modalUpdCores() {
     const modal = await this.modalController.create({
@@ -187,6 +209,10 @@ export class AdminPage implements OnInit {
 
     modal.onDidDismiss()
     modal.present();
+  }
+
+  async collectBackstage(id:string,name:string){
+    console.log(`Id ${id}, name: ${name}`)
   }
 
   async chgStatusCore(event:any,item:any) {

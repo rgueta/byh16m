@@ -15,13 +15,9 @@
 
       </div>
 
-      
-     
     <!-- </ion-item> -->
   </ion-toolbar>
 </ion-header>
-
-
 
 <ion-content padding>
   <form [formGroup] = "RegisterForm" >
@@ -29,8 +25,6 @@
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-
-
         <ion-item>
           <ion-label class='labelInput' floating>Country:</ion-label>
           <ion-select [(ngModel)]="localCountry" ok-text="Seleccionar" cancel-text="Cancelar" 
@@ -140,7 +134,8 @@
         (click)="cancelUploadFile()">Cancel</ion-button>
       </div>
 
-    <ion-card [ngClass]="!item.disable ?  'CardInfo' : 'HiddenCardInfo'" *ngFor="let item of localInfo; let i = index;">
+    <ion-card [ngClass]="!item.disable ?  'CardInfo' : 'HiddenCardInfo'" 
+        *ngFor="let item of localInfo; let i = index;">
       <ion-card-header>
         <div class="VisibleCtrl">
           <ion-card-subtitle *ngIf="item.disable">Mostrar</ion-card-subtitle>

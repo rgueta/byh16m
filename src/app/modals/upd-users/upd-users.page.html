@@ -18,5 +18,105 @@
 </ion-header>
 
 <ion-content>
+  <div *ngIf = 'UserItSelf == false' class="titleCore">
+    <label>{{coreName}}</label>
+  </div>
+   
+  <form [formGroup] = "RegisterForm">
+
+    <ion-item *ngIf = 'UserItSelf == true' >
+      <ion-select id="cmbCpu" *ngIf = 'UserItSelf == true' 
+       [(ngModel)]="localCpu"  ok-text="Seleccionar" 
+       (ionChange)="onChangeCpu($event)"
+        label="Colonia:" cancel-text="Cancelar"
+        formControlName="Cpu">
+        <ion-select-option *ngFor="let item of CpuList" 
+          [value] = '{id:item._id,name:item.name}'>{{item.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf = 'UserItSelf == true' >
+      <ion-select *ngIf = 'UserItSelf == true' [(ngModel)]="localCore" 
+      ok-text="Seleccionar" 
+        label="Privada:" cancel-text="Cancelar"
+        formControlName="Core">
+        <ion-select-option *ngFor="let item of CoreList" 
+        [value] = '{id:item._id,name:item.name}'>{{item.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+    <ion-item class="wrap-input">
+      <ion-input class='input' type="text" name='name' required placeholder="Nombre" 
+      formControlName="Name" value={{name}} [(ngModel)]="name"></ion-input>
+    </ion-item>
+
+    <ion-item class="wrap-input">
+      <ion-input class='input' type="text" name='username' required placeholder="Usuario" 
+      formControlName="UserName" value={{username}} [(ngModel)]="username"></ion-input>
+    </ion-item>
+
+    <ion-item class="wrap-input">
+      <ion-input class='input' type="text" name='email' required placeholder="Correo" 
+      formControlName="Email" value={{email}} [(ngModel)]="email"></ion-input>
+    </ion-item>
+    
+    <ion-item class="wrap-input">
+      <ion-input class='input' type="text" name='sim' required placeholder="# celular" 
+      formControlName="Sim" value={{sim}} [(ngModel)]="sim"></ion-input>
+    </ion-item>
+
+    <ion-item class="wrap-input">
+      <ion-input class='input' type="text" name='house' required placeholder="# de casa" 
+      formControlName="House" value={{house}} [(ngModel)]="house"></ion-input>
+    </ion-item>
+
+    <ion-item class="wrap-input">
+      <ion-select value="gender" [(ngModel)]="gender" label="Genero:"
+        formControlName="Gender" 
+        okText="Aceptar" cancelText="Cancelar" >
+          <ion-select-option value="M" >Hombre</ion-select-option>
+          <ion-select-option value="F" >Mujer</ion-select-option>
+          <ion-select-option value="O" >Otro</ion-select-option>
+      </ion-select>
+    </ion-item>
+  
+    <ion-item *ngIf = 'UserItSelf == false' >
+      <ion-select *ngIf = 'UserItSelf == false' [(ngModel)]="localRole" 
+      ok-text="Seleccionar" 
+        label="Roles:" cancel-text="Cancelar" (ionChange)="roleSelection()" 
+        formControlName="Roles" [multiple]="true">
+        <ion-select-option *ngFor="let item of RoleList" 
+          value={{item._id}}>{{item.name}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf = 'UserItSelf == true' class="wrap-input">
+      <ion-textarea class='input' placeholder="Comentario" 
+        id="comment"
+        aria-multiline = 'true'>
+      </ion-textarea>
+    </ion-item>
+
+    <ion-item *ngIf = 'UserItSelf == true' class="wrap-input">
+      <ion-button type="submit" [disabled]="RegisterForm.invalid" 
+      class="submit titleButtonBlue" expand="full"  
+      (click)="onSubmitItSelf(localCpu,localCore,name,username,email,sim,house,gender)" >Grabar</ion-button>
+    </ion-item>
+
+
+    <ion-item *ngIf = 'UserItSelf == false'class="wrap-input">
+      <ion-button type="submit" [disabled]="RegisterForm.invalid" 
+      class="submit titleButtonBlue" expand="full"  
+      (click)="onSubmit()" >Grabar</ion-button>
+    </ion-item>
+
+  </form>
+
+  
+
 
 </ion-content>

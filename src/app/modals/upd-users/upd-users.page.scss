@@ -30,3 +30,18 @@
   .centralize{
     margin-left:-60px;
 }
+
+.titleCore{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border: 1px solid;
+    flex-direction: column;
+    padding-top: 8px;
+}
+
+.basic-alert{
+  --background: #161e2c!important;   
+ --color:#FF0000!important;
+ --border-radius:5px!important;
+}

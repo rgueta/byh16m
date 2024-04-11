@@ -135,27 +135,25 @@ getData_key(collection:String,data:any){
 
 //--- POST data to server
 
- postData_noToken(collecion:String){
-  //  console.log('postData_noToken url --> ', collecion);
-
+ async postData_noToken(collection:String, data:any){
   let  options = {
     headers : {
-     'Accept': 'application/json',
-     'content-type' :'application/json',
-     'Access-Control-Allow-Headers': 'Content-Type',
-     'Access-Control-Allow-Origin': '*',
-     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
-    }
-   }
+      'Accept': 'application/json',
+      'content-type' :'application/json',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
+  }
+  }
 
-
-  return this.http.post(this.REST_API_SERVER + collecion , options)
-    // .subscribe(data => {
-    //   console.log(data);
-    
-    // }, error => {
-    //   console.log(error);
-    // });
+   return new Promise((resolve, reject) => {
+    this.http.post(this.REST_API_SERVER + collection , data, options)
+    .subscribe(res => {
+      resolve(res);
+    }, error => {
+      reject(error)
+    });
+  })
 }
 
 

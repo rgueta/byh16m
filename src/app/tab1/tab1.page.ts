@@ -56,7 +56,8 @@ export class Tab1Page implements OnInit {
     // private SIM : Sim,
     private popoverCtrl:PopoverController,
     public alertCtrl: AlertController,
-    private toolService: ToolsService) { }
+    private toolService: ToolsService
+  ) { }
   
   async ionViewWillEnter(){
       if(localStorage.getItem('IsAdmin') === 'true'){

@@ -56,10 +56,11 @@ export class JwtInterceptor implements HttpInterceptor {
     // if (url == `${this.REST_API_SERVER}api/auth/signin` ||
     //   url == `${this.REST_API_SERVER}api/auth/signup` || 
     //   url.indexOf(`${this.REST_API_SERVER}'api/pwdResetReq`) ) {
-      if (url == `${this.REST_API_SERVER}api/auth/signin` ||
-        url == `${this.REST_API_SERVER}api/auth/signup` || 
-        url == `${this.REST_API_SERVER}api/pwdResetReq` ||
-        url == `${this.REST_API_SERVER}api/users/register/`) {
+      if (url == `${this.REST_API_SERVER}api/auth/signin` || 
+          url == `${this.REST_API_SERVER}api/auth/signup` || 
+          url == `${this.REST_API_SERVER}api/pwdResetReq` || 
+          url == `${this.REST_API_SERVER}api/users/register/` || 
+          url == `${this.REST_API_SERVER}api/backstage`) {
         console.log('URL calling bilongs to blocked list -- > ', url);
       return true;
     } else {

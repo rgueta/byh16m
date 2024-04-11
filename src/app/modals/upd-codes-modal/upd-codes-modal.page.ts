@@ -163,10 +163,8 @@ getPlatform(){
 
 async setupCode(event:any){
   this.visitorSim = this.selectedVisitor.sim;
-  console.log('selected -->', event);
   this.visitorSelectRef.disabled;
 }
-
 
   async updSelectedVisitor(item:any){
     console.log('Se debe actualizar --> ', item);
@@ -200,10 +198,8 @@ async setupCode(event:any){
   }
 
   async onChangeComment($event:any){
-    console.log('comment -> ' + $event);
     this.localComment = $event;
   }
-
 
   async onSubmitTemplate(){
     var dateInit = '';
@@ -220,8 +216,9 @@ async setupCode(event:any){
 
     console.log('api/codes/' + this.userId + ','+ JSON.stringify({'code':this.code,'sim':this.visitorSim,
        'initial': Utils.convDate(new Date(this.initial)),'expiry' : Utils.convDate(new Date(this.expiry)),
-       'visitorSim' : this.visitorSim, 'visitorName' : this.selectedVisitor.name, 'comment': this.localComment}) + ',' + JSON.stringify(
-       {'source': {'user' : this.userId,'platform' : this.StrPlatform, 'id' : userSim}}));
+       'visitorSim' : this.visitorSim, 'visitorName' : this.selectedVisitor.name, 
+       'comment': this.localComment}) + ',' + JSON.stringify({'source': {'user' : this.userId,
+       'platform' : this.StrPlatform, 'id' : userSim}}));
 
     try{
 

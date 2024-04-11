@@ -37,6 +37,7 @@ export class VisitorsPage implements OnInit {
     public api:DatabaseService,
     private animationController : AnimationController,
   ) { 
+    
     this.RegisterForm = new FormGroup({
       LocalName : new FormControl('', [Validators.required]),
       LocalSim : new FormControl('', [Validators.required]),

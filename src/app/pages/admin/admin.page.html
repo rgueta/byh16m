@@ -112,18 +112,19 @@
           <ion-item tappable class="sectionRoutines"  (click)="toggleSectionRoutines()">
             <ion-icon color="white" slot="end" name="chevron-forward-outline" *ngIf="!routineOpen"></ion-icon>
             <ion-icon color="white" slot="end" name="chevron-down-outline" *ngIf="routineOpen"></ion-icon>
-            <ion-label class="ion-text-wrap">
-            <strong>Routines</strong></ion-label>
+            <ion-label class="ion-text-wrap"> <strong>Routines</strong></ion-label>
           </ion-item>
           <form tappable *ngIf="routineOpen" class="detailRoutines">
-            <ion-item class="detail-item" 
-              (click)="collectUsers(item._id,item.name)">View users</ion-item>
-            <ion-item class="detail-item" 
-              (click)="modalRegister(item._id,item.name,item.location)">Add user</ion-item>
+            <ion-item class="detail-item" (click)="collectUsers(item._id,item.name)">
+                View users</ion-item>
+            <ion-item class="detail-item" (click)="newUser(item._id,item.name,item.location)">
+                Add user</ion-item>
+            <ion-item class="detail-item" (click)="collectBackstage(item._id,item.name)">
+                Backstage</ion-item>
 
             <ion-item class="detail-item">
-              <ion-label class='labelInput' floating>Routines:</ion-label>
-              <ion-select [interfaceOptions]="{'cssClass': 'routines'}" interface="action-sheet"
+              <ion-select [interfaceOptions]="{'cssClass': 'routines'}" label="Routines:"
+               interface="action-sheet"
                 [(ngModel)]="routine_byh16s" ok-text="Seleccionar" cancel-text="Cancelar" 
                   (ionChange)="routineSelected($event,item)">
                 <ion-select-option class="menu-routines" *ngFor="let item of routineOptions" 

@@ -12,6 +12,7 @@ import { Sim } from "@ionic-native/sim/ngx";
 import { DatabaseService } from "../../services/database.service";
 import { ToolsService } from 'src/app/services/tools.service';
 import { Capacitor } from "@capacitor/core";
+import { UpdUsersPage } from "../../modals/upd-users/upd-users.page";
 
 
 const USER_ROLES = 'my-roles';
@@ -41,12 +42,14 @@ export class LoginPage implements OnInit {
   }
   
  device_info:any;
+ sourcePage:string='login'
 
  private  REST_API_SERVER = environment.cloud.server_url;
  public version = '';
  net_status:any;
  device_uuid:string='';
  admin_device:any;
+ admin_sim:[] = []
  public myToast:any;
  
   constructor(
@@ -119,8 +122,8 @@ export class LoginPage implements OnInit {
      }
     });
       
-      // if (this.admin_device.includes(this.device_uuid)){
-      if (1 == 1){
+      if (this.admin_device.includes(this.device_uuid)){
+      // if (1 == 1){
         await this.credentials.get('email').setValue ('neighbor2@gmail.com');
         await this.credentials.get('pwd').setValue ('1234');
       }
@@ -150,6 +153,8 @@ export class LoginPage implements OnInit {
  async getConfigApp(){
      await this.api.getData("api/config/").subscribe(async (result:any) =>{
       this.admin_device = result[0].admin_device;
+      this.admin_sim = result[0].admin_sim;
+      await localStorage.setItem('admin_sim',JSON.stringify(result[0].admin_sim));
       await localStorage.setItem(ADMIN_DEVICE,await result[0].admin_device);
     });
  }
@@ -255,7 +260,22 @@ export class LoginPage implements OnInit {
 }
 
 
+async newUser(){
+    const modal = await this.modalController.create({
+      component: UpdUsersPage,
+      componentProps:{
+        'SourcePage': this.sourcePage,
+        'CoreName': '',
+        'CoreId': '',
+        'pathLocation': ''
+      }
 
+    });
+    
+     await modal.present();
+  
+  }
+  
 
 async lockedUser(msg:string){
   const alert = await this.alertController.create({
