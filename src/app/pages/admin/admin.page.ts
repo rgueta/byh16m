@@ -9,6 +9,7 @@ import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { InfoPage } from "../../modals/info/info.page";
 import { ToolsService } from "../../services/tools.service";
 import { UpdUsersPage } from "../../modals/upd-users/upd-users.page";
+import { BackstagePage } from "../../modals/backstage/backstage.page";
 
 const TWILIO = 'twilio';
 const EMAIL_TO_VISITOR = 'emailToVisitor'
@@ -59,6 +60,8 @@ export class AdminPage implements OnInit {
   public routine_byh16s:string;
   input: boolean = false;
   backstageList:any;
+  sourcePage:string='admin'
+  RoleList:any;
 
   constructor(
         public animationController : AnimationController,
@@ -76,6 +79,10 @@ export class AdminPage implements OnInit {
     this.userId = await localStorage.getItem('my-userId');
     this.emailToVisitor = await (localStorage.getItem('emailToVisitor') === 'true');
     this.getCores();
+    if(!localStorage.getItem('roles')){
+      this.getRoles();
+    }
+    
   }
 
   async getCores(){
@@ -87,8 +94,14 @@ export class AdminPage implements OnInit {
     });
   }
 
-  async getBackstage(){
-    
+  async getRoles(){
+    this.api.getData('api/roles/' + localStorage.getItem('my-userId'))
+      .subscribe(async (result: any) => {
+        this.RoleList = await result;
+        localStorage.setItem('roles',JSON.stringify(result));
+      }, (error:any) => {
+        console.log('Error response --> ', JSON.stringify(error));
+      });
   }
 
   async doRefresh(event:any){
@@ -103,22 +116,7 @@ export class AdminPage implements OnInit {
     await this.modalController.dismiss({'msg':'just to call onDidDismiss'});
   } 
 
-  // async modalRegister(CoreId:string,CoreName:string, pathLocation:string) {
-
-  //   const modal = await this.modalController.create({
-  //     component: UsersPage,
-  //     componentProps:{
-  //       'CoreName':CoreName,
-  //       'CoreId': CoreId,
-  //       'pathLocation': pathLocation
-  //      }
-  //   });
-
-  //   return await modal.present();
-  // }
-
-
-  async newUser(CoreId:string,CoreName:string, pathLocation:string){
+  async addUser(CoreId:string,CoreName:string, pathLocation:string){
     const modal = await this.modalController.create({
       component: UpdUsersPage,
       componentProps:{
@@ -162,6 +160,13 @@ export class AdminPage implements OnInit {
   async modalUpdInfo(){
     const modal = await this.modalController.create({
       component : InfoPage
+    });
+    return await modal.present()
+  }
+
+  async modalBackstage(){
+    const modal = await this.modalController.create({
+      component : BackstagePage
     });
     return await modal.present()
   }

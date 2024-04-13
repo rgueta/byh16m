@@ -120,6 +120,9 @@ export class LoginPage implements OnInit {
      }else{
        console.log('no soy android');
      }
+
+     localStorage.setItem('device_info',JSON.stringify(this.device_info));
+
     });
       
       if (this.admin_device.includes(this.device_uuid)){

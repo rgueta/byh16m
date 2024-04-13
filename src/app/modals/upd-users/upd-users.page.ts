@@ -33,6 +33,7 @@ export class UpdUsersPage implements OnInit {
   localRole:String;
   localCpu:any;
   localCore:any;
+  pkgUser:any;
 
 
   constructor(
@@ -57,18 +58,50 @@ export class UpdUsersPage implements OnInit {
   }
 
   ngOnInit() {
-    this.coreId = this.navParams.data['CoreId'];
-    this.coreName = this.navParams.data['CoreName'];
     this.sourcePage = this.navParams.data['SourcePage'];
 
+    if(this.navParams.data['CoreId']){
+      this.coreId = this.navParams.data['CoreId'];
+    }
+    
+    if(this.navParams.data['CoreName']){
+      this.coreName = this.navParams.data['CoreName'];
+    }
+    
+
     if(this.sourcePage == 'admin'){
-      this.getRoles()
+      
+      this.UserItSelf = false;
+      this.pkgUser = this.navParams.data['pkg'];
+      this.coreName = this.pkgUser['coreName']
+      this.RoleList = JSON.parse(localStorage.getItem('roles'))
+      console.log('pkg to mongo:', this.pkgUser);
+      this.fillData();
     }else{
       this.getCpus();
       // just to enable button because formGroup for user itself
       this.RegisterForm.get('Roles').setValue('some value');
       this.UserItSelf = true;
     }
+  }
+
+  async fillData(){
+    this.name = this.pkgUser['name'];
+    this.username = this.pkgUser['username'];
+    this.email = this.pkgUser['email'];
+    this.sim = this.pkgUser['sim'];
+    this.house = this.pkgUser['house'];
+    this.gender = this.pkgUser['gender'];
+
+    this.RegisterForm.get('Cpu').setValue(this.pkgUser['cpu']);
+    this.RegisterForm.get('Core').setValue(this.pkgUser['core']);
+    this.RegisterForm.get('Name').setValue(this.name);
+    this.RegisterForm.get('UserName').setValue(this.username);
+    this.RegisterForm.get('Email').setValue(this.email);
+    this.RegisterForm.get('Sim').setValue(this.sim);
+    this.RegisterForm.get('House').setValue(this.house);
+    this.RegisterForm.get('Gender').setValue(this.gender);
+
   }
 
   async getCpus(){
@@ -99,17 +132,28 @@ export class UpdUsersPage implements OnInit {
       });
   }
 
-  async onChangeCpu(event:any){
+  async onChangeCpu(){
     this.getCores(this.localCpu['id'])
   }
+
+  async onSubmit(){
+    // send to DB user pkg
+    // send to device to able to open
+
+}
+
+async sendToDevice(sim:string){
+  
+}
+
 
   async onSubmitItSelf(cpu:string,core:string,name:string,username:string,
     email:string,sim:string,house:string,gender:any ){
       const comment = document.getElementById("comment")
   
-      const pkg : {} = {'cpu':this.localCpu['id'], 'core': this.localCore['id'], 'name': name, 'username':username, 
-        'email':email, 'sim':sim, 'house':house, 'gender':gender,'note': comment.textContent,
-        'uuid':localStorage.getItem('device-uuid')
+      const pkg : {} = {'cpu':this.localCpu['id'], 'core': this.localCore['id'], 
+        'name': name, 'username':username, 'email':email, 'sim':sim, 'house':house,
+        'gender':gender,'note': comment.textContent, 'uuid':localStorage.getItem('device-uuid')
       }
 
     // >> Confirmation ------------------------------------
@@ -167,11 +211,7 @@ export class UpdUsersPage implements OnInit {
           JSON.stringify(error.error.msg),['Ok'])})
     }
 
-  async onSubmit(){
-      // let data: {} = {'cpu': this.cpu}
-      // this.api.postData('api/backstage',)
-
-  }
+  
 
   async roleSelection(){
 

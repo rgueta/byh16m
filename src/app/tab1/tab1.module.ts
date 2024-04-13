@@ -6,7 +6,6 @@ import { Tab1Page } from './tab1.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 import { Tab1PageRoutingModule } from './tab1-routing.module';
 import { SMS } from '@ionic-native/sms/ngx';
-import { VisitorsPage } from '../modals/visitors/visitors.page';
 
 @NgModule({
   imports: [

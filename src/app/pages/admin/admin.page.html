@@ -28,6 +28,7 @@
         <ion-item (click)="modalUpdCpus()">New CPU</ion-item>
         <ion-item (click)="modalUpdCores()">New CORE</ion-item>
         <ion-item (click)="modalUpdInfo()">Add Information</ion-item>
+        <ion-item (click)="modalBackstage()">Backstage</ion-item>
         <ion-item-divider></ion-item-divider>
         <ion-item class="wrap-input">
           <ion-toggle id="twilioToggle" class="ion-toggle-red" labelPlacement="start" 
@@ -117,10 +118,8 @@
           <form tappable *ngIf="routineOpen" class="detailRoutines">
             <ion-item class="detail-item" (click)="collectUsers(item._id,item.name)">
                 View users</ion-item>
-            <ion-item class="detail-item" (click)="newUser(item._id,item.name,item.location)">
+            <ion-item class="detail-item" (click)="addUser(item._id,item.name,item.location)">
                 Add user</ion-item>
-            <ion-item class="detail-item" (click)="collectBackstage(item._id,item.name)">
-                Backstage</ion-item>
 
             <ion-item class="detail-item">
               <ion-select [interfaceOptions]="{'cssClass': 'routines'}" label="Routines:"

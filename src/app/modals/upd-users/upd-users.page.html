@@ -27,7 +27,7 @@
     <ion-item *ngIf = 'UserItSelf == true' >
       <ion-select id="cmbCpu" *ngIf = 'UserItSelf == true' 
        [(ngModel)]="localCpu"  ok-text="Seleccionar" 
-       (ionChange)="onChangeCpu($event)"
+       (ionChange)="onChangeCpu()"
         label="Colonia:" cancel-text="Cancelar"
         formControlName="Cpu">
         <ion-select-option *ngFor="let item of CpuList" 

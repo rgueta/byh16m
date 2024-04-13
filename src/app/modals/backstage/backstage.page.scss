@@ -1,0 +1,52 @@
+.title{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+
+  .column {
+    float: left;
+    padding:.3rem 0 .3rem .2rem;
+  }
+
+  .left{
+    width: 25%;
+    padding: .3rem 0 .3rem .4rem;
+    // background-color: beige;
+  }
+  
+  .middle {
+    padding: 1rem 0 0.5rem 0;
+    
+    width: 90%;
+    ion-title{
+        font-size: 5vw;
+        text-align: center;
+    }
+
+  }
+
+  .centralize{
+    margin-left:-60px;
+}
+
+.titleCore{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    border: 1px solid;
+    flex-direction: column;
+    padding-top: 8px;
+}
+
+.basic-alert{
+  --background: #161e2c!important;   
+ --color:#FF0000!important;
+ --border-radius:5px!important;
+}
+
+.fabicon{
+    font-size: 2.3em;
+    color: white;
+}
