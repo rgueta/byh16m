@@ -70,13 +70,16 @@ export class UpdUsersPage implements OnInit {
     
 
     if(this.sourcePage == 'admin'){
-      
       this.UserItSelf = false;
-      this.pkgUser = this.navParams.data['pkg'];
-      this.coreName = this.pkgUser['coreName']
-      this.RoleList = JSON.parse(localStorage.getItem('roles'))
-      console.log('pkg to mongo:', this.pkgUser);
-      this.fillData();
+      
+      this.RoleList = JSON.parse(localStorage.getItem('roles'));
+
+      if(this.navParams.data['pkg']){
+        
+        this.pkgUser = this.navParams.data['pkg'];
+        this.coreName = this.pkgUser['coreName'];
+        this.fillData();
+      }
     }else{
       this.getCpus();
       // just to enable button because formGroup for user itself
@@ -143,13 +146,10 @@ export class UpdUsersPage implements OnInit {
 }
 
 async sendToDevice(sim:string){
-  
 }
-
-
   async onSubmitItSelf(cpu:string,core:string,name:string,username:string,
     email:string,sim:string,house:string,gender:any ){
-      const comment = document.getElementById("comment")
+      const comment = document.getElementById("comment");
   
       const pkg : {} = {'cpu':this.localCpu['id'], 'core': this.localCore['id'], 
         'name': name, 'username':username, 'email':email, 'sim':sim, 'house':house,

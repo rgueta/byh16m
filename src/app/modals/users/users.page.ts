@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController,NavParams } from "@ionic/angular";
 import { DatabaseService  } from "../../services/database.service";
+import { ToolsService } from "../../services/tools.service";
+import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 
 @Component({
   selector: 'app-users',
@@ -18,7 +20,9 @@ export class UsersPage implements OnInit {
     private modalController:ModalController,
     private alertCtrl:AlertController,
     private api:DatabaseService,
-    private navParams:NavParams
+    private navParams:NavParams,
+    private toolService:ToolsService,
+    private sms: SMS,
   ) { }
 
   ngOnInit() {
@@ -32,9 +36,17 @@ export class UsersPage implements OnInit {
     ).subscribe(async (result:any) => {
       this.users = result;
       this.users[0].open = true;
-      console.log('users -->', this.users);
+      console.log('users --> ', result);
     });
+  }
 
+
+  async doRefresh(event:any){
+    this.getUsers();
+
+    setTimeout(() => {
+      event.target.complete();
+    }, 2000);
   }
 
   toggleSection(index:number){
@@ -46,63 +58,57 @@ export class UsersPage implements OnInit {
     }
   }
 
-  async chgLockStatus(event:any,userStatus:any, id:string, name:string) {
-    let element = <HTMLInputElement> document.getElementById("disableToggle");
-    let titleMsg = 'UnLock ';
-    console.log('event -->' ,event)
-    console.log('users status --> ', userStatus)
+  async chgLockStatus(event:any,userStatus:any, id:string, sim:string, 
+      name:string, house:string,coreSim:string) {
+    const adminId = localStorage.getItem('my-userId');
+    const titleMsg = (userStatus ? 'Lock' : 'Unlock')
+    const status = titleMsg.toLowerCase();
+    const pkg = status + ',' + name + ',' + house + ',' + sim + ',' + id;
+    // const pkg = status + ',' + name + ',' + house + ',6641752182,' + id;
 
-    if(event.target.checked)
-    {
-      titleMsg = 'Lock ';
-    }
-    if(event.target.checked != userStatus){
-      let alert = await this.alertCtrl.create({
-        header: 'Confirm',
-        message: titleMsg + '[ ' + name + ' ] ?',
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            cssClass: 'icon-color',
-            handler: () => {
-              element.checked = !event.target.checked;
-            }
-          },
-          {
-            text: 'Ok',
-            cssClass: 'icon-color',
-            handler: async data => {
-              const adminId = localStorage.getItem('my-userId');
-              if(event.target.checked){
-                await this.api.postData('api/users/lock/' + adminId + '/' + id, 
-                  {'neighborId' : id}).then(async (onResolve) =>{
-                  await this.getUsers();
-                },
-                (onReject) =>{
-                  console.log('Can not enable core, ', onReject);
-                });
-                // console.log('Se bloqueara el usuario ', id);
-              }else{
-                // console.log('api/cores/disable/',{'coreId': id});
-                await this.api.postData('api/users/unlock/' + adminId + '/' + id, {'neighborId' : id}).then(async (onResolve) =>{
-                  await this.getUsers();
-                },
-                (onReject) =>{
-                  console.log('Can not disable core, ', onReject);
-                });
-                // console.log('Se Desbloqueara el usuario ', id);
-
-              }
-                
-            }
+    let alert = await this.alertCtrl.create({
+      subHeader: 'Confirm',
+      message: titleMsg + ' [ ' + name + ' ] ?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            event.target.checked = !event.target.checked;
           }
-        ]
-      });
+        },
+        {
+          text: 'Ok',
+          handler: async data => {
+            const options:SmsOptions={
+              replaceLineBreaks:false,
+              android:{
+                intent:''
+              }
+            }
+            
+            // const devSim = localStorage.getItem()
+            await this.api.postData('api/users/' + status + '/' + adminId + '/' + id, 
+            {'neighborId' : id}).then(async (onResolve) =>{
+                await this.sms.send(coreSim,pkg ,options)
+                .then()
+                .catch((e:any) => this.toolService.showAlertBasic('Alerta','Error send sms',e,['Ok']));
+
+                await this.getUsers();
+
+            },
+            (onReject) =>{
+              this.toolService.showAlertBasic('Alert','Error api call', 
+              'Can not ' + status + ' user, ' + onReject, ['Ok']);
+            });
+              
+          }
+        }
+      ]
+    });
 
     await alert.present();
-    }
-  }  
+  }
 
   removeVisitor(index:number,item:any){
 

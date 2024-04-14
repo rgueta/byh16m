@@ -25,22 +25,23 @@ export class AdminPage implements OnInit {
   routineOptions = [
     {'id':0,'cmd':'ModuleRST','name':'Reboot module','confirm':'Reboot module ?'},
     {'id':1,'cmd':'getSIMstatus','name':'Module status','confirm':'Request module status?'},
-    {'id':2,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
-    {'id':3,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
+    {'id':2,'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
+    {'id':3,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
+    {'id':4,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
       'name':'Code open Gate','confirm':'Open gate with code?'},
-    {'id':4,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
+    {'id':5,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
       'name':'Code open Magnet','confirm':'Open magnet with code?'},
-    {'id':5,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
+    {'id':6,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
       'name':'Set Keypad flex','confirm':'Set keypad flex?'},
-    {'id':6,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
+    {'id':7,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
       'name':'Set Keypad hard plastic','confirm':'Set keypad hardPlastic?'},
-    {'id':7,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
+    {'id':8,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
       'name':'Set debug mode','confirm':'Set debug On?'},
-    {'id':8,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
+    {'id':9,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
       'name':'Remove debug mode','confirm':'Set debug Off?'},
-    {'id':9,'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
+    {'id':10,'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
       'name':'Change settings Code','confirm':'Change settingsCode ?'},
-    {'id':10,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
+    {'id':11,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
       'name':'Change pwdRST','confirm':'Change pwdRST ?'},
             ]
 
@@ -116,7 +117,7 @@ export class AdminPage implements OnInit {
     await this.modalController.dismiss({'msg':'just to call onDidDismiss'});
   } 
 
-  async addUser(CoreId:string,CoreName:string, pathLocation:string){
+  async addNewUser(CoreId:string,CoreName:string, pathLocation:string){
     const modal = await this.modalController.create({
       component: UpdUsersPage,
       componentProps:{
@@ -405,12 +406,21 @@ toggleSectionSim(){
                 break;
               case 'getSIMstatus':
                 try{
-                  await this.sms.send(item.Sim,'status,sim',options);
+                  await this.sms.send(item.Sim,'status,gral',options);
                   this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');
                 }catch(e){
                   this.toolService.toastAlert('No se envio, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
                 }
                 break;
+              case 'RestraintStatus':
+                  try{
+                    await this.sms.send(item.Sim,'status,restraint',options);
+                    this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');
+                  }catch(e){
+                    this.toolService.toastAlert('No se envio, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                  }
+                  break;
+
               case 'ModuleRST':
                 try{
                     await this.sms.send(item.Sim,'rst,sim',options);
