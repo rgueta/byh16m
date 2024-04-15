@@ -18,14 +18,14 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf = 'UserItSelf == false' class="titleCore">
+  <div *ngIf = "sourcePage == 'admin'" class="titleCore">
     <label>{{coreName}}</label>
   </div>
    
   <form [formGroup] = "RegisterForm">
 
-    <ion-item *ngIf = 'UserItSelf == true' >
-      <ion-select id="cmbCpu" *ngIf = 'UserItSelf == true' 
+    <ion-item *ngIf = "sourcePage != 'admin'" >
+      <ion-select id="cmbCpu" 
        [(ngModel)]="localCpu"  ok-text="Seleccionar" 
        (ionChange)="onChangeCpu()"
         label="Colonia:" cancel-text="Cancelar"
@@ -36,8 +36,8 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngIf = 'UserItSelf == true' >
-      <ion-select *ngIf = 'UserItSelf == true' [(ngModel)]="localCore" 
+    <ion-item *ngIf = "sourcePage != 'admin'" >
+      <ion-select [(ngModel)]="localCore" 
       ok-text="Seleccionar" 
         label="Privada:" cancel-text="Cancelar"
         formControlName="Core">
@@ -73,6 +73,18 @@
       formControlName="House" value={{house}} [(ngModel)]="house"></ion-input>
     </ion-item>
 
+    <ion-item class="wrap-input" >
+      <ion-input class='input' type="text" name='location' placeholder="Location" 
+      [readonly] = "locationReadonly" formControlName="Location" value={{location}} 
+      [(ngModel)]="location"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf = "sourcePage == 'adminNew'" class="wrap-input" > 
+      <ion-input class='input' type="text" name='uuid'  placeholder = "uuid"
+      [readonly] = "uuidReadonly"
+      formControlName="Uuid" value={{uuid}} [(ngModel)]="uuid"></ion-input>
+    </ion-item>
+
     <ion-item class="wrap-input">
       <ion-select value="gender" [(ngModel)]="gender" label="Genero:"
         formControlName="Gender" 
@@ -83,8 +95,8 @@
       </ion-select>
     </ion-item>
   
-    <ion-item *ngIf = 'UserItSelf == false' >
-      <ion-select *ngIf = 'UserItSelf == false' [(ngModel)]="localRole" 
+    <ion-item *ngIf = "sourcePage != 'login' " >
+      <ion-select [(ngModel)]="localRole" 
       ok-text="Seleccionar" 
         label="Roles:" cancel-text="Cancelar" (ionChange)="roleSelection()" 
         formControlName="Roles" [multiple]="true">
@@ -94,25 +106,26 @@
       </ion-select>
     </ion-item>
 
-    <ion-item *ngIf = 'UserItSelf == true' class="wrap-input">
+    <ion-item *ngIf = "sourcePage == 'login' " class="wrap-input">
       <ion-textarea class='input' placeholder="Comentario" 
         id="comment"
         aria-multiline = 'true'>
       </ion-textarea>
     </ion-item>
 
-    <ion-item *ngIf = 'UserItSelf == true' class="wrap-input">
+    <ion-item *ngIf = "sourcePage == 'login' " class="wrap-input">
       <ion-button type="submit" [disabled]="RegisterForm.invalid" 
       class="submit titleButtonBlue" expand="full"  
       (click)="onSubmitItSelf(localCpu,localCore,name,username,email,sim,house,gender)" >Grabar</ion-button>
     </ion-item>
 
 
-    <ion-item *ngIf = 'UserItSelf == false'class="wrap-input">
-      <ion-button type="submit" [disabled]="RegisterForm.invalid" 
+    <ion-item *ngIf = "sourcePage != 'login' " class="wrap-input">
+      <ion-button type="submit"  
       class="submit titleButtonBlue" expand="full"  
       (click)="onSubmit()" >Grabar</ion-button>
     </ion-item>
 
   </form>
 </ion-content>
+ 

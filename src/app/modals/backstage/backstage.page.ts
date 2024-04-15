@@ -12,7 +12,6 @@ export class BackstagePage implements OnInit {
 
   backstageList :any;
   simSectionOpen = false;
-  sourcePage:string='admin';
 
   constructor(
     private modalController: ModalController,
@@ -25,10 +24,11 @@ export class BackstagePage implements OnInit {
   }
 
   async getBackstage(){
-    this.api.getData('api/backstage')
+    this.api.getData('api/backstage/' + localStorage.getItem('my-userId') )
       .subscribe(async (result: any) => {
         this.backstageList = await result;
         this.backstageList[0].open = true;
+
       }, (error:any) => {
         console.log('Error response --> ', JSON.stringify(error));
       });
@@ -55,7 +55,7 @@ export class BackstagePage implements OnInit {
     const modal = await this.modalController.create({
       component: UpdUsersPage,
       componentProps:{
-        'SourcePage': this.sourcePage,
+        'SourcePage': 'admin',
         'pkg': pkg
        }
     });

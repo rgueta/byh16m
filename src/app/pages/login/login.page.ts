@@ -42,7 +42,6 @@ export class LoginPage implements OnInit {
   }
   
  device_info:any;
- sourcePage:string='login'
 
  private  REST_API_SERVER = environment.cloud.server_url;
  public version = '';
@@ -267,7 +266,7 @@ async newUser(){
     const modal = await this.modalController.create({
       component: UpdUsersPage,
       componentProps:{
-        'SourcePage': this.sourcePage,
+        'SourcePage': 'login',
         'CoreName': '',
         'CoreId': '',
         'pathLocation': ''

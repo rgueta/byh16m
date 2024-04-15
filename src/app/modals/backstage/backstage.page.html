@@ -42,7 +42,7 @@
       </ion-item>
 
       <ion-item class='detail-item'>
-        <ion-label> path: <b>{{item.path}}</b></ion-label>
+        <ion-label> Location: <b>{{item.path}}</b></ion-label>
       </ion-item>
 
       <ion-item class="sectionRoutines" >
@@ -58,9 +58,14 @@
       </ion-item>
 
       <ion-item tappable class="sectionRoutines" >
+        <ion-label> Uuid:  <b>{{item.uuid}}</b></ion-label>
+      </ion-item>
+
+      <ion-item tappable class="sectionRoutines" >
         <ion-label> Note:  <b>{{item.note}}</b></ion-label>
       </ion-item>
 
+      
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button  (click)="addUser(item)">
           <ion-icon class="fabicon" name="add-circle-outline" ></ion-icon>

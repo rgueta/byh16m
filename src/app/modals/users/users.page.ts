@@ -64,7 +64,6 @@ export class UsersPage implements OnInit {
     const titleMsg = (userStatus ? 'Lock' : 'Unlock')
     const status = titleMsg.toLowerCase();
     const pkg = status + ',' + name + ',' + house + ',' + sim + ',' + id;
-    // const pkg = status + ',' + name + ',' + house + ',6641752182,' + id;
 
     let alert = await this.alertCtrl.create({
       subHeader: 'Confirm',
@@ -87,7 +86,6 @@ export class UsersPage implements OnInit {
               }
             }
             
-            // const devSim = localStorage.getItem()
             await this.api.postData('api/users/' + status + '/' + adminId + '/' + id, 
             {'neighborId' : id}).then(async (onResolve) =>{
                 await this.sms.send(coreSim,pkg ,options)

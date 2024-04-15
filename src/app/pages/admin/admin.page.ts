@@ -61,7 +61,6 @@ export class AdminPage implements OnInit {
   public routine_byh16s:string;
   input: boolean = false;
   backstageList:any;
-  sourcePage:string='admin'
   RoleList:any;
 
   constructor(
@@ -121,7 +120,7 @@ export class AdminPage implements OnInit {
     const modal = await this.modalController.create({
       component: UpdUsersPage,
       componentProps:{
-        'SourcePage': this.SourcePage,
+        'SourcePage': 'adminNew',
         'CoreName': CoreName,
         'CoreId': CoreId,
         'pathLocation': pathLocation

@@ -49,27 +49,27 @@ export class DatabaseService {
 
   // Potentially perform a logout operation inside your API
   // or simply remove all local tokens and navigate to login
-logout() {
-  return this.http.post(`${this.REST_API_SERVER}api/auth/logout`, {}).pipe(
-    switchMap(_ => {
-      this.currentAccessToken = null;
-      // Remove all stored tokens
-      const deleteAccess = localStorage.removeItem(TOKEN_KEY);
-      const deleteRefresh = localStorage.removeItem(REFRESH_TOKEN_KEY);
-      return from(Promise.all([deleteAccess, deleteRefresh]));
-    }),
-    tap(_ => {
-      this.isAuthenticated.next(false);
-      this.router.navigateByUrl('', { replaceUrl: true });
-    })
-  ).subscribe();
-}
+  logout() {
+    return this.http.post(`${this.REST_API_SERVER}api/auth/logout`, {}).pipe(
+      switchMap(_ => {
+        this.currentAccessToken = null;
+        // Remove all stored tokens
+        const deleteAccess = localStorage.removeItem(TOKEN_KEY);
+        const deleteRefresh = localStorage.removeItem(REFRESH_TOKEN_KEY);
+        return from(Promise.all([deleteAccess, deleteRefresh]));
+      }),
+      tap(_ => {
+        this.isAuthenticated.next(false);
+        this.router.navigateByUrl('', { replaceUrl: true });
+      })
+    ).subscribe();
+  }
 
 
-// Load the refresh token from storage
-// then attach it as the header for one specific API call
-getNewAccessToken() {
-  // const refreshToken = from<string>(localStorage.getItem(REFRESH_TOKEN_KEY));
+  // Load the refresh token from storage
+  // then attach it as the header for one specific API call
+  getNewAccessToken() {
+    // const refreshToken = from<string>(localStorage.getItem(REFRESH_TOKEN_KEY));
   const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
       if (localStorage.getItem(REFRESH_TOKEN_KEY)) {
         const httpOptions = {
@@ -88,7 +88,7 @@ getNewAccessToken() {
         this.router.navigateByUrl('', { replaceUrl: true });
         return of(null);
       }
-}
+  }
   // Store a new access token
   storeAccessToken(token:any) {
     this.currentAccessToken = token.accessToken;
@@ -103,34 +103,34 @@ getNewAccessToken() {
   }
 
 
-//---- GET data from server  ------
-getData_key(collection:String,data:any){
-  const token = localStorage.getItem(TOKEN_KEY);
- let  options = {
-   headers : {
-    'Accept': 'application/json',
-    'content-type' :'application/json',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'authorization' : `Bearer ${token}`,
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
-   }
-  }
-
-   return this.http.get(this.REST_API_SERVER + collection, options);
-}
-
- getData(collection:String) {
-  const token = localStorage.getItem(TOKEN_KEY);
+  //---- GET data from server  ------
+  getData_key(collection:String,data:any){
+    const token = localStorage.getItem(TOKEN_KEY);
   let  options = {
     headers : {
-  'content-type' : 'application/json',
-  'authorization' : `Bearer ${token}`,
-  }
+      'Accept': 'application/json',
+      'content-type' :'application/json',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'authorization' : `Bearer ${token}`,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
+    }
+    }
+
+    return this.http.get(this.REST_API_SERVER + collection, options);
   }
 
+ getData(collection:String) {
+    const token = localStorage.getItem(TOKEN_KEY);
+    let  options = {
+      headers : {
+    'content-type' : 'application/json',
+    'authorization' : `Bearer ${token}`,
+    }
+    }
+
     return this.http.get(this.REST_API_SERVER + collection ,options);
-}
+  }
 
 
 //--- POST data to server
@@ -143,154 +143,142 @@ getData_key(collection:String,data:any){
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
-  }
-  }
-
-   return new Promise((resolve, reject) => {
-    this.http.post(this.REST_API_SERVER + collection , data, options)
-    .subscribe(res => {
-      resolve(res);
-    }, error => {
-      reject(error)
-    });
-  })
-}
-
-
-async postData(collection:String,data:any){
-  const token = await localStorage.getItem(TOKEN_KEY);
-  
-  let  options = {
-    headers : {
-  'content-type' : 'application/json',
-  'authorization' : `Bearer ${token}`,
-  }
+    }
   }
 
-   return new Promise((resolve, reject) => {
-    this.http.post(this.REST_API_SERVER + collection , data, options)
-    .subscribe(res => {
-      resolve(res);
-    }, error => {
-      reject(error)
-    });
-  })
-}
-
-async postDataInfo(collection:String,data:any, params:{}){
-  const token = await localStorage.getItem(TOKEN_KEY);
-  
-  let  options = {
-    headers : {
-      'content-type' : 'application/json',
-      'authorization' : `Bearer ${token}`,
-      },
-    params: params
+    return new Promise((resolve, reject) => {
+      this.http.post(this.REST_API_SERVER + collection , data, options)
+      .subscribe(res => {
+        resolve(res);
+      }, error => {
+        reject(error)
+      });
+    })
   }
 
-   return new Promise((resolve, reject) => {
-    this.http.post(this.REST_API_SERVER + collection , data, options)
-    .subscribe(res => {
-      resolve(res);
-    }, error => {
-      reject(error)
-    });
-  })
-}
 
-async postRegisterData(url:String,data:any){
-  const token = localStorage.getItem(TOKEN_KEY);
-  
- let  options = {
-   headers : {
-    'content-type' :'application/json',
-    'authorization' : `Bearer ${token}`,
-    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
-   }
-  }
-
-    return new Promise((resolve, reject) => {this.http.post(this.REST_API_SERVER + url , data, options)
-    .subscribe(res=> {
-      resolve(res)
+  async postData(collection:String,data:any){
+    const token = await localStorage.getItem(TOKEN_KEY);
     
-    }, error => {
-      reject(error);
-    });
-  });
+    let  options = {
+      headers : {
+    'content-type' : 'application/json',
+    'authorization' : `Bearer ${token}`,
+    }
+    }
 
-}
+    return new Promise((resolve, reject) => {
+      this.http.post(this.REST_API_SERVER + collection , data, options)
+      .subscribe(res => {
+        resolve(res);
+      }, error => {
+        reject(error)
+      });
+    })
+  }
+
+  async postDataInfo(collection:String,data:any, params:{}){
+    const token = await localStorage.getItem(TOKEN_KEY);
+    
+    let  options = {
+      headers : {
+        'content-type' : 'application/json',
+        'authorization' : `Bearer ${token}`,
+        },
+      params: params
+    }
+
+    return new Promise((resolve, reject) => {
+      this.http.post(this.REST_API_SERVER + collection , data, options)
+      .subscribe(res => {
+        resolve(res);
+      }, error => {
+        reject(error)
+      });
+    })
+  }
+
+  async postRegisterData(url:String,data:any){
+    const token = localStorage.getItem(TOKEN_KEY);
+    
+  let  options = {
+    headers : {
+      'content-type' :'application/json',
+      'authorization' : `Bearer ${token}`,
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
+    }
+    }
+
+      return new Promise((resolve, reject) => {this.http.post(this.REST_API_SERVER + url , data, options)
+      .subscribe(res=> {
+        resolve(res)
+      
+      }, error => {
+        reject(error);
+      });
+    });
+
+  }
 
  postRegister(url:String,data:any){
   console.log('postRegister ------ ');
- let  options = {
-   headers : {
-    'Accept': 'application/json',
-    'content-type' :'application/json',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
-   }
-  }
-
-  return this.http.post(this.REST_API_SERVER + url , data, options)
-}
-
-//--- PUT data to server
-async putData(collecion:String,data:any){
-  const token = localStorage.getItem(TOKEN_KEY);
-
- let  options = {
-   headers : {
-    'content-type' :'application/json',
-    'authorization' :  `Bearer ${token}`,
-   }
-  }
-
- return new Promise((resolve, reject) => {this.http.put(this.REST_API_SERVER + collecion , data, options)
-    .subscribe(data => {
-      console.log('http put success --> ',data);
-      resolve(data);
-    
-    }, error => {
-      console.log('http put error --> ',error);
-      reject(error);
-    });
-  });
-}
-
-  //--- DELETE data to server
-  async deleteData(collecion:String,data:any){
-    const token = await localStorage.getItem(TOKEN_KEY);
-    // const token = await this.storage.get('my-token');
-    // console.log('token -- > ' + JSON.stringify(token['value']))
-    // console.log('url: --> ' + this.REST_API_SERVER + collecion + data + '\nDate:  ' + Utils.convDateToday());
-
-    console.log('token -- > ' + JSON.stringify(token))
-    console.log('url: --> ' + this.REST_API_SERVER + collecion + data + 
-        '\nDate:  ' + Utils.convDateToday());
-
-
   let  options = {
     headers : {
       'Accept': 'application/json',
       'content-type' :'application/json',
       'Access-Control-Allow-Headers': 'Content-Type',
-      // 'x-access-token': token['value'],
-      'x-access-token': token,
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE'
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
     }
     }
 
+    return this.http.post(this.REST_API_SERVER + url , data, options)
+  }
 
-      this.http.delete(this.REST_API_SERVER + collecion + data,options)
+  //--- PUT data to server
+  async putData(collecion:String,data:any){
+    const token = localStorage.getItem(TOKEN_KEY);
+
+  let  options = {
+    headers : {
+      'content-type' :'application/json',
+      'authorization' :  `Bearer ${token}`,
+    }
+    }
+
+  return new Promise((resolve, reject) => {this.http.put(this.REST_API_SERVER + collecion , data, options)
       .subscribe(data => {
-        console.log(data);
+        console.log('http put success --> ',data);
+        resolve(data);
       
       }, error => {
-        console.log(error);
+        console.log('http put error --> ',error);
+        reject(error);
       });
+    });
+  }
+
+  //--- DELETE data to server
+  async deleteData(collection:String,data:any){
+    const token = await localStorage.getItem(TOKEN_KEY);
+
+  let  options = {
+    headers : {
+      'Accept': 'application/json',
+      'authorization': `Bearer ${token}`
+    }
+  }
       
+  return new Promise((resolve, reject) => {
+    this.http.post(this.REST_API_SERVER + collection , data, options)
+    .subscribe(res => {
+      resolve(res);
+    }, error => {
+      reject(error)
+    });
+  })
+
+
   }
 }
 

@@ -27,7 +27,8 @@ export class RequestsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.devicePkg = localStorage.getItem('device-pkg');
+    // this.devicePkg = localStorage.getItem('device-pkg');
+    this.devicePkg = localStorage.getItem('device_info');
 
     switch(this.navParams.data['request']){
       case 'UnblockAccount':
@@ -47,19 +48,15 @@ export class RequestsPage implements OnInit {
         break;
     }
 
-
     this.validator = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.required]),
       comment: new FormControl('', [Validators.required, Validators.required]),
     });
   }
 
-
   sendRequest(){
       this.api.postData('api/pwdResetReq/' + this.email.value,
       this.devicePkg).then(async result => {  
-        // console.log('psswordRST_request result -- > ', result);
-        // console.log('Object.value [1] -- > ', Object.values(result)[1]);
 
         if(Object.values(result)[1] == 'Locked'){
           this.showAlert('Alerta','', 'Este usuario esta bloqueado', ['Ok']);
