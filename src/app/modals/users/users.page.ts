@@ -27,6 +27,7 @@ export class UsersPage implements OnInit {
 
   ngOnInit() {
     this.coreId = this.navParams.data['CoreId'];
+
     this.getUsers();
   }
 
@@ -90,7 +91,8 @@ export class UsersPage implements OnInit {
             {'neighborId' : id}).then(async (onResolve) =>{
                 await this.sms.send(coreSim,pkg ,options)
                 .then()
-                .catch((e:any) => this.toolService.showAlertBasic('Alerta','Error send sms',e,['Ok']));
+                .catch((e:any) => this.toolService.showAlertBasic('Alerta','Error send sms'
+                  ,e,['Ok']));
 
                 await this.getUsers();
 

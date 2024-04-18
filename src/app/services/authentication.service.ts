@@ -74,10 +74,15 @@ export class AuthenticationService {
 
     return this.http.post(`${this.REST_API_SERVER}api/auth/signin`, credentials).pipe(
       switchMap(async (tokens:any) =>{
+        
         this.currentAccessToken = await tokens.accessToken;
 
         this.IsAdmin(tokens.roles).then(async val => {
           await localStorage.setItem('IsAdmin',val.toString());
+        });
+
+        this.IsNeighborAdmin(tokens.roles).then(async val => {
+          await localStorage.setItem('IsNeighborAdmin',val.toString());
         });
 
         this.MyRole(tokens.roles).then(async val_role => {
@@ -119,6 +124,8 @@ export class AuthenticationService {
       myrole = 'admin'
     }else if(await roles.find((role: { name: string; }) => role.name.toLowerCase() === 'supervisor')){
       myrole = 'supervisor'
+    }else if(await roles.find((role: { name: string; }) => role.name.toLowerCase() === 'neighboradmin')){
+      myrole = 'neighborAdmin'
     }else if(await roles.find((role: { name: string; }) => role.name.toLowerCase() === 'neighbor')){
       myrole = 'neighbor'
     }else if(await roles.find((role: { name: string; }) => role.name.toLowerCase() === 'relative')){
@@ -132,6 +139,11 @@ export class AuthenticationService {
 
   async IsAdmin(roles: any[]){
     let myRole = await roles.find((role: { name: string; }) => role.name.toLowerCase() === 'admin');
+    return myRole ? true : false
+  }
+
+  async IsNeighborAdmin(roles: any[]){
+    let myRole = await roles.find((role: { name: string; }) => role.name.toLowerCase() === 'neighboradmin');
     return myRole ? true : false
   }
 

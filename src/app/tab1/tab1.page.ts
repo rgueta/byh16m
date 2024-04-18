@@ -6,6 +6,7 @@ import { environment } from "../../environments/environment";
 import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
 import { VisitorListPage } from '../modals/visitor-list/visitor-list.page';
+import { UsersPage } from "../modals/users/users.page";
 import { ScreenOrientation } from "@ionic-native/screen-orientation/ngx";
 import { LocalNotifications } from "@capacitor/local-notifications";
 import { Utils } from "../tools/tools";
@@ -32,10 +33,12 @@ export class Tab1Page implements OnInit {
   myToast:any;
   myRoles:any;
   public SoyAdmin: boolean = false;
+  public SoyNeighborAdmin: boolean = false;
   isAndroid:any;
   currentUser = '';
   public version = '';
   public coreName = '';
+  public coreId = '';
   twilio_client : any;
   userId : string;
   id : number = 0;
@@ -62,15 +65,21 @@ export class Tab1Page implements OnInit {
   async ionViewWillEnter(){
       if(localStorage.getItem('IsAdmin') === 'true'){
         this.SoyAdmin = true;
-      }else{
-        this.SoyAdmin = false;
+      }
+      // else{
+      //   this.SoyAdmin = false;
+      // }
+
+      if(localStorage.getItem('IsNeighborAdmin') === 'true'){
+        this.SoyNeighborAdmin = true;
       }
   }
 
   async ngOnInit(){
     const sim = await localStorage.getItem('my-core-sim');
     this.userId = await localStorage.getItem('my-userId');
-    this.coreName = await localStorage.getItem('core-name')
+    this.coreName = await localStorage.getItem('core-name');
+    this.coreId = await localStorage.getItem('core-id')
 
     // -----------------firebase Push notification
     PushNotifications.requestPermissions().then(resul => {
@@ -333,10 +342,22 @@ async deviceLost(){
    await modal.present();
 }
 
-async newModal(){
+async newVisitor(){
   const modal = await this.modalController.create({
     component: VisitorListPage,
     // cssClass:"my-modal"
+  });
+
+  modal.present()
+}
+
+
+async ModalUsers(){
+  const modal = await this.modalController.create({
+    component: UsersPage,
+    backdropDismiss: true,
+    componentProps: {'CoreId' : this.coreId,
+      'coreName':this.coreName}
   });
 
   modal.present()

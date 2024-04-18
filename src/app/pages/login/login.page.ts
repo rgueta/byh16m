@@ -126,8 +126,8 @@ export class LoginPage implements OnInit {
       
       if (this.admin_device.includes(this.device_uuid)){
       // if (1 == 1){
-        await this.credentials.get('email').setValue ('neighbor2@gmail.com');
-        await this.credentials.get('pwd').setValue ('1234');
+        await this.credentials.get('email').setValue ('ricardogueta@gmail.com');
+        await this.credentials.get('pwd').setValue ('1234567');
       }
   }
 
@@ -188,7 +188,9 @@ export class LoginPage implements OnInit {
             await this.lockedUser('Usuario bloqueado !');
             return;
           }
-          if(val_myrole.name === 'admin' || val_myrole.name === 'neighbor'){
+          if(val_myrole.name === 'admin' || val_myrole.name === 'neighbor'
+          || val_myrole.name === 'neighborAdmin'
+          ){
 
     // ------socket.io ---------------------------------
 
@@ -220,9 +222,6 @@ export class LoginPage implements OnInit {
           // });
 
   // -----------------------------------------
-
-
-          
 
             this.router.navigateByUrl('/tabs', { replaceUrl: true });
           }else{

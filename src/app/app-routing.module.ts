@@ -85,7 +85,8 @@ const routes: Routes = [
   {
     path: 'requests',
     loadChildren: () => import('./modals/requests/requests.module').then( m => m.RequestsPageModule)
-  },  {
+  },
+  {
     path: 'backstage',
     loadChildren: () => import('./modals/backstage/backstage.module').then( m => m.BackstagePageModule)
   }
