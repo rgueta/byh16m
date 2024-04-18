@@ -34,10 +34,10 @@ export class UpdUsersPage implements OnInit {
   localCore:any;
   pkgUser:any;
   devicePkg:any;
-  location:string;
+  location:string = '';
   locationReadonly : boolean = true;
   id:string;
-  uuid:string = '';
+  uuid:string = '00-000';
   uuidReadonly : boolean = true;
 
 
@@ -76,25 +76,30 @@ export class UpdUsersPage implements OnInit {
     if(this.navParams.data['CoreName']){
       this.coreName = this.navParams.data['CoreName'];
     }
-    
 
-    if(this.sourcePage == 'admin'){
+    if(this.sourcePage == 'admin' || this.sourcePage == 'adminNew'){
       this.RoleList = JSON.parse(localStorage.getItem('roles'));
+    }
 
+    if(this.sourcePage == 'login' || this.sourcePage == 'adminNew'){
+      this.getCpus();
+    }
+    
+    if(this.sourcePage == 'admin'){
       if(this.navParams.data['pkg']){
         this.pkgUser = this.navParams.data['pkg'];
         this.coreName = this.pkgUser['coreName'];
         this.fillData();
       }
-      
     }else if(this.sourcePage == 'adminNew'){
-      this.getCpus();
       this.locationReadonly = false;
       this.uuidReadonly = false;
-    }else{
-      this.getCpus();
+    }
+    else{
       // just to enable button because formGroup for user itself
       this.RegisterForm.get('Roles').setValue('some value');
+      this.RegisterForm.get('Location').setValue('some value');
+      this.RegisterForm.get('Uuid').setValue(localStorage.getItem('device-uuid'));
     }
   }
 
@@ -118,6 +123,8 @@ export class UpdUsersPage implements OnInit {
     this.RegisterForm.get('House').setValue(this.house);
     this.RegisterForm.get('Gender').setValue(this.gender);
     this.RegisterForm.get('Location').setValue(this.location);
+    this.RegisterForm.get('Uuid').setValue(this.pkgUser['uuid']);
+
   }
 
   async getCpus(){
@@ -125,7 +132,8 @@ export class UpdUsersPage implements OnInit {
       .subscribe(async (result: any) => {
         this.CpuList = await result;
       }, (error:any) => {
-        console.log('Error response --> ', JSON.stringify(error));
+        this.toolService.showAlertBasic('Alerta','Error, getCpus: ',
+                  JSON.stringify(error),['Ok']);
       });
   }
 
@@ -133,9 +141,10 @@ export class UpdUsersPage implements OnInit {
     this.api.getData('api/cores/'+ cpu)
       .subscribe(async (result: any) => {
         this.CoreList = await result;
-        console.log('cores --> ', result)
-      }, (error:any) => {
-        console.log('Error response --> ', JSON.stringify(error));
+      }, 
+      (error:any) => {
+        this.toolService.showAlertBasic('Alerta','Error, getCores: ',
+                  JSON.stringify(error),['Ok'])
       });
   }
 
@@ -143,8 +152,10 @@ export class UpdUsersPage implements OnInit {
     this.api.getData('api/roles/' + localStorage.getItem('my-userId'))
       .subscribe(async (result: any) => {
         this.RoleList = await result;
-      }, (error:any) => {
-        console.log('Error response --> ', JSON.stringify(error));
+      },
+      (error:any) => {
+        this.toolService.showAlertBasic('Alerta','Error, getRoles: ',
+                  JSON.stringify(error),['Ok']);
       });
   }
 
@@ -153,10 +164,20 @@ export class UpdUsersPage implements OnInit {
   }
 
   async onSubmit(){
+    // get cpu, check if came as object
+    const localCpu = 
+      typeof this.RegisterForm.get('Cpu').value == 'object' ? 
+      this.RegisterForm.get('Cpu').value['id'] :
+      this.RegisterForm.get('Cpu').value ;
+
+    const localCore = 
+      typeof this.RegisterForm.get('Core').value == 'object' ? 
+      this.RegisterForm.get('Core').value['id'] :
+      this.RegisterForm.get('Core').value ;
 
     const pkg = {
-      cpu: this.RegisterForm.get('Cpu').value, 
-      core: this.RegisterForm.get('Core').value,
+      cpu: localCpu, 
+      core: localCore,
       name: this.RegisterForm.get('Name').value,
       username: this.RegisterForm.get('UserName').value, 
       email: this.RegisterForm.get('Email').value,
@@ -169,42 +190,44 @@ export class UpdUsersPage implements OnInit {
       avatar: ''
      }
 
-     if (this.id){
-      console.log('backstageId: ', this.id);
-     }else{
-      console.log('No hay Id: ');
-     }
-
-     return;
-
-    //  add new user 
-    await this.api.postData('api/users/new/' + 
-      localStorage.getItem('my-userId'), pkg)
-      .then(async (res) =>{
-          // create password reset
+     try{
+      //  add new user 
+      await this.api.postData('api/users/new/' + 
+        localStorage.getItem('my-userId'), pkg)
+        .then(async (res) => {
+          // // create password reset
           // this.api.postData('api/pwdResetReq/' + this.RegisterForm.get('Email').value,
           this.api.postData('api/pwdResetReq/ricardogueta@gmail.com',
             JSON.parse(this.devicePkg))
             .then(async result => {
-              // delete backstage document
-              this.api.deleteData('api/backstage/'+ localStorage.getItem('my-userId'),
-
-              JSON.parse(this.devicePkg))
-              .then(async result => {})
-              .catch((err) =>{
-                this.toolService.showAlertBasic('Alerta','Error, pwd reset: '
-                ,JSON.stringify(err),['Ok'])
-              });
+              if(this.sourcePage == 'admin'){
+                // delete backstage document
+                this.api.deleteData('api/backstage/'+ localStorage.getItem('my-userId') +
+                  '/' + this.id)
+                .then(async result => {})
+                .catch((err) =>{ 
+                  this.toolService.showAlertBasic('Alerta','Error, delete backstage: ',
+                  JSON.stringify(err),['Ok']) })
+              }
             })
             .catch((err) =>{
-              this.toolService.showAlertBasic('Alerta','Error, pwd reset: '
-              ,JSON.stringify(err),['Ok'])
-            });
-      })
-      .catch((rej) =>{
-        this.toolService.showAlertBasic('Alert','Error api call', 
-        'Can not add user, ' + JSON.stringify(rej), ['Ok']);
-      });
+              this.toolService.showAlertBasic('Alerta','Error, pwd reset: ',
+                JSON.stringify(err),['Ok']);
+            })
+        })
+        .catch((rej) => { 
+          this.toolService.showAlertBasic('Alert','Error api call','Can not add user, ' + 
+            JSON.stringify(rej['error']['msg']), ['Ok']); });
+
+      this.toolService.showAlertBasic('','Se agrego el usuario:',
+        this.RegisterForm.get('Name').value,['Ok']);
+
+      // exit model
+      this.modalController.dismiss('refresh');
+
+      }catch(err){
+        console.log('error final catch', err);
+      }
 }
 
 async sendToDevice(sim:string){
@@ -270,16 +293,12 @@ async sendUserReq(pkg:any){
     }
 
     this.modalController.dismiss();
-  },
-    error =>{this.toolService.showAlertBasic('Alerta','Error',
-      JSON.stringify(error.error.msg),['Ok'])})
+  })
+  .catch((err) => {
+    this.toolService.showAlertBasic('Alerta','Error', 
+      JSON.stringify(err['error']['msg']),['Ok'])
+  })
 }
-
-  
-
-  async roleSelection(){
-
-  }
 
   async closeModal(){
     var empty : Boolean = true;

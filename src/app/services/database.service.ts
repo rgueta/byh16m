@@ -259,7 +259,7 @@ export class DatabaseService {
   }
 
   //--- DELETE data to server
-  async deleteData(collection:String,data:any){
+  async deleteData(collection:String){
     const token = await localStorage.getItem(TOKEN_KEY);
 
   let  options = {
@@ -270,7 +270,7 @@ export class DatabaseService {
   }
       
   return new Promise((resolve, reject) => {
-    this.http.post(this.REST_API_SERVER + collection , data, options)
+    this.http.delete(this.REST_API_SERVER + collection , options)
     .subscribe(res => {
       resolve(res);
     }, error => {

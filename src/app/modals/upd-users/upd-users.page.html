@@ -47,7 +47,6 @@
       </ion-select>
     </ion-item>
 
-
     <ion-item class="wrap-input">
       <ion-input class='input' type="text" name='name' required placeholder="Nombre" 
       formControlName="Name" value={{name}} [(ngModel)]="name"></ion-input>
@@ -73,14 +72,14 @@
       formControlName="House" value={{house}} [(ngModel)]="house"></ion-input>
     </ion-item>
 
-    <ion-item class="wrap-input" >
-      <ion-input class='input' type="text" name='location' placeholder="Location" 
+    <ion-item *ngIf = "sourcePage != 'login'" class="wrap-input" >
+      <ion-input *ngIf = "sourcePage != 'login' " class='input' type="text" name='location' placeholder="Location" 
       [readonly] = "locationReadonly" formControlName="Location" value={{location}} 
       [(ngModel)]="location"></ion-input>
     </ion-item>
 
     <ion-item *ngIf = "sourcePage == 'adminNew'" class="wrap-input" > 
-      <ion-input class='input' type="text" name='uuid'  placeholder = "uuid"
+      <ion-input *ngIf = "sourcePage == 'adminNew'" class='input' type="text" name='uuid'  placeholder = "uuid"
       [readonly] = "uuidReadonly"
       formControlName="Uuid" value={{uuid}} [(ngModel)]="uuid"></ion-input>
     </ion-item>
@@ -96,9 +95,9 @@
     </ion-item>
   
     <ion-item *ngIf = "sourcePage != 'login' " >
-      <ion-select [(ngModel)]="localRole" 
+      <ion-select *ngIf = "sourcePage != 'login' " [(ngModel)]="localRole" 
       ok-text="Seleccionar" 
-        label="Roles:" cancel-text="Cancelar" (ionChange)="roleSelection()" 
+        label="Roles:" cancel-text="Cancelar" 
         formControlName="Roles" [multiple]="true">
         <ion-select-option *ngFor="let item of RoleList" 
           value={{item._id}}>{{item.name}}
@@ -121,7 +120,7 @@
 
 
     <ion-item *ngIf = "sourcePage != 'login' " class="wrap-input">
-      <ion-button type="submit"  
+      <ion-button type="submit"  [disabled]="RegisterForm.invalid" 
       class="submit titleButtonBlue" expand="full"  
       (click)="onSubmit()" >Grabar</ion-button>
     </ion-item>

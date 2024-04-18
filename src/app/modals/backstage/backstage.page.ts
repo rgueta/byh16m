@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams,AlertController } from "@ionic/angular";
 import { DatabaseService } from '../../services/database.service';
 import { UpdUsersPage } from "../../modals/upd-users/upd-users.page";
+import { ToolsService } from "../../services/tools.service";
 
 @Component({
   selector: 'app-backstage',
@@ -16,7 +17,8 @@ export class BackstagePage implements OnInit {
   constructor(
     private modalController: ModalController,
     private api : DatabaseService,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    private toolService: ToolsService,
   ) { }
 
   ngOnInit() {
@@ -27,10 +29,15 @@ export class BackstagePage implements OnInit {
     this.api.getData('api/backstage/' + localStorage.getItem('my-userId') )
       .subscribe(async (result: any) => {
         this.backstageList = await result;
-        this.backstageList[0].open = true;
+        if(this.backstageList.length > 0){
+          this.backstageList[0].open = true;
+        }else{
+          this.toolService.showAlertBasic('','Empty backstage collection', '',['Ok']);
+        }
 
-      }, (error:any) => {
-        console.log('Error response --> ', JSON.stringify(error));
+      }, (err:any) => {
+        this.toolService.showAlertBasic('Alerta','Error, get backstage: ',
+                JSON.stringify(err),['Ok']);
       });
   }
 
@@ -60,10 +67,19 @@ export class BackstagePage implements OnInit {
        }
     });
     
-     await modal.present();
+   
+
+    await modal.present();
+
+    await modal.onDidDismiss()
+    .then(async (res) =>{
+      if(res.data == 'refresh'){
+        this.getBackstage();
+      }
+    });
   }
 
   closeModal(){
-    this.modalController.dismiss();
+    this.modalController.dismiss('no refresh');
   }
 }
