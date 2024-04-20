@@ -292,6 +292,9 @@ async sendUserReq(pkg:any){
           this.toolService.showAlertBasic('Alerta','Error',e,['Ok']));
     }
 
+    this.toolService.showAlertBasic('','Requerimiento enviado',
+      'Pronto recibiras un correo',['Ok'])
+
     this.modalController.dismiss();
   })
   .catch((err) => {

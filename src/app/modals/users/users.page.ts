@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, AlertController,NavParams } from "@ionic/angular";
+import { ModalController, AlertController,NavParams, NavController } from "@ionic/angular";
 import { DatabaseService  } from "../../services/database.service";
 import { ToolsService } from "../../services/tools.service";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
@@ -15,6 +15,9 @@ export class UsersPage implements OnInit {
   automaticClose = false;
   coreId: string = '';
   coreName : string= '';
+  RoleList : any = [];
+  editRole : boolean = false;
+  soyAdmin : boolean = false;
   
   constructor(
     private modalController:ModalController,
@@ -23,12 +26,30 @@ export class UsersPage implements OnInit {
     private navParams:NavParams,
     private toolService:ToolsService,
     private sms: SMS,
+    public navCtrl : NavController
   ) { }
+
+  async ionViewWillEnter(){
+    this.coreId = this.navParams.data['CoreId'];
+    this.soyAdmin = localStorage.getItem('my-role') == 'admin' ? true : false;
+    this.getUsers();
+    this.getRoles();
+  }
 
   ngOnInit() {
     this.coreId = this.navParams.data['CoreId'];
+   
+  }
 
-    this.getUsers();
+  async getRoles(){
+    this.api.getData('api/roles/' + localStorage.getItem('my-userId'))
+      .subscribe(async (result: any) => {
+        this.RoleList = await result;
+      },
+      (error:any) => {
+        this.toolService.showAlertBasic('Alerta','Error, getRoles: ',
+                  JSON.stringify(error),['Ok']);
+      });
   }
 
   async getUsers(){
@@ -37,10 +58,12 @@ export class UsersPage implements OnInit {
     ).subscribe(async (result:any) => {
       this.users = result;
       this.users[0].open = true;
-      console.log('users --> ', result);
     });
   }
 
+  onEditRole(){
+    this.editRole = !this.editRole;
+  }
 
   async doRefresh(event:any){
     this.getUsers();
@@ -59,16 +82,56 @@ export class UsersPage implements OnInit {
     }
   }
 
+  async changeRoles(event:any, userId:string, name:string){
+    console.log(event.detail.value)
+    const userAdminId = localStorage.getItem('my-userId');
+    const pkg = {'userId':userId, 'roles': event.detail.value}
+
+
+    let alert = await this.alertCtrl.create({
+      subHeader: 'Cambiar roles ',
+      message:  'al usuario: ' + name + '  ?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Ok',
+          handler: async data => {
+            
+            await this.api.postData('api/users/updroles/' + userAdminId ,
+            pkg)
+            .then(async (res) =>{
+                await this.getUsers();
+
+            })
+            .catch((rej) =>{
+              this.toolService.showAlertBasic('Alert','Error api call', 
+              'Can not update roles, error ' + JSON.stringify(rej), ['Ok']);
+            });
+              
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+  }
+
   async chgLockStatus(event:any,userStatus:any, id:string, sim:string, 
       name:string, house:string,coreSim:string) {
     const adminId = localStorage.getItem('my-userId');
-    const titleMsg = (userStatus ? 'Lock' : 'Unlock')
+    const titleMsg = (userStatus ?  'Desbloqueo' : 'Bloqueo')
     const status = titleMsg.toLowerCase();
     const pkg = status + ',' + name + ',' + house + ',' + sim + ',' + id;
 
     let alert = await this.alertCtrl.create({
-      subHeader: 'Confirm',
-      message: titleMsg + ' [ ' + name + ' ] ?',
+      subHeader: 'Continuar con ' + titleMsg,
+      message:  'al usuario: ' + name + '  ?',
       buttons: [
         {
           text: 'Cancel',

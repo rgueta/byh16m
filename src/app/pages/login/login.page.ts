@@ -27,6 +27,7 @@ const ADMIN_DEVICE = 'admin_device';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
+
 export class LoginPage implements OnInit {
   isAndroid:any;
   credentials: FormGroup;
@@ -165,6 +166,7 @@ export class LoginPage implements OnInit {
     this.orientation.lock(this.orientation.ORIENTATIONS.PORTRAIT)
   }
 
+
   async login() {
 
     if(! await this.toolService.verifyNetStatus())
@@ -258,7 +260,7 @@ export class LoginPage implements OnInit {
         await alert.present();
       }
     );
-}
+  }
 
 
 async newUser(){

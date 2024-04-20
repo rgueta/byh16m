@@ -77,18 +77,11 @@ export class AuthenticationService {
         
         this.currentAccessToken = await tokens.accessToken;
 
-        this.IsAdmin(tokens.roles).then(async val => {
-          await localStorage.setItem('IsAdmin',val.toString());
-        });
-
-        this.IsNeighborAdmin(tokens.roles).then(async val => {
-          await localStorage.setItem('IsNeighborAdmin',val.toString());
-        });
-
         this.MyRole(tokens.roles).then(async val_role => {
-          await localStorage.setItem('my-role',val_role);
+          localStorage.setItem('my-role',val_role);
         })
         
+        localStorage.setItem('my-email',tokens.email);
         localStorage.setItem(TOKEN_PX,tokens.pwd);
         localStorage.setItem(USERID,tokens.userId);
         localStorage.setItem(USER_ROLES,JSON.stringify(tokens.roles));
@@ -135,16 +128,6 @@ export class AuthenticationService {
     }
 
     return await myrole;
-  }
-
-  async IsAdmin(roles: any[]){
-    let myRole = await roles.find((role: { name: string; }) => role.name.toLowerCase() === 'admin');
-    return myRole ? true : false
-  }
-
-  async IsNeighborAdmin(roles: any[]){
-    let myRole = await roles.find((role: { name: string; }) => role.name.toLowerCase() === 'neighboradmin');
-    return myRole ? true : false
   }
 
   getUser(){

@@ -16,7 +16,7 @@
        </div>
       </div>
       <div class="column right">
-        <span [hidden] = '!SoyAdmin' >
+        <span [hidden] = "MyRole != 'admin'" >
           <ion-buttons slot="end">
             <ion-button id="popover-button">
               <ion-icon  name="ellipsis-vertical-outline"></ion-icon>
@@ -24,7 +24,7 @@
           </ion-buttons>
         </span>
         
-        <span [hidden] = 'SoyAdmin'>
+        <span [hidden] = "MyRole == 'admin'">
           <ion-buttons slot="end">
             <ion-button (click)="logout()">
               <ion-icon  name="exit-outline"></ion-icon>
@@ -86,7 +86,8 @@
           <ion-item [button]="true" [detail]="false" 
             (click)="fcmNotification()">FCM notification</ion-item>
           <ion-item id="logout1-alert" [button]="true" [detail]="false" 
-          (click)="logout()">Log out</ion-item>
+          (click)="logout()">Log out 
+          {{myEmail}}</ion-item>
         </ion-item-group>
       </ion-list>
     </ion-content>

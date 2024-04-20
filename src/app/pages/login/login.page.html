@@ -21,7 +21,9 @@
         <span *ngIf="email.errors?.['email']">Email is invalid</span>
       </div>
       <ion-item>
-        <ion-input type="password" placeholder="Password" formControlName="pwd"></ion-input>
+        <ion-input type="password" placeholder="Password" (keyup.enter)="login()"
+         formControlName="pwd">
+        </ion-input>
       </ion-item>
       <div *ngIf="(password.dirty || password.touched) && password.errors" class="errors">
         <span *ngIf="password.errors?.['required']">Password is required</span>

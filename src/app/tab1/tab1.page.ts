@@ -32,8 +32,7 @@ export class Tab1Page implements OnInit {
   @Input() sim:string;
   myToast:any;
   myRoles:any;
-  public SoyAdmin: boolean = false;
-  public SoyNeighborAdmin: boolean = false;
+  public MyRole : string = 'visitor';
   isAndroid:any;
   currentUser = '';
   public version = '';
@@ -44,7 +43,7 @@ export class Tab1Page implements OnInit {
   id : number = 0;
   public visible : boolean = true;
   infoPanel : any;
-  
+  myEmail = '';
   REST_API_SERVER = environment.cloud.server_url;
 
   iosOrAndroid: boolean;
@@ -63,16 +62,8 @@ export class Tab1Page implements OnInit {
   ) { }
   
   async ionViewWillEnter(){
-      if(localStorage.getItem('IsAdmin') === 'true'){
-        this.SoyAdmin = true;
-      }
-      // else{
-      //   this.SoyAdmin = false;
-      // }
-
-      if(localStorage.getItem('IsNeighborAdmin') === 'true'){
-        this.SoyNeighborAdmin = true;
-      }
+    this.MyRole = localStorage.getItem('my-role');
+    this.myEmail = localStorage.getItem('my-email');
   }
 
   async ngOnInit(){

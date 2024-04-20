@@ -21,7 +21,7 @@
   </ion-refresher>
 
   <ion-list *ngFor="let item of users; let i = index;" class="accordion-list"
-   lines="none" detail="false" no-padding >
+    lines="none" detail="false" no-padding >
     <ion-item tappable (click)="toggleSection(i)" [ngClass]="{'section-expired' : 
       item.expired || !item.enable, 'section' : !item.expired}">
       <ion-icon class="lock" slot="start"  name="lock-closed-outline" 
@@ -45,18 +45,34 @@
             <ul *ngFor= "let role of item.roles">
               <li>{{role}}</li>
             </ul> 
+            <ion-icon *ngIf="soyAdmin" slot="end"
+               name="create-outline" (click)="onEditRole()">
+            </ion-icon>
         </ion-item>
+
+        <ion-item *ngIf="editRole && soyAdmin">
+          <ion-select ok-text="Seleccionar" 
+          placeholder="Select Event"
+            (ionChange)="changeRoles($event,item._id,item.name)"
+            label="Roles:" cancel-text="Cancelar" [multiple]="true">
+            <ion-select-option *ngFor="let item of RoleList" 
+              value={{item._id}}>{{item.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
         <ion-item class='detail-item'>
           <ion-label> Location:  {{item.location}}</ion-label>
         </ion-item>
+
         <ion-item class="wrap-input">
-          <ion-toggle id="disableToggle" checked = "{{item.locked}}"
-          labelPlacement="start" [(ngModel)] = "item.locked"
-          (ionChange)="chgLockStatus($event,item.locked,item._id, item.sim,
-            item.name, item.house, item.coreSim)">
-          <ion-label *ngIf="item.locked">Unlock : </ion-label>
-          <ion-label *ngIf="!item.locked">Lock : </ion-label>
-        </ion-toggle>
+            <ion-toggle id="disableToggle" 
+            labelPlacement="start" [ngModel] = "item.locked"
+            (ionChange)="chgLockStatus($event,item.locked,item._id, item.sim,
+              item.name, item.house, item.coreSim)">
+            <ion-label id="lblUnlock" *ngIf="item.locked">Desbloquear : </ion-label>
+            <ion-label id="lblLock" *ngIf="!item.locked">Bloquear : </ion-label>
+          </ion-toggle>
         </ion-item>
 
     </form>

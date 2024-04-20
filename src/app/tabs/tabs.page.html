@@ -5,7 +5,7 @@
       <ion-icon name="home-outline"></ion-icon>
     </ion-tab-button>
 
-    <ion-tab-button [hidden]="!SoyAdmin" tab="tab2">
+    <ion-tab-button [hidden]="MyRole != 'admin'" tab="tab2">
       <ion-icon name="time-outline"></ion-icon>
     </ion-tab-button>
 
@@ -17,7 +17,7 @@
     <ion-icon name="people"></ion-icon>
   </ion-tab-button>
 
-  <ion-tab-button [hidden]="!SoyAdmin" tab="admin">
+  <ion-tab-button [hidden]="MyRole != 'admin'" tab="admin">
     <ion-icon name="settings-outline"></ion-icon>
   </ion-tab-button>
 
