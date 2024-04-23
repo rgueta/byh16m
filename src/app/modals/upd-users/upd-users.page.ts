@@ -212,6 +212,9 @@ export class UpdUsersPage implements OnInit {
         this.RegisterForm.get('Sim').value + ',' + 
         this.id + ',' + this.localRole;
 
+        console.log('pckDevice: ', pkgDevice);
+        return
+
      try{
       this.showLoading();
       //  add new user 
