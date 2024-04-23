@@ -25,6 +25,32 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+// Accordion -------------------------------
+ion-accordion.accordion-expanding ion-item[slot="header"],
+ion-accordion.accordion-expanded ion-item[slot="header"]{
+    --background:#0c0254;
+    --color:#fff;
+    font-weight: 600;
+    ion-icon{
+        color: #fff;
+    }
+    border-bottom: 2px solid #fff;
+}
+
+ion-accordion.accordion-collapsed ion-item[slot="header"],
+ion-accordion.accordion-collapsing ion-item[slot="header"]{
+    --background: var(--ion-color-primary);
+    --color: #fff;
+    font-weight: 600;
+    ion-icon{
+        color:#fff
+    }
+    border-bottom: 2px solid #fff;
+}
+
+
+
+
 .my-modal {
     .modal-wrapper {
         position: absolute;

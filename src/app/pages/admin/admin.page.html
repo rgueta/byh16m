@@ -29,7 +29,7 @@
         <ion-item (click)="modalUpdCores()">New CORE</ion-item>
         <ion-item (click)="modalUpdInfo()">Add Information</ion-item>
         <ion-item (click)="modalBackstage()">Backstage</ion-item>
-        <ion-item-divider></ion-item-divider>
+
         <ion-item class="wrap-input">
           <ion-toggle id="twilioToggle" class="ion-toggle-red" labelPlacement="start" 
             [ngModel]="localenable" [checked]="false"  
@@ -106,7 +106,8 @@
         </ion-list>
         
         <ion-item class='detail-item'>
-          <ion-label class='labelInput'>Gate : <b>{{item.detail.Gate_type}}</b>, Motor: <b>{{item.detail.Motor}}</b></ion-label>
+          <ion-label class='labelInput'>Gate : <b>{{item.detail.Gate_type}}</b>, Motor: 
+            <b>{{item.detail.Motor}}</b></ion-label>
         </ion-item>
 
         <ion-list  class="accordion-list"  lines="none" detail="false" no-padding>
@@ -122,13 +123,39 @@
                 New user</ion-item>
 
             <ion-item class="detail-item">
-              <ion-select [interfaceOptions]="{'cssClass': 'routines'}" label="Routines:"
-               interface="action-sheet"
-                [(ngModel)]="routine_byh16s" ok-text="Seleccionar" cancel-text="Cancelar" 
-                  (ionChange)="routineSelected($event,item)">
-                <ion-select-option class="menu-routines" *ngFor="let item of routineOptions" 
-                    value = {{item.id}}>{{item.name}}</ion-select-option>
-              </ion-select>
+
+              <ion-accordion-group style="width: 100%;">
+                <ion-accordion>
+                  <ion-item slot="header">Routines</ion-item>
+                  <div slot="content">
+                    <ion-accordion-group>
+                      <ion-accordion>
+                        <ion-item slot="header">Information </ion-item>
+                        <ion-list slot="content" style="padding-top: 0px; padding-bottom: 0px;"
+                        *ngFor="let routine of routineOptions.slice(0,5); let i=index;">
+                          <ion-item button (click)="routineSelected($event, i, item)"
+                          >{{routine.name}}</ion-item>
+                        </ion-list>
+                      </ion-accordion>
+                    </ion-accordion-group>
+                  </div>
+    
+                  <div slot="content">
+                    <ion-accordion-group>
+                      <ion-accordion>
+                        <ion-item slot="header">configuration </ion-item>
+                        <ion-list slot="content" style="padding-top: 0px; padding-bottom: 0px;" 
+                        *ngFor="let routine of routineOptions.slice(5); let i=index;">
+                          <ion-item button (click)="routineSelected($event, i+5, item)"
+                            >{{routine.name}}</ion-item>
+                        </ion-list>
+                      </ion-accordion>
+                    </ion-accordion-group>
+                  </div>
+                    
+                </ion-accordion>
+              </ion-accordion-group>
+
             </ion-item>
           </form>
         </ion-list>
@@ -141,7 +168,8 @@
          <ion-item  *ngIf="myUserList?.length > 0" >
           <ion-label class='labelInput' floating>Users:</ion-label>
           <ion-select ok-text="Seleccionar" cancel-text="Cancelar" (ionChange)="setupCode(visitorId)" >
-            <ion-select-option *ngFor="let user of myUserList; let i = index;" value={{user._id}}  >{{user.name}}</ion-select-option>
+            <ion-select-option *ngFor="let user of myUserList; let i = index;" value={{user._id}} >
+              {{user.name}}</ion-select-option>
           </ion-select>
       </ion-item>
     </form>

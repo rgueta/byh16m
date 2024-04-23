@@ -126,8 +126,8 @@ export class UsersPage implements OnInit {
       name:string, house:string,coreSim:string) {
     const adminId = localStorage.getItem('my-userId');
     const titleMsg = (userStatus ?  'Desbloqueo' : 'Bloqueo')
-    const status = titleMsg.toLowerCase();
-    const pkg = status + ',' + name + ',' + house + ',' + sim + ',' + id;
+    const status = (userStatus ?  'unlock' : 'lock')
+    const pkg = status + ',' + name + ',' + house + ',' + sim + ',' + id ;
 
     let alert = await this.alertCtrl.create({
       subHeader: 'Continuar con ' + titleMsg,
@@ -152,12 +152,13 @@ export class UsersPage implements OnInit {
             
             await this.api.postData('api/users/' + status + '/' + adminId + '/' + id, 
             {'neighborId' : id}).then(async (onResolve) =>{
-                await this.sms.send(coreSim,pkg ,options)
-                .then()
-                .catch((e:any) => this.toolService.showAlertBasic('Alerta','Error send sms'
-                  ,e,['Ok']));
+              // set lock status on device 
+              await this.sms.send(coreSim,pkg ,options)
+              .then()
+              .catch((e:any) => this.toolService.showAlertBasic('Alerta','Error send sms'
+                ,e,['Ok']));
 
-                await this.getUsers();
+              await this.getUsers();
 
             },
             (onReject) =>{

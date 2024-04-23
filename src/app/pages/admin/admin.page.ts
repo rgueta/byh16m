@@ -26,22 +26,23 @@ export class AdminPage implements OnInit {
     {'id':0,'cmd':'ModuleRST','name':'Reboot module','confirm':'Reboot module ?'},
     {'id':1,'cmd':'getSIMstatus','name':'Module status','confirm':'Request module status?'},
     {'id':2,'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
-    {'id':3,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
-    {'id':4,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
+    {'id':3,'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
+    {'id':4,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
+    {'id':5,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
       'name':'Code open Gate','confirm':'Open gate with code?'},
-    {'id':5,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
+    {'id':6,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
       'name':'Code open Magnet','confirm':'Open magnet with code?'},
-    {'id':6,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
+    {'id':7,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
       'name':'Set Keypad flex','confirm':'Set keypad flex?'},
-    {'id':7,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
+    {'id':8,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
       'name':'Set Keypad hard plastic','confirm':'Set keypad hardPlastic?'},
-    {'id':8,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
+    {'id':9,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
       'name':'Set debug mode','confirm':'Set debug On?'},
-    {'id':9,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
+    {'id':10,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
       'name':'Remove debug mode','confirm':'Set debug Off?'},
-    {'id':10,'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
+    {'id':11,'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
       'name':'Change settings Code','confirm':'Change settingsCode ?'},
-    {'id':11,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
+    {'id':12,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
       'name':'Change pwdRST','confirm':'Change pwdRST ?'},
             ]
 
@@ -102,6 +103,11 @@ export class AdminPage implements OnInit {
       }, (error:any) => {
         console.log('Error response --> ', JSON.stringify(error));
       });
+  }
+
+
+  async clicked(item:string){
+    console.log('clicked: ', item);
   }
 
   async doRefresh(event:any){
@@ -171,30 +177,34 @@ export class AdminPage implements OnInit {
     return await modal.present()
   }
 
-  async routineSelected(event:any,item:any){
-    if(this.routineOptions[event.detail.value]['input']){
+  // routineSelected(index:any, item:any){
+  //   console.log('event.detail: ',index);
+  //   console.log('item: ',item);
+
+  // }
+
+  async routineSelected(event:any, index:number, item:any){
+    if(this.routineOptions[index]['input']){
       this.input = true;
-      console.log('si agregue el input, item: ', item)
     }else{
       this.input = false;
-      console.log('No agregue el input, item: ', item)
     }
 
-    if(this.routineOptions[event.detail.value]['option1']){
-      item['option1'] = this.routineOptions[event.detail.value]['option1'];
+    if(this.routineOptions[index]['option1']){
+      item['option1'] = this.routineOptions[index]['option1'];
     }
 
-    if(this.routineOptions[event.detail.value]['option2']){
-      item['option2'] = this.routineOptions[event.detail.value]['option2'];
+    if(this.routineOptions[index]['option2']){
+      item['option2'] = this.routineOptions[index]['option2'];
     }
 
-    if(this.routineOptions[event.detail.value]['option3']){
-      item['option3'] = this.routineOptions[event.detail.value]['option3'];
+    if(this.routineOptions[index]['option3']){
+      item['option3'] = this.routineOptions[index]['option3'];
     }
 
     this.alertCtrlEvent(event, item,'Confirm', 
-      this.routineOptions[event.detail.value]['confirm'],
-      this.routineOptions[event.detail.value]['cmd'], 'Yes', 'Cancel');
+      this.routineOptions[index]['confirm'],
+      this.routineOptions[index]['cmd'], 'Yes', 'Cancel');
   }
 
   
@@ -378,19 +388,30 @@ toggleSectionSim(){
                 try{
                   if (this.sim.length >= 10 ){
                     if(await this.toolService.verifyNetStatus()){
+
                       console.log('item.Sim: ' + item.Sim)
                       await this.api.postData('api/cores/chgSim/' + this.userId ,
-                        {'coreId':item._id, 'newSim':this.sim}).then(async (result) => {
-                        // Change sim on pcb
-                        await this.sms.send(item.Sim,'cfgCHG,sim,value,' + this.sim, options);
-                        this.sim = '';
-                        this.getCores();
-                        this.simSectionOpen = false;
-                        this.toolService.toastAlert('Sim cambiado ' + this.sim,0, ['Ok'], 'bottom')
-                      }, error => {
-                        this.toolService.toastAlert('chgSim API error: <br>' +
-                        JSON.stringify(error),0,['Ok'],'bottom');
-                      });
+                        {'coreId':item._id, 'newSim':this.sim})
+                        .then(async (result) => {
+                          // Change sim on pcb
+                          await this.sms.send(item.Sim,'cfgCHG,sim,value,' + this.sim, options)
+                          .then(() =>{
+                            this.sim = '';
+                            this.getCores();
+                            this.simSectionOpen = false;
+                            this.toolService.toastAlert('Sim cambiado ' + this.sim,0, ['Ok'], 'bottom')
+                          })
+                          .catch((err) =>{
+                            this.toolService.toastAlert('No se envio sms, error: <br>' + 
+                              err,0, ['Ok'], 'bottom')
+                          })
+                          
+                      })
+                        .catch((error) => {
+                          this.toolService.toastAlert('chgSim API error: <br>' +
+                          JSON.stringify(error),0,['Ok'],'bottom');
+                        });
+
                     }else{
                       this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
                     }
@@ -404,12 +425,11 @@ toggleSectionSim(){
                 }
                 break;
               case 'getSIMstatus':
-                try{
-                  await this.sms.send(item.Sim,'status,gral',options);
-                  this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');
-                }catch(e){
-                  this.toolService.toastAlert('No se envio, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
-                }
+                  await this.sms.send(item.Sim,'status,gral',options)
+                  .then(() => {this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');})
+                  .catch((err) => {this.toolService.toastAlert('No se envio sms, error: <br>' + 
+                    err,0, ['Ok'], 'bottom');})
+                  
                 break;
               case 'RestraintStatus':
                   try{
@@ -419,6 +439,15 @@ toggleSectionSim(){
                     this.toolService.toastAlert('No se envio, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                   break;
+              
+              case 'status,extrange':
+                try{
+                  await this.sms.send(item.Sim, option, options);
+                  this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');
+                }catch(e){
+                  this.toolService.toastAlert('No se envio sms, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                }
+                break;
 
               case 'ModuleRST':
                 try{

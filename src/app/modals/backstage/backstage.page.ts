@@ -33,6 +33,7 @@ export class BackstagePage implements OnInit {
           this.backstageList[0].open = true;
         }else{
           this.toolService.showAlertBasic('','Empty backstage collection', '',['Ok']);
+          this.modalController.dismiss('no refresh');
         }
 
       }, (err:any) => {
@@ -66,8 +67,6 @@ export class BackstagePage implements OnInit {
         'pkg': pkg
        }
     });
-    
-   
 
     await modal.present();
 

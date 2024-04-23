@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ModalController, NavParams,AlertController } from "@ionic/angular";
+import { ModalController, NavParams,AlertController, 
+  LoadingController } from "@ionic/angular";
 import { DatabaseService } from '../../services/database.service';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
@@ -28,6 +29,7 @@ export class UpdUsersPage implements OnInit {
   CoreList: any = [];
   coreId: string = '';
   coreName : string= '';
+  coreSim : string = '';
   public gender = "";
   localRole:String;
   localCpu:any;
@@ -47,7 +49,9 @@ export class UpdUsersPage implements OnInit {
     private api : DatabaseService,
     private sms: SMS,
     private toolService: ToolsService,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    private loadingController : LoadingController,
+
   ) { 
     this.RegisterForm = new FormGroup({
       Cpu : new FormControl('', [Validators.required]),
@@ -113,6 +117,7 @@ export class UpdUsersPage implements OnInit {
     this.gender = this.pkgUser['gender'];
     this.location = this.pkgUser['path'];
     this.uuid = this.pkgUser['uuid'];
+    this.coreSim = this.pkgUser['coreSim'];
 
     this.RegisterForm.get('Cpu').setValue(this.pkgUser['cpu']);
     this.RegisterForm.get('Core').setValue(this.pkgUser['core']);
@@ -159,6 +164,16 @@ export class UpdUsersPage implements OnInit {
       });
   }
 
+  showLoading() {
+    this.loadingController.create({
+        message: 'Espere por favor...',
+        duration: 2500,
+        translucent: true
+    }).then((res) => {
+        res.present();
+    });
+}
+
   async onChangeCpu(){
     this.getCores(this.localCpu['id'])
   }
@@ -190,7 +205,15 @@ export class UpdUsersPage implements OnInit {
       avatar: ''
      }
 
+
+     const pkgDevice =  'newUser,' + 
+        this.RegisterForm.get('Name').value + ',' + 
+        this.RegisterForm.get('House').value + ',' + 
+        this.RegisterForm.get('Sim').value + ',' + 
+        this.id + ',' + this.localRole;
+
      try{
+      this.showLoading();
       //  add new user 
       await this.api.postData('api/users/new/' + 
         localStorage.getItem('my-userId'), pkg)
@@ -204,7 +227,21 @@ export class UpdUsersPage implements OnInit {
                 // delete backstage document
                 this.api.deleteData('api/backstage/'+ localStorage.getItem('my-userId') +
                   '/' + this.id)
-                .then(async result => {})
+                .then(async result => {
+
+                  const options:SmsOptions={
+                    replaceLineBreaks:false,
+                    android:{
+                      intent:''
+                    }
+                  }
+                  await this.sms.send(this.coreSim,pkgDevice ,options)
+                  .then()
+                  .catch((e:any) => this.toolService.showAlertBasic('Error','Adding newUser error'
+                    ,e,['Ok']));
+
+
+                })
                 .catch((err) =>{ 
                   this.toolService.showAlertBasic('Alerta','Error, delete backstage: ',
                   JSON.stringify(err),['Ok']) })
@@ -280,6 +317,7 @@ async sendUserReq(pkg:any){
     }
   }
 
+  this.showLoading();
   this.api.postData('api/backstage/',pkg)
   .then( async (result:any) =>{
     const msg = `new user requested, cpu: ${this.localCpu['name']}, core: ${this.localCore['name']}, 
