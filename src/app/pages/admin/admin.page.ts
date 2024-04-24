@@ -312,6 +312,7 @@ toggleSectionSim(){
 
   async alertCtrlEvent(event:any,item:any,titleMsg:string,Message:string,option:string, txtConfirm:string, txtCancel:string){
     let element = <HTMLInputElement> document.getElementById("disableToggle");
+    
     var options:SmsOptions={
       replaceLineBreaks:false,
       android:{

@@ -18,6 +18,10 @@ export class UsersPage implements OnInit {
   RoleList : any = [];
   editRole : boolean = false;
   soyAdmin : boolean = false;
+  editSim : boolean = false;
+  sim:string;
+  public simSectionOpen = false;
+  userId : string = '';
   
   constructor(
     private modalController:ModalController,
@@ -36,8 +40,9 @@ export class UsersPage implements OnInit {
     this.getRoles();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.coreId = this.navParams.data['CoreId'];
+    this.userId = await localStorage.getItem('my-userId');
    
   }
 
@@ -61,9 +66,96 @@ export class UsersPage implements OnInit {
     });
   }
 
+  onEditSim(){
+    this.editSim = !this.editSim;
+  }
+  
+
+  async simChange(neighborId:string,actualSim:string){
+
+    const coreSim = localStorage.getItem('my-core-sim')
+    var options:SmsOptions={
+      replaceLineBreaks:false,
+      android:{
+        intent:''
+      }
+    } 
+
+      // >> Confirmation ------------------------------------
+
+    let alert = await this.alertCtrl.create({
+      subHeader: 'Mandar solicitud',
+      message: 'Cambiar numero de cell ?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: (
+
+          ) => {
+          }
+        },
+        {
+          text: 'Si',
+          handler: async () => {
+            try{
+              if (this.sim.length >= 10 ){
+                if(await this.toolService.verifyNetStatus()){
+                  await this.api.postData('api/users/updSim/' + this.userId ,
+                    {'userId':neighborId, 'newSim':this.sim})
+                    .then(async (result) => {
+                      // Change sim on pcb
+                      await this.sms.send(coreSim,'updSim,' + actualSim + ',' + this.sim, options)
+                      .then(() =>{
+                        this.sim = '';
+                        this.getUsers();
+                        this.simSectionOpen = false;
+                        this.toolService.showAlertBasic('','Sim cambiado','',['Ok']);
+                      })
+                      .catch((err) =>{
+                        this.toolService.showAlertBasic('','No se envio sms, error: <br>',
+                      JSON.stringify(err),['Ok']);
+                      })
+                      
+                  })
+                    .catch((err) => {
+                      this.toolService.showAlertBasic('','updSim API error: <br>',
+                      JSON.stringify(err),['Ok']);
+
+                    });
+        
+                }else{
+                  this.toolService.showAlertBasic('','No hay Acceso a internet','',['Ok']);
+                }
+              }else{
+                this.toolService.showAlertBasic('','Formato Invalido','',['Ok']);
+              }
+        
+            }catch(e){
+              this.toolService.showAlertBasic('','Error, updSim: ',
+                  JSON.stringify(e),['Ok']);
+            }
+          }
+        }
+      ]
+    });
+
+    return await alert.present();
+
+    // << Confirmation  -----------------------------------
+
+
+  }
+ 
+  // region sim Section Routine -------------------------------
+  toggleSectionSim(){
+    this.simSectionOpen = !this.simSectionOpen
+  }
+
   onEditRole(){
     this.editRole = !this.editRole;
   }
+
 
   async doRefresh(event:any){
     this.getUsers();

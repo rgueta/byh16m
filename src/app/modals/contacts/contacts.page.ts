@@ -82,7 +82,7 @@ export class ContactsPage implements OnInit {
     // >> Confirmation ------------------------------------
 
     let alert = await this.alertCtrl.create({
-      header: 'Confirmar',
+      subHeader: 'Confirmar',
       message: 'Aceptar contacto ?',
       cssClass:'basic-alert',
       buttons: [
