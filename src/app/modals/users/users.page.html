@@ -42,12 +42,12 @@
 
         <ion-item class='detail-item'>
           <ion-label> Sim: {{item.sim}}</ion-label>
-          <ion-icon *ngIf="soyAdmin" slot="end"
+          <ion-icon *ngIf="soyAdmin || soyNeighborAdmin" slot="end"
                name="create-outline" (click)="onEditSim()">
             </ion-icon>
         </ion-item>
 
-        <form tappable *ngIf="editSim && soyAdmin" class="detailRoutines">
+        <form tappable *ngIf="editSim && (soyAdmin || soyNeighborAdmin)" class="detailRoutines">
           <ion-item class="detail-item">
             <ion-input name='code' required placeholder="new Sim" 
               value={{item.Sim}} [(ngModel)]="sim"></ion-input>

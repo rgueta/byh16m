@@ -16,7 +16,8 @@
        </div>
       </div>
       <div class="column right">
-        <span [hidden] = "MyRole != 'admin'" >
+        <!-- <span [hidden] = "MyRole != 'admin'" > -->
+          <span>
           <ion-buttons slot="end">
             <ion-button id="popover-button">
               <ion-icon  name="ellipsis-vertical-outline"></ion-icon>
@@ -24,13 +25,13 @@
           </ion-buttons>
         </span>
         
-        <span [hidden] = "MyRole == 'admin'">
+        <!-- <span [hidden] = "MyRole == 'admin'">
           <ion-buttons slot="end">
             <ion-button (click)="logout()">
               <ion-icon  name="exit-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
-        </span>
+        </span> -->
       </div>
       
   </ion-toolbar>
@@ -48,7 +49,8 @@
         <ion-icon name="person-outline"></ion-icon>
       </ion-fab-button>
 
-      <ion-fab-button class="button-green" (click)="ModalUsers()">
+      <ion-fab-button *ngIf="MyRole == 'neighborAdmin' || MyRole == 'admin'" 
+      class="button-green" (click)="ModalUsers()">
         <ion-icon name="lock-closed-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
@@ -74,7 +76,7 @@
   <ng-template>
     <ion-content>
       <ion-list>
-        <ion-item-group>
+        <ion-item-group *ngIf="MyRole == 'admin'">
           <ion-item [button]="true" [detail]="false" 
             (click)="openFamily()">Familia</ion-item>
           <ion-item [button]="true" [detail]="false" 
@@ -85,6 +87,23 @@
             (click)="localNotification()">Local notification</ion-item>
           <ion-item [button]="true" [detail]="false" 
             (click)="fcmNotification()">FCM notification</ion-item>
+          <ion-item class="wrap-input">
+            <ion-toggle id="twilioToggle" class="ion-toggle-red" labelPlacement="start" 
+              [ngModel]="demoMode" [checked]="false"  
+              [ngModelOptions]="{standalone: true}" (ionChange)="DemoMode()">
+              Demo mode
+            </ion-toggle>
+          </ion-item>
+        </ion-item-group>
+        <ion-item-group *ngIf="MyRole == 'neighborAdmin' || MyRole == 'admin'">
+          <ion-item id="logout1-alert" [button]="true" [detail]="false" 
+          (click)="newNeighbor()">Agregar usuario
+          <ion-icon slot="end"
+          name="person-add-outline" (click)="newNeighbor()">
+       </ion-icon>
+        </ion-item>
+        </ion-item-group>
+        <ion-item-group>
           <ion-item id="logout1-alert" [button]="true" [detail]="false" 
           (click)="logout()">Log out 
           {{myEmail}}</ion-item>

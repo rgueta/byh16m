@@ -63,6 +63,7 @@ export class AdminPage implements OnInit {
   input: boolean = false;
   backstageList:any;
   RoleList:any;
+  demoMode:boolean = false;
 
   constructor(
         public animationController : AnimationController,
@@ -76,6 +77,7 @@ export class AdminPage implements OnInit {
     ) {}
 
   async ngOnInit() {
+
     this.core_sim = await localStorage.getItem('my-core-sim');
     this.userId = await localStorage.getItem('my-userId');
     this.emailToVisitor = await (localStorage.getItem('emailToVisitor') === 'true');
@@ -83,7 +85,16 @@ export class AdminPage implements OnInit {
     if(!localStorage.getItem('roles')){
       this.getRoles();
     }
+
+    if (localStorage.getItem('demoMode')){
+      this.demoMode = localStorage.getItem('demoMode') == 'true' ? true : false
+    }
     
+  }
+
+  DemoMode(){
+    this.demoMode = !this.demoMode;
+    localStorage.setItem('demoMode', this.demoMode.toString())
   }
 
   async getCores(){
@@ -136,6 +147,8 @@ export class AdminPage implements OnInit {
      await modal.present();
   
   }
+
+  
 
   async modalUpdCores() {
     const modal = await this.modalController.create({

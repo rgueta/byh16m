@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController, NavParams,AlertController, 
-  LoadingController } from "@ionic/angular";
+  LoadingController,PopoverController } from "@ionic/angular";
 import { DatabaseService } from '../../services/database.service';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
@@ -41,6 +41,8 @@ export class UpdUsersPage implements OnInit {
   id:string;
   uuid:string = '00-000';
   uuidReadonly : boolean = true;
+  demoMode:boolean = false;
+  public MyRole : string = 'visitor';
 
 
   constructor(
@@ -51,8 +53,10 @@ export class UpdUsersPage implements OnInit {
     private toolService: ToolsService,
     public alertCtrl: AlertController,
     private loadingController : LoadingController,
+    private popoverCtrl:PopoverController,
 
   ) { 
+
     this.RegisterForm = new FormGroup({
       Cpu : new FormControl('', [Validators.required]),
       Core : new FormControl('', [Validators.required]),
@@ -67,6 +71,17 @@ export class UpdUsersPage implements OnInit {
       Uuid : new FormControl('', [Validators.required]),
     });
   }
+
+
+
+  async ionViewWillEnter(){
+    this.MyRole = localStorage.getItem('my-role');
+    if (localStorage.getItem('demoMode')){
+      this.demoMode = localStorage.getItem('demoMode') == 'true' ? true : false
+    }
+
+  }
+
 
   ngOnInit() {
     this.devicePkg = localStorage.getItem('device_info');
@@ -85,7 +100,14 @@ export class UpdUsersPage implements OnInit {
       this.RoleList = JSON.parse(localStorage.getItem('roles'));
     }
 
-    if(this.sourcePage == 'login' || this.sourcePage == 'adminNew'){
+    if(this.sourcePage == 'tab1NewNeighbor'){
+      this.RegisterForm.get('Cpu').setValue('byh16');
+      this.RegisterForm.get('Core').setValue(localStorage.getItem('core-id'));
+      this.location = localStorage.getItem('location');
+      this.getRoles();
+    }
+
+    if(this.sourcePage == 'login' || this.sourcePage == 'adminNew' ){
       this.getCpus();
     }
     
@@ -96,7 +118,7 @@ export class UpdUsersPage implements OnInit {
         this.fillData();
       }
     }else if(this.sourcePage == 'adminNew'){
-      this.locationReadonly = false;
+      // this.locationReadonly = false;
       this.uuidReadonly = false;
     }
     else{
@@ -154,7 +176,11 @@ export class UpdUsersPage implements OnInit {
   }
 
   async getRoles(){
-    this.api.getData('api/roles/' + localStorage.getItem('my-userId'))
+    let url = 'api/roles/'
+    if (this.sourcePage == 'tab1NewNeighbor'){
+      url = 'api/roles/neiAdmin/'
+    }
+    this.api.getData(url + localStorage.getItem('my-userId'))
       .subscribe(async (result: any) => {
         this.RoleList = await result;
       },
@@ -162,6 +188,11 @@ export class UpdUsersPage implements OnInit {
         this.toolService.showAlertBasic('Alerta','Error, getRoles: ',
                   JSON.stringify(error),['Ok']);
       });
+  }
+
+  DemoMode(){
+    this.demoMode = !this.demoMode;
+    localStorage.setItem('demoMode', this.demoMode.toString())
   }
 
   showLoading() {
@@ -176,6 +207,11 @@ export class UpdUsersPage implements OnInit {
 
   async onChangeCpu(){
     this.getCores(this.localCpu['id'])
+    this.location = this.localCpu['location']
+  }
+
+  async onChangeCore(){
+    this.location = this.localCpu['location'] + '.' + this.localCore['shortName'];
   }
 
   async onSubmit(){
@@ -205,12 +241,23 @@ export class UpdUsersPage implements OnInit {
       avatar: ''
      }
 
+     if (localStorage.getItem('demoMode')){
+      if (localStorage.getItem('demoMode') == 'true'){
+        console.log('Si es demo mode');
+      }else{
+        console.log('No es demo mode');
+      }
+
+     }
 
      const pkgDevice =  'newUser,' + 
+        this.RegisterForm.get('Sim').value + ',' + 
         this.RegisterForm.get('Name').value + ',' + 
         this.RegisterForm.get('House').value + ',' + 
-        this.RegisterForm.get('Sim').value + ',' + 
         this.id + ',' + this.localRole;
+
+
+        console.log('pkg: ', pkg);
 
         console.log('pckDevice: ', pkgDevice);
         return

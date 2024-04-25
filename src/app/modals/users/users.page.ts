@@ -18,6 +18,7 @@ export class UsersPage implements OnInit {
   RoleList : any = [];
   editRole : boolean = false;
   soyAdmin : boolean = false;
+  soyNeighborAdmin : boolean = false;
   editSim : boolean = false;
   sim:string;
   public simSectionOpen = false;
@@ -36,6 +37,7 @@ export class UsersPage implements OnInit {
   async ionViewWillEnter(){
     this.coreId = this.navParams.data['CoreId'];
     this.soyAdmin = localStorage.getItem('my-role') == 'admin' ? true : false;
+    this.soyNeighborAdmin = localStorage.getItem('my-role') == 'neighborAdmin' ? true : false;
     this.getUsers();
     this.getRoles();
   }
@@ -43,7 +45,6 @@ export class UsersPage implements OnInit {
   async ngOnInit() {
     this.coreId = this.navParams.data['CoreId'];
     this.userId = await localStorage.getItem('my-userId');
-   
   }
 
   async getRoles(){

@@ -18,6 +18,7 @@ import {
 } from '@capacitor/push-notifications';
 import { FCM } from "@capacitor-community/fcm";
 import { ToolsService } from "../services/tools.service";
+import { UpdUsersPage } from "../modals/upd-users/upd-users.page";
 
 
 @Component({
@@ -45,8 +46,8 @@ export class Tab1Page implements OnInit {
   infoPanel : any;
   myEmail = '';
   REST_API_SERVER = environment.cloud.server_url;
-
   iosOrAndroid: boolean;
+  demoMode:boolean = false;
 
   constructor(
     private sms: SMS,
@@ -64,6 +65,10 @@ export class Tab1Page implements OnInit {
   async ionViewWillEnter(){
     this.MyRole = localStorage.getItem('my-role');
     this.myEmail = localStorage.getItem('my-email');
+    if (localStorage.getItem('demoMode')){
+      this.demoMode = localStorage.getItem('demoMode') == 'true' ? true : false
+    }
+
   }
 
   async ngOnInit(){
@@ -81,11 +86,9 @@ export class Tab1Page implements OnInit {
       }
     });
 
-    
     PushNotifications.addListener('registration', (token: Token) => {
       console.log('Push registration success, token: ' + token.value);
     });
-
 
     //  Subscribe to a specific topic
     FCM.subscribeTo({ topic: localStorage.getItem('core-id') })
@@ -148,6 +151,11 @@ export class Tab1Page implements OnInit {
   setTimeout(() => {
     event.target.complete();
   }, 2000);
+}
+
+DemoMode(){
+  this.demoMode = !this.demoMode;
+  localStorage.setItem('demoMode', this.demoMode.toString())
 }
 
 toggleButtons(){
@@ -236,6 +244,7 @@ async collectInfo(){
   }
 
 }
+
   lockToPortrait(){
     this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
   }
@@ -340,6 +349,18 @@ async newVisitor(){
   });
 
   modal.present()
+}
+
+async newNeighbor(){
+  const modal = await this.modalController.create({
+    component: UpdUsersPage,
+    componentProps:{
+      'SourcePage': 'tab1NewNeighbor',
+      'coreName': localStorage.getItem('core-name')
+     }
+  });
+  
+   await modal.present();
 }
 
 

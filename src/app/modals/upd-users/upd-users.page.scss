@@ -15,11 +15,16 @@
     padding: .3rem 0 .3rem .4rem;
     // background-color: beige;
   }
+
+  .menu{
+    border-left: 0px;
+    padding-left: 30px;
+  }
   
   .middle {
     padding: 1rem 0 0.5rem 0;
     
-    width: 90%;
+    width: 50%;
     ion-title{
         font-size: 5vw;
         text-align: center;
@@ -27,8 +32,8 @@
 
   }
 
-  .centralize{
-    margin-left:-60px;
+  .centralize_Title{
+    margin-left: 0px;
 }
 
 .titleCore{
