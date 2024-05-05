@@ -316,18 +316,28 @@ async sendSMS(){
   this.sim = local_sim;
   this.msg = this.msg + ',' + uuid;
 
-  this.showLoading(2500,'Abriendo ...')
-
   try{
-    if(use_twilio == 'false'){
-      await this.sms.send(this.sim,this.msg,options)
-      .then()
-      .catch((e:any) => this.toolService.showAlertBasic('Alerta','Error',e,['Ok']));
 
-    }else{
-      this.api.postData('api/twilio/open/' + 
-      this.userId + '/' + this.msg + '/' + this.sim,'')
-    }
+    this.loadingController.create({
+      message: 'Abriendo ...',
+      translucent: true
+    }).then(async (res) => {
+        res.present();
+        if(use_twilio == 'false'){
+          await this.sms.send(this.sim,this.msg,options)
+          .then(() => this.loadingController.dismiss())
+          .catch((e:any) => {
+              this.loadingController.dismiss();
+              this.toolService.showAlertBasic('Alerta','Error',e,['Ok']);
+          });
+    
+        }else{
+          this.api.postData('api/twilio/open/' + 
+          this.userId + '/' + this.msg + '/' + this.sim,'');
+          this.loadingController.dismiss();
+        }
+
+    });
   }
   catch(e){
     this.toolService.showAlertBasic('Aviso','Ocurrio una excepción revisar:',
@@ -483,16 +493,6 @@ async showAlert(Header:string, subHeader:string, msg:string, btns:any,
   });
 
   await alert.present();
-}
-
-showLoading(duration:number, msg:string) {
-  this.loadingController.create({
-      message: msg,
-      duration: duration,
-      translucent: true
-  }).then((res) => {
-      res.present();
-  });
 }
 
 }
