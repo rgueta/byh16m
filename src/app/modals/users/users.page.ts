@@ -59,9 +59,18 @@ export class UsersPage implements OnInit {
   }
 
   async getUsers(){
-    await this.api.getData('api/users/core/' + this.coreId + '/' +
+    let url = '';
+    if(this.soyAdmin){
+      url = 'api/users/core/';
+    }
+    if(this.soyNeighborAdmin){
+      url = 'api/users/coreNeighbor/';
+    }
+
+    await this.api.getData(url + this.coreId + '/' +
     localStorage.getItem('my-userId')
     ).subscribe(async (result:any) => {
+      if(result)
       this.users = result;
       this.users[0].open = true;
     });
@@ -179,7 +188,10 @@ export class UsersPage implements OnInit {
     console.log(event.detail.value)
     const userAdminId = localStorage.getItem('my-userId');
     const pkg = {'userId':userId, 'roles': event.detail.value}
+    // console.log('user event: ', event)
+    // console.log('user pkg: ',pkg)
 
+    // return;
 
     let alert = await this.alertCtrl.create({
       subHeader: 'Cambiar roles ',

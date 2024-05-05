@@ -9,7 +9,7 @@
     </div>
 
     <div class="column middle centralize">
-      <ion-title>Backstage</ion-title>
+      <ion-title>Usuarios por agregar</ion-title>
     </div>  
 
   </div>
@@ -34,22 +34,22 @@
 
    <form tappable *ngIf="item.open" class="detail">
       <ion-item class='detail-item'>
-        <ion-label> Cpu: <b>{{item.cpuName}}</b></ion-label>
+        <ion-label> Colonia: <b>{{item.cpuName}}</b></ion-label>
       </ion-item>
 
       <ion-item class='detail-item'>
-        <ion-label> Core: <b>{{item.coreName}}</b></ion-label>
+        <ion-label> Privada: <b>{{item.coreName}}</b></ion-label>
       </ion-item>
 
-      <ion-item class='detail-item'>
+      <ion-item class='detail-item' *ngIf="MyRole == 'admin'">
         <ion-label> Location: <b>{{item.path}}</b></ion-label>
       </ion-item>
 
       <ion-item class="sectionRoutines" >
-        <ion-label> Sim:  <b>{{item.sim}}</b></ion-label>
+        <ion-label> cell:  <b>{{item.sim}}</b></ion-label>
       </ion-item>
 
-      <ion-item class="sectionRoutines" >
+      <ion-item class="sectionRoutines"  *ngIf="MyRole == 'admin'">
         <ion-label> Core sim:  <b>{{item.coreSim}}</b></ion-label>
       </ion-item>
 
@@ -57,7 +57,7 @@
         <ion-label> email:  <b>{{item.email}}</b></ion-label>
       </ion-item>
 
-      <ion-item tappable class="sectionRoutines" >
+      <ion-item tappable class="sectionRoutines"  *ngIf="MyRole == 'admin'">
         <ion-label> Uuid:  <b>{{item.uuid}}</b></ion-label>
       </ion-item>
 
@@ -67,8 +67,9 @@
 
       
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button  (click)="addUser(item)">
-          <ion-icon class="fabicon" name="add-circle-outline" ></ion-icon>
+        <ion-fab-button  size="small" (click)="addUser(item)">
+          <ion-icon class="fabicon" name="send" style="font-size: 1.5em;" 
+            ionFocus="true"></ion-icon>
         </ion-fab-button>
       </ion-fab>
 

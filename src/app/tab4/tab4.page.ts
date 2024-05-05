@@ -49,11 +49,14 @@ export class Tab4Page {
 
   async getVisitors(){
     this.VisitorsList = await JSON.parse(localStorage.getItem('visitors'))
-
+    
     //Sort Visitors by name
     this.VisitorsList = await Utils.sortJsonVisitors(this.VisitorsList,'name',true);
-
-    this.VisitorsList[0].open = true;
+    if(this.VisitorsList){
+      if(this.VisitorsList.length > 0){
+        this.VisitorsList[0].open = true;
+      }
+    }
   }
 
 

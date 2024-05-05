@@ -1,6 +1,6 @@
 import { Component ,Input, OnInit} from '@angular/core';
 import { ModalController ,AnimationController, isPlatform,
-  PopoverController, AlertController} from '@ionic/angular';
+  PopoverController, AlertController, LoadingController} from '@ionic/angular';
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { environment } from "../../environments/environment";
 import { DatabaseService } from '../services/database.service';
@@ -19,6 +19,7 @@ import {
 import { FCM } from "@capacitor-community/fcm";
 import { ToolsService } from "../services/tools.service";
 import { UpdUsersPage } from "../modals/upd-users/upd-users.page";
+import { BackstagePage } from "../modals/backstage/backstage.page";
 
 
 @Component({
@@ -59,7 +60,8 @@ export class Tab1Page implements OnInit {
     // private SIM : Sim,
     private popoverCtrl:PopoverController,
     public alertCtrl: AlertController,
-    private toolService: ToolsService
+    private toolService: ToolsService,
+    private loadingController : LoadingController
   ) { }
   
   async ionViewWillEnter(){
@@ -167,6 +169,17 @@ toggleButtons(){
     this.infoPanel.style.marginTop = "0px";
   }
 
+}
+
+async modalBackstage(){
+  const modal = await this.modalController.create({
+    component : BackstagePage,
+    componentProps:{
+      'SourcePage': 'tab1NewNeighbor',
+      'coreName': localStorage.getItem('core-name')
+     }
+  });
+  return await modal.present()
 }
 
 async collectInfo(){
@@ -303,6 +316,8 @@ async sendSMS(){
   this.sim = local_sim;
   this.msg = this.msg + ',' + uuid;
 
+  this.showLoading(2500,'Abriendo ...')
+
   try{
     if(use_twilio == 'false'){
       await this.sms.send(this.sim,this.msg,options)
@@ -349,6 +364,10 @@ async newVisitor(){
   });
 
   modal.present()
+}
+
+async lockUser(){
+
 }
 
 async newNeighbor(){
@@ -464,6 +483,16 @@ async showAlert(Header:string, subHeader:string, msg:string, btns:any,
   });
 
   await alert.present();
+}
+
+showLoading(duration:number, msg:string) {
+  this.loadingController.create({
+      message: msg,
+      duration: duration,
+      translucent: true
+  }).then((res) => {
+      res.present();
+  });
 }
 
 }

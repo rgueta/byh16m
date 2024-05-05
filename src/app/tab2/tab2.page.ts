@@ -37,7 +37,6 @@ export class Tab2Page implements OnInit {
   async ngOnInit(): Promise<void> {
   }
 
-
   async ionViewWillEnter() {
     const today = new Date();
     today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
@@ -59,11 +58,14 @@ export class Tab2Page implements OnInit {
 
     this.start = await new Date($event);
     this.end = await new Date($event);
+
     await this.start.setHours(0,0,0,0);
     await this.end.setHours(23,59,59,0);
 
-    this.start = await Utils.convDate(this.start);
-    this.end = await Utils.convDate(this.end);
+    this.start = await Utils.convDate(await 
+      Utils.convertLocalDateToUTCDate(new Date(this.start)));
+    this.end = await Utils.convDate(await 
+      Utils.convertLocalDateToUTCDate(new Date(this.end)));
 
     try{
       await this.api.getData('api/codeEvent/' + 

@@ -31,7 +31,7 @@ export class UpdUsersPage implements OnInit {
   coreName : string= '';
   coreSim : string = '';
   public gender = "";
-  localRole:String;
+  localRole: any;
   localCpu:any;
   localCore:any;
   pkgUser:any;
@@ -39,7 +39,7 @@ export class UpdUsersPage implements OnInit {
   location:string = '';
   locationReadonly : boolean = true;
   id:string;
-  uuid:string = '00-000';
+  uuid:string = '';
   uuidReadonly : boolean = true;
   demoMode:boolean = false;
   public MyRole : string = 'visitor';
@@ -72,18 +72,11 @@ export class UpdUsersPage implements OnInit {
     });
   }
 
-
-
-  async ionViewWillEnter(){
+  ngOnInit() {
     this.MyRole = localStorage.getItem('my-role');
     if (localStorage.getItem('demoMode')){
       this.demoMode = localStorage.getItem('demoMode') == 'true' ? true : false
     }
-
-  }
-
-
-  ngOnInit() {
     this.devicePkg = localStorage.getItem('device_info');
 
     this.sourcePage = this.navParams.data['SourcePage'];
@@ -96,11 +89,13 @@ export class UpdUsersPage implements OnInit {
       this.coreName = this.navParams.data['CoreName'];
     }
 
-    if(this.sourcePage == 'admin' || this.sourcePage == 'adminNew'){
+    // if(this.sourcePage == 'admin' || this.sourcePage == 'adminNew'){
+    if(this.MyRole == 'admin'){
       this.RoleList = JSON.parse(localStorage.getItem('roles'));
     }
 
-    if(this.sourcePage == 'tab1NewNeighbor'){
+    // if(this.sourcePage == 'tab1NewNeighbor'){
+      if(this.MyRole == 'admin' || this.MyRole == 'neighborAdmin'){
       this.RegisterForm.get('Cpu').setValue('byh16');
       this.RegisterForm.get('Core').setValue(localStorage.getItem('core-id'));
       this.location = localStorage.getItem('location');
@@ -111,22 +106,23 @@ export class UpdUsersPage implements OnInit {
       this.getCpus();
     }
     
-    if(this.sourcePage == 'admin'){
+    // if(this.sourcePage == 'admin'){
       if(this.navParams.data['pkg']){
         this.pkgUser = this.navParams.data['pkg'];
         this.coreName = this.pkgUser['coreName'];
         this.fillData();
       }
-    }else if(this.sourcePage == 'adminNew'){
-      // this.locationReadonly = false;
-      this.uuidReadonly = false;
-    }
-    else{
-      // just to enable button because formGroup for user itself
-      this.RegisterForm.get('Roles').setValue('some value');
-      this.RegisterForm.get('Location').setValue('some value');
-      this.RegisterForm.get('Uuid').setValue(localStorage.getItem('device-uuid'));
-    }
+    // }
+    // else if(this.sourcePage == 'adminNew'){
+    //   // this.locationReadonly = false;
+    //   this.uuidReadonly = false;
+    // }
+    // else{
+    //   // just to enable button because formGroup for user itself
+    //   this.RegisterForm.get('Roles').setValue('some value');
+    //   this.RegisterForm.get('Location').setValue('some value');
+    //   this.RegisterForm.get('Uuid').setValue(localStorage.getItem('device-uuid'));
+    // }
   }
 
   async fillData(){
@@ -180,6 +176,7 @@ export class UpdUsersPage implements OnInit {
     if (this.sourcePage == 'tab1NewNeighbor'){
       url = 'api/roles/neiAdmin/'
     }
+    
     this.api.getData(url + localStorage.getItem('my-userId'))
       .subscribe(async (result: any) => {
         this.RoleList = await result;
@@ -195,10 +192,10 @@ export class UpdUsersPage implements OnInit {
     localStorage.setItem('demoMode', this.demoMode.toString())
   }
 
-  showLoading() {
+  showLoading(duration:number) {
     this.loadingController.create({
         message: 'Espere por favor...',
-        duration: 2500,
+        duration: duration,
         translucent: true
     }).then((res) => {
         res.present();
@@ -215,7 +212,6 @@ export class UpdUsersPage implements OnInit {
   }
 
   async onSubmit(){
-    // get cpu, check if came as object
     const localCpu = 
       typeof this.RegisterForm.get('Cpu').value == 'object' ? 
       this.RegisterForm.get('Cpu').value['id'] :
@@ -225,13 +221,26 @@ export class UpdUsersPage implements OnInit {
       typeof this.RegisterForm.get('Core').value == 'object' ? 
       this.RegisterForm.get('Core').value['id'] :
       this.RegisterForm.get('Core').value ;
+    
+      let email:any;
+
+    if (localStorage.getItem('demoMode')){
+      if (localStorage.getItem('demoMode') == 'true'){
+        email = JSON.parse(localStorage.getItem('admin_email'))[0]['email'];
+      }else{
+        email = this.RegisterForm.get('Email').value;
+      }
+    }else{
+      email = this.RegisterForm.get('Email').value;
+    }
 
     const pkg = {
       cpu: localCpu, 
       core: localCore,
       name: this.RegisterForm.get('Name').value,
-      username: this.RegisterForm.get('UserName').value, 
-      email: this.RegisterForm.get('Email').value,
+      username: this.RegisterForm.get('UserName').value,
+      pwd:'',
+      email: email,
       sim: this.RegisterForm.get('Sim').value,
       house: this.RegisterForm.get('House').value, 
       gender: this.RegisterForm.get('Gender').value,
@@ -241,44 +250,27 @@ export class UpdUsersPage implements OnInit {
       avatar: ''
      }
 
-     if (localStorage.getItem('demoMode')){
-      if (localStorage.getItem('demoMode') == 'true'){
-        console.log('Si es demo mode');
-      }else{
-        console.log('No es demo mode');
-      }
-
-     }
-
      const pkgDevice =  'newUser,' + 
         this.RegisterForm.get('Sim').value + ',' + 
         this.RegisterForm.get('Name').value + ',' + 
         this.RegisterForm.get('House').value + ',' + 
-        this.id + ',' + this.localRole;
-
-
-        console.log('pkg: ', pkg);
-
-        console.log('pckDevice: ', pkgDevice);
-        return
+        this.id + ',' + this.localRole[0]['name'];
 
      try{
-      this.showLoading();
+      this.showLoading(2500);
       //  add new user 
       await this.api.postData('api/users/new/' + 
         localStorage.getItem('my-userId'), pkg)
-        .then(async (res) => {
-          // // create password reset
-          // this.api.postData('api/pwdResetReq/' + this.RegisterForm.get('Email').value,
-          this.api.postData('api/pwdResetReq/ricardogueta@gmail.com',
+        .then(async (resUser) => {
+          // create password reset
+          this.api.postData('api/pwdResetReq/' + email,
             JSON.parse(this.devicePkg))
             .then(async result => {
-              if(this.sourcePage == 'admin'){
+              if(this.MyRole == 'admin' || this.MyRole == 'neighborAdmin'){
                 // delete backstage document
                 this.api.deleteData('api/backstage/'+ localStorage.getItem('my-userId') +
                   '/' + this.id)
                 .then(async result => {
-
                   const options:SmsOptions={
                     replaceLineBreaks:false,
                     android:{
@@ -287,9 +279,8 @@ export class UpdUsersPage implements OnInit {
                   }
                   await this.sms.send(this.coreSim,pkgDevice ,options)
                   .then()
-                  .catch((e:any) => this.toolService.showAlertBasic('Error','Adding newUser error'
-                    ,e,['Ok']));
-
+                  .catch((e:any) => this.toolService.showAlertBasic('Error',
+                    'Adding newUser error',e,['Ok']));
 
                 })
                 .catch((err) =>{ 
@@ -304,13 +295,14 @@ export class UpdUsersPage implements OnInit {
         })
         .catch((rej) => { 
           this.toolService.showAlertBasic('Alert','Error api call','Can not add user, ' + 
-            JSON.stringify(rej['error']['msg']), ['Ok']); });
+            JSON.stringify(rej['error']['msg']), ['Ok']); 
+        });
 
-      this.toolService.showAlertBasic('','Se agrego el usuario:',
+        this.toolService.showAlertBasic('','Se agrego el usuario:',
         this.RegisterForm.get('Name').value,['Ok']);
 
-      // exit model
-      this.modalController.dismiss('refresh');
+        // exit model
+        this.modalController.dismiss('refresh');
 
       }catch(err){
         console.log('error final catch', err);
@@ -367,26 +359,16 @@ async sendUserReq(pkg:any){
     }
   }
 
-  this.showLoading();
+  this.showLoading(2500);
   this.api.postData('api/backstage/',pkg)
   .then( async (result:any) =>{
-    const msg = `new user requested, cpu: ${this.localCpu['name']}, core: ${this.localCore['name']}, 
-      house: ${pkg.house}, sim: ${pkg.sim}, email: ${pkg.email}`
-    
-    for(var key in admin_sim){
-      await this.sms.send(admin_sim[key].sim, msg, options)
-      .then()
-      .catch((e:any) => 
-          this.toolService.showAlertBasic('Alerta','Error',e,['Ok']));
-    }
-
     this.toolService.showAlertBasic('','Requerimiento enviado',
       'Pronto recibiras un correo',['Ok'])
 
     this.modalController.dismiss();
   })
   .catch((err) => {
-    this.toolService.showAlertBasic('Alerta','Error', 
+    this.toolService.showAlertBasic('','Error', 
       JSON.stringify(err['error']['msg']),['Ok'])
   })
 }

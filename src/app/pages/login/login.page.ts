@@ -49,7 +49,9 @@ export class LoginPage implements OnInit {
  net_status:any;
  device_uuid:string='';
  admin_device:any;
- admin_sim:[] = []
+ admin_sim:[] = [];
+ admin_email:[] = [];
+
  public myToast:any;
  
   constructor(
@@ -157,8 +159,10 @@ export class LoginPage implements OnInit {
      await this.api.getData("api/config/").subscribe(async (result:any) =>{
       this.admin_device = result[0].admin_device;
       this.admin_sim = result[0].admin_sim;
+      this.admin_email = result[0].admin_email;
       await localStorage.setItem('admin_sim',JSON.stringify(result[0].admin_sim));
       await localStorage.setItem(ADMIN_DEVICE,await result[0].admin_device);
+      await localStorage.setItem('admin_email',await JSON.stringify(result[0].admin_email));
     });
  }
 
@@ -182,7 +186,6 @@ export class LoginPage implements OnInit {
       async res => {        
         await loading.dismiss();
         const roles = await localStorage.getItem(USER_ROLES); // typeof object
-        // let myrole = await localStorage.getItem(USER_ROLE);
 
        for(const val_myrole of JSON.parse(roles)){
           if(localStorage.getItem('locked') === 'true')
@@ -230,6 +233,9 @@ export class LoginPage implements OnInit {
            this.router.navigateByUrl('/store', { replaceUrl: true });
           }
         };
+
+        // get config info
+        this.getConfigApp();
 
       },
       async err  =>{

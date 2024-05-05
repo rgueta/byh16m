@@ -37,12 +37,45 @@
 }
 
 .titleCore{
+  background: none !important;
     display: flex;
     align-items: center;
     height: 40px;
     border: 1px solid;
-    flex-direction: column;
-    padding-top: 8px;
+    flex-direction: row;
+    justify-content:space-between ;
+}
+
+.divlblCoreName{
+  background: none !important;
+  display: flex;
+  justify-items: center;
+  padding-left: 40px;
+  width: 100%;
+  flex-direction: row;
+  padding: 0px;
+  text-align: center;
+}
+
+.divToggleDemo{
+  background: none !important;
+  height: 33px;
+  margin-top: -5px;
+  padding-top: 0px;
+  border-top: 0px;
+}
+
+.ToggleDemo{
+  background: none !important;
+  margin-top: -6px;
+  padding-top: 0px;
+  border-top: 0px;
+}
+
+
+.itemToggleDemo{
+  background: transparent;
+  height: 33px;
 }
 
 .basic-alert{

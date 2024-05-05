@@ -40,7 +40,7 @@
 <ion-content [fullscreen]="true">
 
   <!-- fab placed to the bottom end -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab *ngIf="MyRole == 'admin'" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button class="button-green">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
@@ -49,25 +49,12 @@
         <ion-icon name="person-outline"></ion-icon>
       </ion-fab-button>
 
-      <ion-fab-button *ngIf="MyRole == 'neighborAdmin' || MyRole == 'admin'" 
+      <ion-fab-button 
       class="button-green" (click)="ModalUsers()">
         <ion-icon name="lock-closed-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
-
-  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button class="button-green" (click)="newVisitor()">
-      <ion-icon name="person-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
-
-
-  <!-- <ion-fab [hidden]="!SoyNeighborAdmin" vertical="bottom" horizontal="end" >
-    <ion-fab-button class="button-green" (click)="ModalUsers()">
-      <ion-icon name="lock-closed-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
 
   <!-- Popover ---------------------------- -->
 
@@ -97,16 +84,27 @@
         </ion-item-group>
         <ion-item-group *ngIf="MyRole == 'neighborAdmin' || MyRole == 'admin'">
           <ion-item id="logout1-alert" [button]="true" [detail]="false" 
-          (click)="newNeighbor()">Agregar usuario
-          <ion-icon slot="end"
-          name="person-add-outline" (click)="newNeighbor()">
-       </ion-icon>
-        </ion-item>
+            (click)="modalBackstage()">Agregar usuario
+            <ion-icon slot="end" name="person-add-outline" (click)="modalBackstage()">
+            </ion-icon>
+          </ion-item>
+          <ion-item id="logout1-alert" [button]="true" [detail]="false" 
+            (click)="ModalUsers()">Bloquear usuario
+            <ion-icon slot="end" name="person-circle-outline" (click)="ModalUsers()">
+            </ion-icon>
+          </ion-item>
+       
         </ion-item-group>
         <ion-item-group>
           <ion-item id="logout1-alert" [button]="true" [detail]="false" 
-          (click)="logout()">Log out 
-          {{myEmail}}</ion-item>
+              (click)="toggleButtons()">Mover botones
+              <ion-icon slot="end" name="toggle-outline" (click)="toggleButtons()">
+              </ion-icon>
+          </ion-item>
+          <ion-item id="logout1-alert" [button]="true" [detail]="false" 
+            (click)="logout()">Cerrar sesion
+            {{myEmail}}
+          </ion-item>
         </ion-item-group>
       </ion-list>
     </ion-content>

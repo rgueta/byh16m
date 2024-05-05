@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, AnimationController,
-         AlertController} from "@ionic/angular";
+         AlertController, LoadingController} from "@ionic/angular";
 import { UpdCoresPage } from "../../modals/upd-cores/upd-cores.page";
 import { UsersPage } from '../../modals/users/users.page';
 import { DatabaseService } from '../../services/database.service';
@@ -73,7 +73,8 @@ export class AdminPage implements OnInit {
         // private toast: ToastController,
         public alertCtrl: AlertController,
         // public routerOutlet :IonRouterOutlet 
-        private toolService:ToolsService
+        private toolService:ToolsService,
+        private loadingController : LoadingController
     ) {}
 
   async ngOnInit() {
@@ -524,6 +525,17 @@ toggleSectionSim(){
     await alert.present();
 
   }
+
+
+  showLoading(duration:number, msg:string) {
+    this.loadingController.create({
+        message: msg,
+        duration: duration,
+        translucent: true
+    }).then((res) => {
+        res.present();
+    });
+}
 
 //endregion
 }

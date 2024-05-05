@@ -93,6 +93,23 @@ export const Utils = {
 
     getTimestamp: async () => {
       return new Date().toISOString();
-    }
+    },
+
+    convertUTCDateToLocalDate: async (date:Date) => {
+      var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+  
+      var offset = date.getTimezoneOffset() / 60;
+      var hours = date.getHours();
+  
+      newDate.setHours(hours - offset);
+  
+      return newDate;
+  },
+
+  convertLocalDateToUTCDate: async (date:Date) => {
+    return await new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+  }
+
+    
 
 }
