@@ -251,9 +251,9 @@ export class UpdUsersPage implements OnInit {
      }
 
      const pkgDevice =  'newUser,' + 
-        this.RegisterForm.get('Sim').value + ',' + 
         this.RegisterForm.get('Name').value + ',' + 
         this.RegisterForm.get('House').value + ',' + 
+        this.RegisterForm.get('Sim').value + ',' + 
         this.id + ',' + this.localRole[0]['name'];
 
      try{
