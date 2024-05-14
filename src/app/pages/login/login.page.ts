@@ -251,12 +251,10 @@ export class LoginPage implements OnInit {
           message: err.error.ErrMsg,
           buttons: [
             {
-              text : 'Registro nuevo',
+              text : 'Registro nuevo?',
               role : 'registro',
               handler : () => {
-                const url = '/register'
-                this.router.navigateByUrl(url, {replaceUrl: true});
-                // this.router.navigate([url] , { state : { from : 'login'}  }); //send parameters
+               this.newUser();
               }
             },
             { text : 'OK'}

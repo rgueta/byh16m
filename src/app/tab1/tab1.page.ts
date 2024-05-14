@@ -205,8 +205,6 @@ async collectInfo(){
         this.localInfo = JSON.parse(localStorage.getItem('info'));
     }
 
-
-    console.log('timestamp --> ' ,timestamp);
     try{
       this.api.getData('api/info/' + this.userId + '/' + timestamp).subscribe({
           next: async result => {
