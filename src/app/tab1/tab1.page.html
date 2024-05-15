@@ -10,8 +10,8 @@
         <ion-title>{{coreName}}</ion-title>
         <div class="doorsButton-toggle">
           <ion-label (click)="toggleButtons()">
-            {{visible ? 'Ocultar' : 'Visualizar'}}</ion-label>
-          <ion-icon  [name]="visible ? 'chevron-up-outline' : 'chevron-down-outline'" 
+            {{btnVisible ? 'Ocultar' : 'Visualizar'}}</ion-label>
+          <ion-icon  [name]="btnVisible ? 'chevron-up-outline' : 'chevron-down-outline'" 
           (click)="toggleButtons()" style="padding-left: 5px;"></ion-icon>
        </div>
       </div>
@@ -24,14 +24,6 @@
             </ion-button>
           </ion-buttons>
         </span>
-        
-        <!-- <span [hidden] = "MyRole == 'admin'">
-          <ion-buttons slot="end">
-            <ion-button (click)="logout()">
-              <ion-icon  name="exit-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </span> -->
       </div>
       
   </ion-toolbar>
@@ -97,7 +89,7 @@
         </ion-item-group>
         <ion-item-group>
           <ion-item id="logout1-alert" [button]="true" [detail]="false" 
-              (click)="toggleButtons()">Mover botones
+              (click)="toggleButtons()">{{titleMenuButtons}}
               <ion-icon slot="end" name="toggle-outline" (click)="toggleButtons()">
               </ion-icon>
           </ion-item>
@@ -114,7 +106,7 @@
 <!-- --------------------------------------------  -->
 
     <!-- Bi-color -->
-    <div slot="fixed" class="aperturas" *ngIf="visible">
+    <div slot="fixed" class="aperturas" *ngIf="btnVisible">
         <ion-button class="doorsButton-green" 
           (click)="sendOpening('open,peatonal')">Peatonal</ion-button>
         <ion-button class="doorsButton-blue" 

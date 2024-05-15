@@ -43,7 +43,9 @@ export class Tab1Page implements OnInit {
   twilio_client : any;
   userId : string;
   id : number = 0;
-  public visible : boolean = true;
+  btnVisible : boolean = true;
+  titleMenuButtons = 'Ocultar botones'
+  
   infoPanel : any;
   myEmail = '';
   REST_API_SERVER = environment.cloud.server_url;
@@ -161,11 +163,13 @@ DemoMode(){
 }
 
 toggleButtons(){
-  this.visible = !this.visible;
+  this.btnVisible = !this.btnVisible;
   
-  if(this.visible){
+  if(this.btnVisible){
+    this.titleMenuButtons = 'Ocultar botones'
     this.infoPanel.style.marginTop = "115px";
   }else{
+    this.titleMenuButtons = 'Mostrar botones'
     this.infoPanel.style.marginTop = "0px";
   }
 
