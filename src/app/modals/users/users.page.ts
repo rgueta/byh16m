@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, AlertController,NavParams, NavController } from "@ionic/angular";
+import { ModalController, AlertController,NavParams,
+  LoadingController, NavController } from "@ionic/angular";
 import { DatabaseService  } from "../../services/database.service";
 import { ToolsService } from "../../services/tools.service";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
@@ -31,7 +32,8 @@ export class UsersPage implements OnInit {
     private navParams:NavParams,
     private toolService:ToolsService,
     private sms: SMS,
-    public navCtrl : NavController
+    public navCtrl : NavController,
+    private loadingController : LoadingController
   ) { }
 
   async ionViewWillEnter(){
@@ -254,23 +256,33 @@ export class UsersPage implements OnInit {
                 intent:''
               }
             }
-            
-            await this.api.postData('api/users/' + status + '/' + adminId + '/' + id, 
-            {'neighborId' : id}).then(async (onResolve) =>{
-              // set lock status on device 
-              await this.sms.send(coreSim,pkg ,options)
-              .then()
-              .catch((e:any) => this.toolService.showAlertBasic('Alerta','Error send sms'
-                ,e,['Ok']));
+            this.loadingController.create({
+              message: titleMsg + ' de usuario ...',
+              translucent: true
+            }).then(async (res) => {
+              res.present();
 
-              await this.getUsers();
+              await this.api.postData('api/users/' + status + '/' + adminId + '/' + id, 
+              {'neighborId' : id}).then(async (onResolve) =>{
+                // set lock status on device 
 
-            },
-            (onReject) =>{
-              this.toolService.showAlertBasic('Alert','Error api call', 
-              'Can not ' + status + ' user, ' + onReject, ['Ok']);
-            });
+                await this.sms.send(coreSim,pkg ,options)
+                .then(() => this.loadingController.dismiss())
+                .catch((e:any) => {
+                  this.loadingController.dismiss();
+                  this.toolService.showAlertBasic('Alerta','Error send sms'
+                  ,e,['Ok'])
+                });
+
+                await this.getUsers();
+
+              },
+              (onReject) =>{
+                this.toolService.showAlertBasic('Alert','Error api call', 
+                'Can not ' + status + ' user, ' + onReject, ['Ok']);
+              });
               
+          });
           }
         }
       ]

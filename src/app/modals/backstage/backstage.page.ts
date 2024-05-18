@@ -85,7 +85,6 @@ export class BackstagePage implements OnInit {
   }
 
   async addUser(pkg:any){
-
     let page = 'tab1NewNeighbor';
     if(this.MyRole == 'admin'){
       page = 'admin'

@@ -191,11 +191,6 @@ export class AdminPage implements OnInit {
     return await modal.present()
   }
 
-  // routineSelected(index:any, item:any){
-  //   console.log('event.detail: ',index);
-  //   console.log('item: ',item);
-
-  // }
 
   async routineSelected(event:any, index:number, item:any){
     if(this.routineOptions[index]['input']){
@@ -327,12 +322,7 @@ toggleSectionSim(){
   async alertCtrlEvent(event:any,item:any,titleMsg:string,Message:string,option:string, txtConfirm:string, txtCancel:string){
     let element = <HTMLInputElement> document.getElementById("disableToggle");
     
-    var options:SmsOptions={
-      replaceLineBreaks:false,
-      android:{
-        intent:''
-      }
-    } 
+   
 
     let inputs = [{}];
 
@@ -369,6 +359,8 @@ toggleSectionSim(){
           text: txtConfirm,
           cssClass: 'icon-color',
           handler: async data => {
+            
+
             switch(option){
               case 'chgStatusCore':
                 if(event.target.checked){
@@ -409,6 +401,12 @@ toggleSectionSim(){
                         {'coreId':item._id, 'newSim':this.sim})
                         .then(async (result) => {
                           // Change sim on pcb
+                          var options:SmsOptions={
+                            replaceLineBreaks:false,
+                            android:{
+                              intent:''
+                            }
+                          } 
                           await this.sms.send(item.Sim,'cfgCHG,sim,value,' + this.sim, options)
                           .then(() =>{
                             this.sim = '';
@@ -440,77 +438,37 @@ toggleSectionSim(){
                 }
                 break;
               case 'getSIMstatus':
-                  await this.sms.send(item.Sim,'status,gral',options)
-                  .then(() => {this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');})
-                  .catch((err) => {this.toolService.toastAlert('No se envio sms, error: <br>' + 
-                    err,0, ['Ok'], 'bottom');})
-                  
+                  this.sendSms(item.Sim, 'status,gral')
                 break;
               case 'RestraintStatus':
-                  try{
-                    await this.sms.send(item.Sim,'status,restraint',options);
-                    this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');
-                  }catch(e){
-                    this.toolService.toastAlert('No se envio, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
-                  }
+                    await this.sendSms(item.Sim,'status,restraint');
                   break;
               
               case 'status,extrange':
-                try{
-                  await this.sms.send(item.Sim, option, options);
-                  this.toolService.toastAlert('Msg. enviado a ' + this.core_sim,0, ['Ok'], 'bottom');
-                }catch(e){
-                  this.toolService.toastAlert('No se envio sms, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
-                }
+                  await this.sendSms(item.Sim, option);
                 break;
 
               case 'ModuleRST':
-                try{
-                    await this.sms.send(item.Sim,'rst,sim',options);
-                    this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
-                }catch(e){
-                  this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
-                }
+                  await this.sendSms(item.Sim,'rst,sim');
                 break;
               case 'getActiveCodes':
-                try{
-                  await this.sms.send(item.Sim,'active_codes,sim',options);
-                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
-                }
-                catch(e){
-                  this.toolService.toastAlert('Msg. no enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
-                  }
+                  await this.sendSms(item.Sim,'active_codes,sim');
                 break;
               case 'setOpen':
-                try{
-                  await this.sms.send(item.Sim,'setOpenCode,' + item.option1, options);
-                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');
-                }
-                catch(e){
-                  this.toolService.toastAlert('No enviado, error:<br>' + 
-                    JSON.stringify(e),0, ['Ok'], 'bottom');
-                  }
+                  await this.sendSms(item.Sim,'setOpenCode,' + item.option1);
                 break;
               case 'setKeypad':
-                try{
-                  await this.sms.send(item.Sim,'setKeypad,' + item.option1, options);
-                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');  
-                }
-                catch(e){
-                    this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
-                  }
+                  await this.sendSms(item.Sim,'setKeypad,' + item.option1);
                 break;
               case 'cfgCHG':
                 try{
                   if(this.input){
-                    await this.sms.send(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
-                      + ',' + data.inputValue, options);
+                    await this.sendSms(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
+                      + ',' + data.inputValue);
                   }else{
-                      await this.sms.send(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
-                      + ',' + item.option3, options);
+                      await this.sendSms(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
+                      + ',' + item.option3);
                   }
-                  
-                  this.toolService.toastAlert('Msg. enviado a ' + item.Sim,0, ['Ok'], 'bottom');  
                 }
                 catch(e){
                     this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
@@ -525,6 +483,39 @@ toggleSectionSim(){
     await alert.present();
 
   }
+
+  async sendSms(sim:string, cmd:any){
+    const options:SmsOptions={
+      replaceLineBreaks:false,
+      android:{
+        intent:''
+      }
+    }
+
+    this.loadingController.create({
+      message: 'Espere un momento ...',
+      translucent: true
+    }).then(async (res) => {
+      res.present();
+
+      try{
+        await this.sms.send(sim, cmd ,options)
+                  .then(() => this.loadingController.dismiss())
+                  .catch((e:any) => {
+                    this.loadingController.dismiss();
+                    this.toolService.showAlertBasic('Alerta','Error send sms'
+                    ,e,['Ok'])
+                  });
+        this.toolService.toastAlert('Msg. enviado a ' + sim,0, ['Ok'], 'bottom');
+      }catch(e){
+        this.loadingController.dismiss()
+        this.toolService.toastAlert('No se envio, error: <br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
+      }
+      
+    });
+
+  }
+  
 
 
   showLoading(duration:number, msg:string) {
