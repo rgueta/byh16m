@@ -20,6 +20,7 @@ import { FCM } from "@capacitor-community/fcm";
 import { ToolsService } from "../services/tools.service";
 import { UpdUsersPage } from "../modals/upd-users/upd-users.page";
 import { BackstagePage } from "../modals/backstage/backstage.page";
+import { AuthenticationService } from "./../services/authentication.service";
 
 
 @Component({
@@ -63,7 +64,8 @@ export class Tab1Page implements OnInit {
     private popoverCtrl:PopoverController,
     public alertCtrl: AlertController,
     private toolService: ToolsService,
-    private loadingController : LoadingController
+    private loadingController : LoadingController,
+    private authService: AuthenticationService,
   ) { }
   
   async ionViewWillEnter(){
@@ -326,12 +328,26 @@ async sendSMS(){
     }).then(async (res) => {
         res.present();
         if(use_twilio == 'false'){
-          await this.sms.send(this.sim,this.msg,options)
-          .then(() => this.loadingController.dismiss())
-          .catch((e:any) => {
-              this.loadingController.dismiss();
-              this.toolService.showAlertBasic('Alerta','Error',e,['Ok']);
+          // Check if user is locked
+          this.api.getData('api/users/notLocked/' + this.userId)
+            .subscribe({
+              next: async (res) => { 
+                  await this.sms.send(this.sim,this.msg,options)
+                  .then(() => this.loadingController.dismiss())
+                  .catch((e:any) => {
+                      this.loadingController.dismiss();
+                      this.toolService.showAlertBasic('Alerta','Error',e,['Ok']);
+                  });
+              },
+              error:async (err) => {
+                this.loadingController.dismiss();
+                await this.showAlert('','', 'Usuario bloqueado','btns', 'Ok','');
+              }
+
+            
           });
+            
+         
     
         }else{
           this.api.postData('api/twilio/open/' + 
@@ -479,7 +495,9 @@ async showAlert(Header:string, subHeader:string, msg:string, btns:any,
     header: Header,
     subHeader: subHeader,
     message: msg,
-    buttons: [{
+    backdropDismiss:false,
+    buttons: [
+      {
       text:txtCancel,
       role: 'cancel'
     },
