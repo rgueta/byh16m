@@ -80,7 +80,8 @@
           <ion-label> Location:  {{item.location}}</ion-label>
         </ion-item>
 
-        <ion-item class="wrap-input">
+      <ion-item class="options" >
+        <div class="option_child">
             <ion-toggle id="disableToggle" 
             labelPlacement="start" [ngModel] = "item.locked"
             (ionChange)="chgLockStatus($event,item.locked,item._id, item.sim,
@@ -88,7 +89,17 @@
             <ion-label id="lblUnlock" *ngIf="item.locked">Desbloquear : </ion-label>
             <ion-label id="lblLock" *ngIf="!item.locked">Bloquear : </ion-label>
           </ion-toggle>
-        </ion-item>
+        </div>
+        <div class="option_child borrar " style="border-left: 2px solid white;">
+          <div class="borrar_child">
+            <ion-label slot="start">Borrar</ion-label>
+          </div>
+          <div class="borrar_child">
+            <ion-icon name="trash-outline" size="large" slot="end"
+              (click)="delUser(item._id, item.name, item.coreSim)"></ion-icon>
+          </div>
+        </div>
+      </ion-item>
 
     </form>
 

@@ -277,9 +277,70 @@ export class UsersPage implements OnInit {
                 await this.getUsers();
 
               },
-              (onReject) =>{
+              (err) =>{
                 this.toolService.showAlertBasic('Alert','Error api call', 
-                'Can not ' + status + ' user, ' + onReject, ['Ok']);
+                'Can not ' + status + ' user, ' + err, ['Ok']);
+              });
+              
+          });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+async delUser(userId:string, name:string,coreSim:string){
+  const adminId = localStorage.getItem('my-userId');
+  const cmd = 'delete,' + userId ;
+
+    let alert = await this.alertCtrl.create({
+      subHeader: 'Continuar con borrar',
+      message:  'al usuario: ' + name + '  ?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Ok',
+          handler: async data => {
+            const options:SmsOptions={
+              replaceLineBreaks:false,
+              android:{
+                intent:''
+              }
+            }
+
+            this.loadingController.create({
+              message: ' Borrando usuario ...',
+              translucent: true
+            }).then(async (res) => {
+              res.present();
+
+              await this.api.deleteData('api/users' + '/' + adminId + '/' + userId)
+              .then(async (onResolve) =>{
+                // set lock status on device 
+
+                // console.log('cmd: ', cmd);
+                // this.loadingController.dismiss();
+
+                await this.sms.send(coreSim, cmd ,options)
+                .then(() => this.loadingController.dismiss())
+                .catch((e:any) => {
+                  this.loadingController.dismiss();
+                  this.toolService.showAlertBasic('Alerta','Error send sms'
+                  ,e,['Ok'])
+                });
+
+                await this.getUsers();
+
+              },
+              err =>{
+                this.loadingController.dismiss();
+                this.toolService.showAlertBasic('Alert','Error api call', 
+                'Can not delete' + ' user, ' + JSON.stringify(err), ['Ok']);
               });
               
           });
