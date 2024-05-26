@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ModalController,AlertController,
+import { ModalController,AlertController,LoadingController,
   Platform, ToastController, IonSelect } from '@ionic/angular';
 import { DatabaseService } from '../../services/database.service';
 import { Utils } from '../../tools/tools';
 import { Sim } from "@ionic-native/sim/ngx";
 import { SMS, SmsOptions } from "@ionic-native/sms/ngx";
 import { Validators, FormGroup, FormControl} from "@angular/forms";
-import { environment } from 'src/environments/environment';
 import { VisitorListPage } from '../visitor-list/visitor-list.page';
+import { ToolsService } from "../../services/tools.service";
 
 const USERID = 'my-userId';
 
@@ -49,6 +49,8 @@ export class UpdCodesModalPage implements OnInit {
     public sms:SMS,
     public toast:ToastController,
     private alertController: AlertController,
+    private loadingController : LoadingController,
+    private toolService:ToolsService,
     ) {
       this.validateControls();
     }
@@ -62,19 +64,14 @@ export class UpdCodesModalPage implements OnInit {
   }
 
   async ngOnInit() {
-    // this.userId = await this.storage.get('my-userId')
-    // this.userId = await Storage.get({key :USERID});
     this.userId = await localStorage.getItem('my-userId');
 
     this.code_expiry = Number(await localStorage.getItem('code_expiry'));
 
-    console.log('Soy el usuario : ' + this.userId + ', code_expiry: ' + this.code_expiry.toString());
     this.code = this.genCode().toString();
     this.getVisitors();
     this.initDates();
     this.getPlatform();
-
-
 
     this.libSim.hasReadPermission().then(
       (info) => console.log('Has permission: ', info)
@@ -90,11 +87,7 @@ export class UpdCodesModalPage implements OnInit {
       (err) => console.log('Unable to get sim info: ', err)
     );
 
-    // this.visitorSelectRef.interface="popover";
-    // await this.visitorSelectRef.open();
   }
-
-
 
 getPlatform(){
   console.log('Platform : ' + this.platform.platforms);
@@ -111,7 +104,6 @@ getPlatform(){
     this.StrPlatform = 'other';
   }
 }
-
 
   async initDates(){
     this.initial = new Date();
@@ -133,8 +125,8 @@ getPlatform(){
       this.initial = await new Date(init);
       this.expiry = await new Date(this.expiry);
 
-      this.diff =  await (Math.abs(this.initial.getTime() - this.expiry.getTime()) / 3600000).toFixed(1);
-      console.log('Initial : ' + Utils.convDate(this.initial) + '\nExpiry :  ' + Utils.convDate(this.expiry) + '\nDiff hrs. ' + this.diff);
+      this.diff =  await (Math.abs(this.initial.getTime() - 
+        this.expiry.getTime()) / 3600000).toFixed(1);
     }
 
   }
@@ -148,8 +140,8 @@ getPlatform(){
       this.initial = await new Date(this.initial);
       this.expiry = await new Date(expiry);
 
-      this.diff = await (Math.abs(this.initial.getTime() - this.expiry.getTime()) / 3600000).toFixed(1);
-    console.log('Initial : ' + this.initial + '\nExpiry :  ' + this.expiry + '\nDiff hrs. ' + this.diff);
+      this.diff = await (Math.abs(this.initial.getTime() - 
+      this.expiry.getTime()) / 3600000).toFixed(1);
     }
   }
 
@@ -167,7 +159,6 @@ async setupCode(event:any){
 }
 
   async updSelectedVisitor(item:any){
-    console.log('Se debe actualizar --> ', item);
     for(var i = 0; i < this.myVisitors.length; i++ ){
       if(item.name === this.myVisitors[i].name &&
          item.sim === this.myVisitors[i].sim){
@@ -180,10 +171,7 @@ async setupCode(event:any){
   }
 
   newCode(){
-    // console.log('generate ne code..!');
     this.code = this.genCode().toString();
-    // alert(this.genCode())[0];
-    // this.genCode();
   }
 
    genCode(){
@@ -209,68 +197,72 @@ async setupCode(event:any){
     const coreSim =  await localStorage.getItem('my-core-sim')
     const userSim =  await localStorage.getItem('my-sim')
     const coreName = await localStorage.getItem('core-name')
-    const expire = await ((new Date(this.expiry).getTime() - new Date().getTime() ) / 3600000).toFixed(1)
-
+    const expire = await ((new Date(this.expiry).getTime() - 
+      new Date().getTime() ) / 3600000).toFixed(1)
 
     this.updSelectedVisitor(this.selectedVisitor);
+    
+    this.loadingController.create({
+      message: ' Mandando codigo ...',
+      translucent: true
+    }).then(async (res) => {
+      res.present();
 
-    console.log('api/codes/' + this.userId + ','+ JSON.stringify({'code':this.code,'sim':this.visitorSim,
-       'initial': Utils.convDate(new Date(this.initial)),'expiry' : Utils.convDate(new Date(this.expiry)),
-       'visitorSim' : this.visitorSim, 'visitorName' : this.selectedVisitor.name, 
-       'comment': this.localComment}) + ',' + JSON.stringify({'source': {'user' : this.userId,
-       'platform' : this.StrPlatform, 'id' : userSim}}));
+        try{
 
-    try{
+          this.api.postData('api/codes/' + this.userId,{'code':this.code,
+          'sim':this.visitorSim,
+          'initial': Utils.convDate(new Date(this.initial)),
+          'expiry' : Utils.convDate(new Date(this.expiry)),
+          'visitorSim' : this.visitorSim,'visitorName' : this.selectedVisitor.name,
+          'comment': this.localComment,
+          'source': {'user' : this.userId,'platform' : this.StrPlatform,
+          'id' : userSim}})
+          .then(async resp => {
+    //------- Uncomment, just to fix bug
+            const respId = await Object.values(resp)[1];
 
-      this.api.postData('api/codes/' + this.userId,{'code':this.code,'sim':this.visitorSim,
-       'initial': Utils.convDate(new Date(this.initial)),'expiry' : Utils.convDate(new Date(this.expiry)),
-       'visitorSim' : this.visitorSim,'visitorName' : this.selectedVisitor.name ,'comment': this.localComment,
-       'source': {'user' : this.userId,'platform' : this.StrPlatform, 'id' : userSim}}).then(async resp => {
+            const pckgToCore = await 'codigo,' + this.code +','+ 
+            Utils.convDate(new Date(this.expiry)) + ',' + 
+            this.userId + ',' + this.visitorSim + ',' + respId
 
-//------- Uncomment, just to fix bug
-        const respId = await Object.values(resp)[1];
+          // Send code to Core
+            await this.sendSMS(coreSim, pckgToCore)
+            .then()
+            .catch((e:any) => {
+                this.loadingController.dismiss();
+                this.toolService.showAlertBasic('','Error, send sms to core:'
+                  ,e,['Ok']);
+                  this.closeModal();
+                  return
+            });
 
-        await console.log('response from aPI --> ', respId);
+          //  send code to visitor
+            await this.sendSMS(this.visitorSim,'codigo ' + coreName 
+              + ': ' + this.code + '  Expira en ' + expire + ' Hrs.' )
+            .then()
+            .catch((e:any)=>{
+              this.toolService.showAlertBasic('','code not send to visitor'
+                  ,'error, ' + e,['Ok']);
+            })
 
-        const pckgToCore = await 'codigo,' + this.code +','+ Utils.convDate(new Date(this.expiry))
-        + ',' + this.userId + ',' + this.visitorSim + ',' + respId
+          this.loadingController.dismiss();
+          this.closeModal();
 
-        await console.log('send to core module --> ', pckgToCore);
+          },
+          error =>{
+            this.loadingController.dismiss();
+            this.toolService.showAlertBasic('','Can not create code'
+            ,'error: ' + error,['Ok']);
+          });
 
-      // Send code to Core
-      if(localStorage.getItem('emailToCore') === 'true'){
-        await this.sendSMS(coreSim, pckgToCore);
-      }else{
-        this.Localtoast = await this.toast.create({
-          message : 'Not sent to Core, check admin setting',
-          duration: 3000
-        });
-  
-          this.Localtoast.present();
-      }
+        }catch(err){
+          this.loadingController.dismiss();
+          this.toolService.showAlertBasic('','Can not create code'
+            ,'error: ' + err,['Ok']);
+        }
 
-      //  send code to visitor
-      if(localStorage.getItem('emailToVisitor') === 'true'){
-        await console.log(`send to Visitor --> ${this.visitorSim}, code: ${this.code}, Expira en ${expire} Hrs.`);
-        await this.sendSMS(this.visitorSim,'codigo ' + coreName + ': ' + this.code + '  Expira en ' + expire + ' Hrs.' )
-      }else{
-        this.Localtoast = await this.toast.create({
-          message : 'Not sent to Visitor, check admin setting',
-          duration: 3000
-        });
-  
-          this.Localtoast.present();
-      }
-
-      this.closeModal();
-
-       },error =>{
-          alert('No se pudo enviar el codigo');
-       });
-
-    }catch(err){
-        console.log('Can not post data : ', err);
-    }
+      });
 
   }
 
