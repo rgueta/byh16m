@@ -28,22 +28,42 @@ export class AdminPage implements OnInit {
     {'id':2,'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
     {'id':3,'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
     {'id':4,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
+
     {'id':5,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
       'name':'Code open Gate','confirm':'Open gate with code?'},
+
     {'id':6,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
       'name':'Code open Magnet','confirm':'Open magnet with code?'},
+
     {'id':7,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
       'name':'Set Keypad flex','confirm':'Set keypad flex?'},
+
     {'id':8,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
       'name':'Set Keypad hard plastic','confirm':'Set keypad hardPlastic?'},
+
     {'id':9,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
       'name':'Set debug mode','confirm':'Set debug On?'},
+
     {'id':10,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
       'name':'Remove debug mode','confirm':'Set debug Off?'},
+
     {'id':11,'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
       'name':'Change settings Code','confirm':'Change settingsCode ?'},
+
     {'id':12,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
       'name':'Change pwdRST','confirm':'Change pwdRST ?'},
+
+    {'id':13,'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'true',
+      'name':'Set demo mode','confirm':'Set demo On?'},
+
+    {'id':14,'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'false',
+      'name':'Remove demo mode','confirm':'Set demo Off?'},
+
+    {'id':15,'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'true',
+      'name':'Set rotate mode','confirm':'Set rotate On?'},
+
+    {'id':16,'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'false',
+      'name':'Remove rotate mode','confirm':'Set rotate Off?'},
             ]
 
   public SourcePage:string = 'admin';
