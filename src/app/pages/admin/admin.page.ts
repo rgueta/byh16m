@@ -412,50 +412,69 @@ toggleSectionSim(){
                 }
               break;
               case 'simChange':
-                try{
-                  if (this.sim.length >= 10 ){
-                    if(await this.toolService.verifyNetStatus()){
 
-                      console.log('item.Sim: ' + item.Sim)
-                      await this.api.postData('api/cores/chgSim/' + this.userId ,
-                        {'coreId':item._id, 'newSim':this.sim})
-                        .then(async (result) => {
-                          // Change sim on pcb
-                          var options:SmsOptions={
-                            replaceLineBreaks:false,
-                            android:{
-                              intent:''
-                            }
-                          } 
-                          await this.sms.send(item.Sim,'cfgCHG,sim,value,' + this.sim, options)
-                          .then(() =>{
-                            this.sim = '';
-                            this.getCores();
-                            this.simSectionOpen = false;
-                            this.toolService.toastAlert('Sim cambiado ' + this.sim,0, ['Ok'], 'bottom')
-                          })
-                          .catch((err) =>{
-                            this.toolService.toastAlert('No se envio sms, error: <br>' + 
-                              err,0, ['Ok'], 'bottom')
-                          })
-                          
-                      })
-                        .catch((error) => {
-                          this.toolService.toastAlert('chgSim API error: <br>' +
-                          JSON.stringify(error),0,['Ok'],'bottom');
-                        });
+              this.loadingController.create({
+                message: 'Cambiando numero sim...',
+                translucent: true
+                }).then(async (res) => {
+                  res.present();
 
+                  localStorage.setItem('my-core-sim',this.sim)
+
+                  try{
+                    if (this.sim.length >= 10 ){
+                      if(await this.toolService.verifyNetStatus()){
+
+                        await this.api.postData('api/cores/chgSim/' + this.userId ,
+                          {'coreId':item._id, 'newSim':this.sim})
+                          .then(async (result) => {
+                            // Change sim on pcb
+                            var options:SmsOptions={
+                              replaceLineBreaks:false,
+                              android:{
+                                intent:''
+                              }
+                            } 
+                            await this.sms.send(item.Sim,'cfgCHG,sim,value,' + this.sim, options)
+                            .then(() =>{
+                              this.sim = '';
+                              this.getCores();
+                              this.simSectionOpen = false;
+                              this.toolService.toastAlert('Sim cambiado ' +
+                                this.sim,0, ['Ok'], 'bottom')
+                            })
+                            .catch((err) =>{
+                              this.loadingController.dismiss();
+                              this.toolService.toastAlert('No se envio sms, error: <br>' + 
+                                err,0, ['Ok'], 'bottom')
+                                return
+                            })
+                            
+                        })
+                          .catch((error) => {
+                            this.loadingController.dismiss();
+                            this.toolService.toastAlert('chgSim API error: <br>' +
+                            JSON.stringify(error),0,['Ok'],'bottom');
+                            return
+                          });
+
+                          this.loadingController.dismiss();
+
+                      }else{
+                        this.loadingController.dismiss();
+                        this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+                      }
                     }else{
-                      this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
+                      this.loadingController.dismiss();
+                      this.toolService.toastAlert('Formato Invalido',0, ['Ok'], 'bottom')
                     }
-                  }else{
-                    this.toolService.toastAlert('Formato Invalido',0, ['Ok'], 'bottom')
+        
+                  }catch(e){
+                    this.loadingController.dismiss();
+                    this.toolService.toastAlert('Sim no cambiado, error:<br>' 
+                      + JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
-      
-                }catch(e){
-                  this.toolService.toastAlert('Sim no cambiado, error:<br>' 
-                    + JSON.stringify(e),0, ['Ok'], 'bottom');
-                }
+                });
                 break;
               case 'getSIMstatus':
                   this.sendSms(item.Sim, 'status,gral')
