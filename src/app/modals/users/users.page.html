@@ -65,7 +65,7 @@
             </ion-icon>
         </ion-item>
 
-        <ion-item *ngIf="editRole && soyAdmin">
+        <ion-item *ngIf="editRole && soyAdmin" mode="ios">
           <ion-select ok-text="Seleccionar" 
           placeholder="Select Event"
             (ionChange)="changeRoles($event,item._id,item.name)"

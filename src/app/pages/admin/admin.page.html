@@ -22,7 +22,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-list >
+      <ion-list>
         <ion-item (click)="modalUpdCity()">New CITY</ion-item>
         <ion-item>New DIVISION</ion-item>
         <ion-item (click)="modalUpdCpus()">New CPU</ion-item>
@@ -78,7 +78,8 @@
       </ion-button>
   </ion-item> -->
 
-  <ion-list  *ngFor="let item of CoresList; let i = index;" class="accordion-list" lines="none" detail="false" no-padding>
+  <ion-list  *ngFor="let item of CoresList; let i = index;" class="accordion-list" 
+    lines="none" detail="false" no-padding>
      <ion-item tappable class='section' (click)="toggleSection(i)">
         <ion-icon color="white" slot="end" name="chevron-forward-outline" *ngIf="!item.open"></ion-icon>
         <ion-icon color="white" slot="end" name="chevron-down-outline" *ngIf="item.open"></ion-icon>
@@ -94,7 +95,7 @@
           <ion-label> Coordinates: <b>{{item.coord[0]}}, {{item.coord[1]}}</b></ion-label>
         </ion-item>
 
-        <ion-list class="accordion-list"  lines="none" detail="false" no-padding>
+        <ion-list class="accordion-list"  lines="none" detail="false" no-padding mode="ios">
           <ion-item tappable class="sectionRoutines"  (click)="toggleSectionSim()">
             <ion-icon color="white" slot="end" name="chevron-forward-outline" *ngIf="!simSectionOpen"></ion-icon>
             <ion-icon color="white" slot="end" name="chevron-down-outline" *ngIf="simSectionOpen"></ion-icon>
@@ -167,7 +168,7 @@
           </form>
         </ion-list>
 
-        <ion-item class="wrap-input">
+        <ion-item class="wrap-input" mode="ios">
           <ion-toggle id="disableToggle" labelPlacement="start" checked="{{item.enable}}" 
           (ionChange)="chgStatusCore($event,item)">Enabled core : </ion-toggle>
         </ion-item>

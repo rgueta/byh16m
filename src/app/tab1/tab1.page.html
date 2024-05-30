@@ -51,7 +51,7 @@
   <!-- Popover ---------------------------- -->
 
 
-<ion-popover trigger="popover-button" [dismissOnSelect]="true">
+<ion-popover trigger="popover-button" [dismissOnSelect]="true" mode="ios">
   <ng-template>
     <ion-content>
       <ion-list>
@@ -69,8 +69,7 @@
           <ion-item class="wrap-input">
             <ion-toggle id="twilioToggle" class="ion-toggle-red" labelPlacement="start" 
               [ngModel]="demoMode" [checked]="false"  
-              [ngModelOptions]="{standalone: true}" (ionChange)="DemoMode()">
-              Demo mode
+              [ngModelOptions]="{standalone: true}" (ionChange)="DemoMode()">Demo mode
             </ion-toggle>
           </ion-item>
         </ion-item-group>
@@ -108,9 +107,9 @@
     <!-- Bi-color -->
     <div slot="fixed" class="aperturas" *ngIf="btnVisible">
         <ion-button class="doorsButton-green" 
-          (click)="sendOpening('open,peatonal')">Peatonal</ion-button>
+          (click)="sendOpening('open,peatonal')" mode="ios">Peatonal</ion-button>
         <ion-button class="doorsButton-blue" 
-          (click)="sendOpening('open,vehicular')">Vehicular</ion-button>
+          (click)="sendOpening('open,vehicular')" mode="ios">Vehicular</ion-button>
     </div> 
 
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">

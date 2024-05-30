@@ -163,3 +163,9 @@ ion-item-divider{
     margin-top: 0px;
     min-height: 5px!important;
 }
+
+ion-popover {
+    &::part(content) {
+      min-width: 230px;
+    }
+  }

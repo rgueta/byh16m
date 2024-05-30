@@ -11,8 +11,8 @@ export const environment = {
     debugging_send_sms: false
   },
   cloud : {
-    // server_url : "http://100.24.58.74/"
-    server_url : "http://192.168.1.89:5500/"
+    server_url : "http://100.24.58.74/"
+    // server_url : "http://192.168.1.89:5500/"
 
     // socket_url : "ws://192.168.1.154:5500/",
   }
