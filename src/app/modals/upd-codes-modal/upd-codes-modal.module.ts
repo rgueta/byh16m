@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule,ReactiveFormsModule} from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
 import { UpdCodesModalPageRoutingModule } from './upd-codes-modal-routing.module';
-
 import { UpdCodesModalPage } from './upd-codes-modal.page';
+import { QrCodeModule } from "ng-qrcode";
 
 @NgModule({
   imports: [
@@ -14,7 +12,8 @@ import { UpdCodesModalPage } from './upd-codes-modal.page';
     FormsModule,
     IonicModule,
     UpdCodesModalPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    QrCodeModule
   ],
   declarations: [UpdCodesModalPage]
 })

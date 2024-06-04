@@ -19,7 +19,11 @@
 <ion-content>
 
   <ion-item class="wrap-input">
-    <ion-input class='newCode' type="text" name='code' required placeholder="codigo" value={{code}} [(ngModel)]="code" ></ion-input>
+    <!-- <qr-code value="Hello world!" 
+         size="300" 
+         errorCorrectionLevel="M" /> -->
+    <ion-input class='newCode' type="text" name='code' required placeholder="codigo" 
+      value={{code}} [(ngModel)]="code" ></ion-input>
     <ion-button class="custom-fab-code" shape="round"  (click)="newCode()">
       <ion-icon name="refresh-outline" size="large"></ion-icon>
     </ion-button>
@@ -27,18 +31,21 @@
 
  <form [formGroup] = "RegisterForm" >
       <ion-item class="visitor-item-select"  color="primary">
-        <ion-input class="visitorOption" href="#" placeholder="Selecciona Vistante" formControlName="ValidVisitorName" (click)="openVisitorModal()" [(ngModel)]="visitorCode"
+        <ion-input class="visitorOption" href="#" placeholder="Selecciona Vistante" 
+        formControlName="ValidVisitorName" (click)="openVisitorModal()" 
+        [(ngModel)]="visitorCode"
         [value]="visitorCode"></ion-input>
-        <ion-icon name="person-add-outline" slot="start" (click)="openVisitorModal()" ></ion-icon>
+        <ion-icon name="person-add-outline" slot="start" (click)="openVisitorModal()"></ion-icon>
       </ion-item>
 
 
     <ion-item>
       <ion-label class='labelInput' floating>Telefono : </ion-label>
-        <ion-input class='phoneNumber' type="text"
+      <ion-input class='phoneNumber' type="text"
           [value]="visitorSim" formControlName="ValidVisitorSim" 
-          [(ngModel)]="visitorSim"></ion-input>
-      </ion-item>
+          [(ngModel)]="visitorSim">
+        </ion-input>
+    </ion-item>
 
 <!-- Initial  -------------------------------------------------------------------- -->
       <ion-item id="open-Initial" class="itemFilter">

@@ -12,6 +12,7 @@ import { SMS } from "@ionic-native/sms/ngx";
 import { Sim } from "@ionic-native/sim/ngx";
 import { UpdCodesModalPageRoutingModule } from 
 "./modals/upd-codes-modal/upd-codes-modal-routing.module";
+// import { QrCodeModule } from "ng-qrcode";
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +23,8 @@ import { UpdCodesModalPageRoutingModule } from
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    UpdCodesModalPageRoutingModule
+    UpdCodesModalPageRoutingModule,
+    // QrCodeModule
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
