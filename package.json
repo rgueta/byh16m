@@ -14,12 +14,12 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "^16.0.5",
-    "@angular/core": "^16.0.5",
-    "@angular/forms": "^16.0.5",
-    "@angular/platform-browser": "^16.0.5",
-    "@angular/platform-browser-dynamic": "^16.0.5",
-    "@angular/router": "^16.0.5",
+    "@angular/common": "^17.3.10",
+    "@angular/core": "^17.3.10",
+    "@angular/forms": "^17.3.10",
+    "@angular/platform-browser": "^17.3.10",
+    "@angular/platform-browser-dynamic": "^17.3.10",
+    "@angular/router": "^17.3.10",
     "@auth0/angular-jwt": "^5.1.2",
     "@awesome-cordova-plugins/file-transfer": "^6.4.0",
     "@capacitor-community/contacts": "^5.0.3",
@@ -52,7 +52,7 @@
     "ng-qrcode": "^18.0.0",
     "rxjs": "^7.8.1",
     "tslib": "^2.5.3",
-    "zone.js": "^0.13.0"
+    "zone.js": "^0.14.6"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.0.2",
@@ -61,9 +61,9 @@
     "@angular-eslint/eslint-plugin-template": "^16.0.3",
     "@angular-eslint/template-parser": "^16.0.3",
     "@angular/cli": "^18.0.2",
-    "@angular/compiler": "^16.0.5",
-    "@angular/compiler-cli": "^16.0.5",
-    "@angular/language-service": "^16.0.5",
+    "@angular/compiler": "^17.3.10",
+    "@angular/compiler-cli": "^17.3.10",
+    "@angular/language-service": "^17.3.10",
     "@capacitor/assets": "^3.0.1",
     "@capacitor/cli": "^5.6.0",
     "@capacitor/core": "^5.6.0",
@@ -86,7 +86,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "^2.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.4.5"
   },
   "description": "Access control"
 }
