@@ -331,27 +331,26 @@ async setupCode(event:any){
       translucent: true,
       spinner: 'crescent'
     });
-    await loading.present();
+      await loading.present();
 
-        await Filesystem.writeFile({
+      await Filesystem.writeFile({
+        path,
+        data:base64,
+        directory: Directory.Cache,
+      })
+      .then(async (res:any) => {
+        let uri = res.uri;
+        await Share.share({url: uri});
+        await Filesystem.deleteFile({
           path,
-          data:base64,
-          directory: Directory.Cache,
-        })
-        .then(async (res:any) => {
-          let uri = res.uri;
+          directory:Directory.Cache
+        });
 
-          await Share.share({url: uri});
-          await Filesystem.deleteFile({
-            path,
-            directory:Directory.Cache
-          })
+        console.log('send code to byh16s')
 
-          console.log('send code to byh16s')
-
-        }).finally(() =>{
-          this.loadingController.dismiss();
-        })
+      }).finally(() =>{
+        this.loadingController.dismiss();
+      })
     
   }
 
