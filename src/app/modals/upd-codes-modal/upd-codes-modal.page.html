@@ -17,30 +17,46 @@
 </ion-header>
 
 <ion-content>
+  <ion-item class="qrWrap">
+    <!-- <div>
+      <ion-button class="custom-fab-code" shape="round" (click)="captureQRscreen()">
+        <ion-icon name="share-social-outline" size="large"></ion-icon>
+      </ion-button>
+    </div> -->
 
-  <ion-item class="wrap-input">
-    <!-- <qr-code value="Hello world!" 
-         size="300" 
-         errorCorrectionLevel="M" /> -->
-    <ion-input class='newCode' type="text" name='code' required placeholder="codigo" 
+      <div id="qrImage" >
+        <div class="qrIn">
+          <qr-code  value={{code}} size="200" errorCorrectionLevel="M"/>
+        </div>
+        <div class="qrLabel">{{code}}</div>
+      </div>
+
+
+    <!-- <div class="code">
+      <ion-input class='newCode' type="text" name='code' required placeholder="codigo" 
       value={{code}} [(ngModel)]="code" ></ion-input>
-    <ion-button class="custom-fab-code" shape="round"  (click)="newCode()">
-      <ion-icon name="refresh-outline" size="large"></ion-icon>
-    </ion-button>
+    </div> -->
+    
+    <!-- <div class="refreshCode">
+      <ion-button class="custom-fab-code" shape="round" (click)="newCode()">
+        <ion-icon name="refresh-outline" size="large"></ion-icon>
+      </ion-button>
+    </div> -->
+    
   </ion-item>
+
 
  <form [formGroup] = "RegisterForm" >
       <ion-item class="visitor-item-select"  color="primary">
-        <ion-input class="visitorOption" href="#" placeholder="Selecciona Vistante" 
+        <ion-input class="visitorOption" href="#" placeholder="Selecciona Visitante" 
         formControlName="ValidVisitorName" (click)="openVisitorModal()" 
         [(ngModel)]="visitorCode"
         [value]="visitorCode"></ion-input>
         <ion-icon name="person-add-outline" slot="start" (click)="openVisitorModal()"></ion-icon>
       </ion-item>
 
-
     <ion-item>
-      <ion-label class='labelInput' floating>Telefono : </ion-label>
+      <ion-label>Telefono:</ion-label>
       <ion-input class='phoneNumber' type="text"
           [value]="visitorSim" formControlName="ValidVisitorSim" 
           [(ngModel)]="visitorSim">
@@ -88,8 +104,8 @@
 
 <!-- ----------------------------------- -->
     
-      <ion-item class="wrap-input">
-        <ion-label class='labelInput' floating>Expira en horas: </ion-label>
+      <ion-item>
+        <ion-label style="min-width: 150px;">Expira en horas: </ion-label>
         <ion-input class='input' type="number" name='diff' disabled value={{diff}}></ion-input>
       </ion-item>
 
@@ -100,11 +116,16 @@
         name="comment" value={{comment}}></ion-textarea>
       </ion-item>
 
-      <ion-item class="wrap-input">
-        <ion-button type="submit" class="submit titleButtonBlue" 
+      <!-- <ion-item class="wrap-input">
+        <ion-button type="submit" class="submit titleButtonBlue" mode="ios"
         [disabled] = "!RegisterForm.valid" expand="full"  
         (click)="onSubmitTemplate()" >Enviar</ion-button>
-      </ion-item>
+      </ion-item> -->
 
+      <ion-item class="wrap-input">
+        <ion-button type="submit" class="submit titleButtonBlue" mode="ios"
+        [disabled] = "!RegisterForm.valid" expand="full"  
+        (click)="captureQRscreen()" >Enviar</ion-button>
+      </ion-item>
   </form>
 </ion-content>

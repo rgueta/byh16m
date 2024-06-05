@@ -12,7 +12,7 @@ ion-modal {
   }
 
   .wrap-input{
-    padding: 10px 0 10px 0;
+    padding: 1px 0 10px 0;
   }
   
   .closeButton{
@@ -118,6 +118,39 @@ ion-modal {
     max-width: 100% !important;
     width: 100%;
 }
+
+.refreshCode{
+  margin-right: 10px;
+  width: 30%;
+  ion-button{
+    width: 50px;
+    height: 50px;
+    float: right;
+  }
+}
+
+.qrWrap{
+  display: grid;
+  justify-content: space-around;
+  background-color: white;
+}
+
+.qrIn{
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+  
+}
+
+.qrLabel{
+  border-top: 0;
+  margin-top: -5px;
+  margin-bottom: 3px;
+  padding-top: 0;
+  border-bottom: 3px;
+  text-align: center;
+}
+
 
 // ---- Lines used to fix ion-select-option width (
     .alert-tappable.alert-radio{

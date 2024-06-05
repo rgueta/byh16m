@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ModalController,AlertController,LoadingController,
-  Platform, ToastController, IonSelect } from '@ionic/angular';
+  Platform, ToastController, IonSelect, 
+  IonLoading} from '@ionic/angular';
 import { DatabaseService } from '../../services/database.service';
 import { Utils } from '../../tools/tools';
 import { Sim } from "@ionic-native/sim/ngx";
@@ -8,7 +9,9 @@ import { SMS, SmsOptions } from "@ionic-native/sms/ngx";
 import { Validators, FormGroup, FormControl} from "@angular/forms";
 import { VisitorListPage } from '../visitor-list/visitor-list.page';
 import { ToolsService } from "../../services/tools.service";
-
+import html2canvas from "html2canvas";
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Share } from "@capacitor/share";
 
 const USERID = 'my-userId';
 
@@ -75,7 +78,7 @@ export class UpdCodesModalPage implements OnInit {
     this.getPlatform();
 
     this.libSim.hasReadPermission().then(
-      (info) => console.log('Has permission: ', info)
+      (info:any) => console.log('Has permission: ', info)
     );
 
     this.libSim.requestReadPermission().then(
@@ -84,8 +87,8 @@ export class UpdCodesModalPage implements OnInit {
     );
 
     this.libSim.getSimInfo().then(
-      (info) => console.log('Sim info: ' , info ),
-      (err) => console.log('Unable to get sim info: ', err)
+      (info:any) => console.log('Sim info: ' , info ),
+      (err:any) => console.log('Unable to get sim info: ', err)
     );
 
   }
@@ -206,7 +209,7 @@ async setupCode(event:any){
     this.loadingController.create({
       message: ' Mandando codigo ...',
       translucent: true
-    }).then(async (res) => {
+    }).then(async (res:any) => {
       res.present();
 
         try{
@@ -308,6 +311,51 @@ async setupCode(event:any){
       }
   }
 
+  //#region -----------------------   QR -----------------------------
+
+  captureQRscreen(){
+    const element = document.getElementById('qrImage') as HTMLElement;
+    html2canvas(element).then((canvas: HTMLCanvasElement) => {
+      this.shareImage(canvas);
+    });
+  }
+
+  async shareImage(canvas:HTMLCanvasElement){
+
+    let base64 = canvas.toDataURL();
+    let path = 'qr.png';
+
+    
+    const loading = await this.loadingController.create({
+      // message: ' Mandando codigo ...',
+      translucent: true,
+      spinner: 'crescent'
+    });
+    await loading.present();
+
+        await Filesystem.writeFile({
+          path,
+          data:base64,
+          directory: Directory.Cache,
+        })
+        .then(async (res:any) => {
+          let uri = res.uri;
+
+          await Share.share({url: uri});
+          await Filesystem.deleteFile({
+            path,
+            directory:Directory.Cache
+          })
+
+          console.log('send code to byh16s')
+
+        }).finally(() =>{
+          this.loadingController.dismiss();
+        })
+    
+  }
+
+  //#endregion -------------------  QR --------------------------------
 
    // -------   show alerts              ---------------------------------
    async showAlerts(header:string,message:string){
@@ -340,7 +388,6 @@ async setupCode(event:any){
     .then(async (item) => {
 
       if(item.data){
-        console.log("data --> ", item.data);
         this.selectedVisitor = item.data;
         this.visitorCode = item.data['name'] ? item.data['name'] : ''  ;
         this.visitorSim = item.data['sim'] ? item.data['sim'] : '';
