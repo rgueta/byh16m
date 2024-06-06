@@ -35,7 +35,6 @@ export class ContactsPage implements OnInit {
   }
 
   async loadContacts(){
-    if(isPlatform('android')){ // -------- Android version
       this.contacts = JSON.parse(localStorage.getItem('lista'));
       try{
         await Contacts.getContacts({
@@ -61,9 +60,6 @@ export class ContactsPage implements OnInit {
       }catch(e){
         this.toolService.toastAlert('Get contacts, error:<br>' + e,0,['Ok'],'middle');
       }
-    }else{
-      // IOS version ------------------------
-    }
   }
 
   basicLoader() {
