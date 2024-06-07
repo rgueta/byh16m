@@ -193,7 +193,7 @@ async setupCode(event:any){
     this.localComment = $event;
   }
 
-  async onSubmitTemplate(){
+  async onSubmitTemplate(SendVisitor:boolean){
     var dateInit = '';
     var dateFinal = '';
     this.codeCreated = await true;
@@ -232,7 +232,7 @@ async setupCode(event:any){
 
           // Send code to Core
             await this.sendSMS(coreSim, pckgToCore)
-            .then()
+            .then(() =>{console.log('yes sending sms')})
             .catch((e:any) => {
                 this.loadingController.dismiss();
                 this.toolService.showAlertBasic('','Error, send sms to core:'
@@ -242,6 +242,7 @@ async setupCode(event:any){
             });
 
           //  send code to visitor
+          if(SendVisitor){
             await this.sendSMS(this.visitorSim,'codigo ' + coreName 
               + ': ' + this.code + '  Expira en ' + expire + ' Hrs.' )
             .then()
@@ -249,6 +250,7 @@ async setupCode(event:any){
               this.toolService.showAlertBasic('','code not send to visitor'
                   ,'error, ' + e,['Ok']);
             })
+          }
 
           this.loadingController.dismiss();
           this.closeModal();
@@ -340,14 +342,24 @@ async setupCode(event:any){
       })
       .then(async (res:any) => {
         let uri = res.uri;
-        await Share.share({url: uri});
-        await Filesystem.deleteFile({
-          path,
-          directory:Directory.Cache
+        await Share.share({
+          url: uri,
+          all
+        })
+        .then(async () =>{
+          await Filesystem.deleteFile({
+            path,
+            directory:Directory.Cache
+          })
+
+          // send code to mongo and core device 
+          this.onSubmitTemplate(false)
+        })
+        .catch((err:any) => {
+          console.log('error sharing, ' + err.message)
+        
         });
-
-        console.log('send code to byh16s')
-
+        
       }).finally(() =>{
         this.loadingController.dismiss();
       })
