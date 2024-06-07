@@ -10,7 +10,7 @@ import { Contacts } from "@capacitor-community/contacts";
   styleUrls: ['./visitor-list.page.scss'],
 })
 export class VisitorListPage implements OnInit {
-  myVisitors:any;
+  myVisitors:any = [];
   selectedVisitor:{}
   permission:any;
 
@@ -41,7 +41,9 @@ export class VisitorListPage implements OnInit {
     this.myVisitors = await JSON.parse(localStorage.getItem('visitors'))
 
     //Sort Visitors by name
-    this.myVisitors = await Utils.sortJsonVisitors(this.myVisitors,'name',true);
+    if(this.myVisitors.length > 1){
+      this.myVisitors = await Utils.sortJsonVisitors(this.myVisitors,'name',true);
+    }
 
 }
 
@@ -62,9 +64,7 @@ async addVisitor(){
 
   modal.onDidDismiss()
   .then(async (item)=>{
-    console.log('item from visitors -->', item);
     if(item.data){
-
       // Put local visitors to local variables
       this.myVisitors = await JSON.parse(localStorage.getItem('visitors'))
 
@@ -93,13 +93,14 @@ async removeVisitor(index:number,name:string){
           text:'Si',
           handler:async () => {
             try{
-              console.log('Se borrara --> ', this.myVisitors[index]);
               this.myVisitors.splice(index,1)
               localStorage.setItem('visitors',JSON.stringify(this.myVisitors));
-              this.myVisitors[0].open = true;
+              if(this.myVisitors.length > 0){
+                this.myVisitors[0].open = true;
+              }
             }
-            catch(e){
-              alert('No se pudo borrar');
+            catch(e:any){
+              alert('No se pudo borrar: ' + e.message );
             }
           }
         }
