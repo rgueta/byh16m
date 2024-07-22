@@ -343,8 +343,7 @@ async setupCode(event:any){
       .then(async (res:any) => {
         let uri = res.uri;
         await Share.share({
-          url: uri,
-          all
+          url: uri
         })
         .then(async () =>{
           await Filesystem.deleteFile({
