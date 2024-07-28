@@ -285,22 +285,10 @@ async setupCode(event:any){
     try{
 
       if(use_twilio == 'false'){
-        // if (environment.app.debugging_send_sms){
           await this.sms.send(sim,text);
-        // }
       }else{
         this.api.postData('api/twilio/open/' + this.userId + '/' + text + '/' + sim,'')
       }
-
-        // this.showAlerts('Message', 'Se envio el codigo')
-
-        // const toast = await this.toast.create({
-        //   message : 'Text was sent !',
-        //   duration: 4000
-        // });
-
-        //   toast.present();
-
     }
     catch(e){
       // alert('Text was not sent !')

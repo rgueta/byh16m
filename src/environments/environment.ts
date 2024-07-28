@@ -11,10 +11,23 @@ export const environment = {
     debugging_send_sms: false
   },
   cloud : {
-    // server_url : "http://100.24.58.74/"
-    server_url : "http://192.168.1.184:5500/"
+    // status 1 = Active; 2 = Inactive, 3 = New register
+    register_status : 3,
 
+    // Web
+    // server_url : "http://100.24.58.74/"
+
+    // Local
+    server_url : "http://localhost:5500/"
+
+    // Eth
+    // server_url : "http://192.168.1.184:5500/"
+
+    // Wifi
     // socket_url : "ws://192.168.1.154:5500/",
+
+    // GL-iNet
+    // server_url : "http://192.168.8.164:5500/"
   }
 };
 
