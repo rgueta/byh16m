@@ -224,13 +224,16 @@ async setupCode(event:any){
           'id' : userSim}})
           .then(async resp => {
     //------- Uncomment, just to fix bug
+
             const respId = await Object.values(resp)[1];
 
             const pckgToCore = await 'codigo,' + this.code +','+ 
             Utils.convDate(new Date(this.expiry)) + ',' + 
             this.userId + ',' + this.visitorSim + ',' + respId
 
-          // Send code to Core
+        // Send code to Core
+          // Check if core has sim to send sms
+          if (coreSim){
             await this.sendSMS(coreSim, pckgToCore)
             .then(() =>{console.log('yes sending sms')})
             .catch((e:any) => {
@@ -239,8 +242,9 @@ async setupCode(event:any){
                   ,e,['Ok']);
                   this.closeModal();
                   return
-            });
-
+            })
+          }
+          
           //  send code to visitor
           if(SendVisitor){
             await this.sendSMS(this.visitorSim,'codigo ' + coreName 

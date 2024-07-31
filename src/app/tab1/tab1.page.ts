@@ -126,8 +126,6 @@ export class Tab1Page implements OnInit {
       },
     );
   
-
-
     // -----------------------------------------------------
 
 // this.init();
@@ -319,6 +317,14 @@ async sendSMS(){
 
   this.sim = local_sim;
   this.msg = this.msg + ',' + uuid;
+
+
+  if(!local_sim){
+    // this.toolService.toastAlert('Privada sin Sim ',0, ['Ok'], 'bottom');
+    this.toolService.showAlertBasic('Alerta','Privada sin Sim'
+      ,'',['Ok'])
+    return
+  }
 
   try{
 
