@@ -14,7 +14,7 @@ export const environment = {
     // server_url : "http://100.24.58.74/"
 
     // Local
-    server_url : "http://192.168.1.184:5500/"
+    // server_url : "http://192.168.1.184:5500/"
 
     // Eth
     // server_url : "http://192.168.1.184:5500/"
@@ -23,7 +23,7 @@ export const environment = {
     // socket_url : "ws://192.168.1.154:5500/",
 
     // GL-iNet
-    // server_url : "http://192.168.8.164:5500/"
+    server_url : "http://192.168.8.164:5500/"
 
     // Carlitos
     // server_url : "http://192.168.43.144:5500/"
