@@ -98,6 +98,7 @@ export class AuthenticationService {
         localStorage.setItem(LOCKED,tokens.locked);
         localStorage.setItem(EMAIL_TO_VISITOR, 'true');
         localStorage.setItem(EMAIL_TO_CORE, 'true');
+        localStorage.setItem('remote', tokens.remote);
         
         const storeAccess = localStorage.setItem(TOKEN_KEY,tokens.accessToken);
         const storeRefresh = localStorage.setItem(REFRESH_TOKEN_KEY,tokens.refreshToken);

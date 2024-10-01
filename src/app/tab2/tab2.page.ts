@@ -38,9 +38,16 @@ export class Tab2Page implements OnInit {
   }
 
   async ionViewWillEnter() {
-    const today = new Date();
-    today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
-    this.start = today.toISOString();
+    const time = Date.now();
+    const today  = new Date(time);
+    today.setUTCHours(0,0,0);
+    // today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+    
+    this.start  = new Date(today);
+    // this.start = this.selected = today.toISOString();
+    console.log('start before : ',this.start);
+
+
     this.filterDay = today.toISOString();
     this.myUserId = await localStorage.getItem(USERID);
     this.myToken = await localStorage.getItem(TOKEN_KEY);
@@ -50,6 +57,19 @@ export class Tab2Page implements OnInit {
   }
 
   async getEvents($event:any){
+    console.log('$event: ', $event)
+
+    this.start = await new Date($event);
+    this.end = await new Date($event);
+
+    await this.start.setUTCHours(0,0,0);
+    await this.end.setUTCHours(23,59,59);
+
+    console.log('start: ',this.start.toISOString());
+    console.log('end: ',this.end.toISOString());
+  }
+
+  async getEvents_($event:any){
 
     if(! await this.toolsService.verifyNetStatus()){
       this.toolsService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
@@ -62,17 +82,19 @@ export class Tab2Page implements OnInit {
     await this.start.setHours(0,0,0,0);
     await this.end.setHours(23,59,59,0);
 
-    this.start = await Utils.convDate(await 
-      Utils.convertLocalDateToUTCDate(new Date(this.start)));
-    this.end = await Utils.convDate(await 
-      Utils.convertLocalDateToUTCDate(new Date(this.end)));
+    console.log('start: ',this.start.toISOString());
+    console.log('end: ',this.end.toISOString());
+
+    // this.start = await Utils.convDate(await 
+    //   Utils.convertLocalDateToUTCDate(new Date(this.start)));
+    // this.end = await Utils.convDate(await 
+    //   Utils.convertLocalDateToUTCDate(new Date(this.end)));
 
     try{
       await this.api.getData('api/codeEvent/' + 
-        this.myUserId + '/' + this.Core_sim + 
-        '/' + this.start + '/' + 
-        this.end).subscribe(async result =>{
-      
+        this.myUserId + '/' + this.start.toISOString() + '/' + 
+        this.end.toISOString()).subscribe(async result =>{
+        console.log('events -->', result)
         this.EventsList = await result;
       
         if(this.EventsList.length > 0){

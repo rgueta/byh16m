@@ -52,6 +52,7 @@ export class Tab1Page implements OnInit {
   REST_API_SERVER = environment.cloud.server_url;
   iosOrAndroid: boolean;
   demoMode:boolean = false;
+  remote:boolean = false;
 
   constructor(
     private sms: SMS,
@@ -71,8 +72,19 @@ export class Tab1Page implements OnInit {
   async ionViewWillEnter(){
     this.MyRole = localStorage.getItem('my-role');
     this.myEmail = localStorage.getItem('my-email');
+    this.remote = await localStorage.getItem('remote') === 'true';
+
+    
+
     if (localStorage.getItem('demoMode')){
       this.demoMode = localStorage.getItem('demoMode') == 'true' ? true : false
+    }
+
+    console.log('Valor del remote: ', this.remote);
+    if (!this.remote){
+      document.getElementById("infoSection").style.setProperty('margin-top', '15px','important');
+      
+      console.log('Si entreeeee');
     }
 
   }

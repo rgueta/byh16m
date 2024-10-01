@@ -8,7 +8,7 @@
       </div>
       <div class="column middle">
         <ion-title>{{coreName}}</ion-title>
-        <div class="doorsButton-toggle">
+        <div class="doorsButton-toggle" *ngIf="remote">
           <ion-label (click)="toggleButtons()">
             {{btnVisible ? 'Ocultar' : 'Visualizar'}}</ion-label>
           <ion-icon  [name]="btnVisible ? 'chevron-up-outline' : 'chevron-down-outline'" 
@@ -87,7 +87,7 @@
        
         </ion-item-group>
         <ion-item-group>
-          <ion-item id="logout1-alert" [button]="true" [detail]="false" 
+          <ion-item id="logout1-alert" [button]="true" [detail]="false" *ngIf="remote"
               (click)="toggleButtons()">{{titleMenuButtons}}
               <ion-icon slot="end" name="toggle-outline" (click)="toggleButtons()">
               </ion-icon>
@@ -105,7 +105,7 @@
 <!-- --------------------------------------------  -->
 
     <!-- Bi-color -->
-    <div slot="fixed" class="aperturas" *ngIf="btnVisible">
+    <div slot="fixed" class="aperturas" *ngIf="btnVisible && remote" >
         <ion-button class="doorsButton-green" 
           (click)="sendOpening('open,peatonal')" mode="ios">Peatonal</ion-button>
         <ion-button class="doorsButton-blue" 
@@ -118,7 +118,7 @@
       </ion-refresher-content>
     </ion-refresher>
 
-  <div id = "infoSection" class="info">
+  <div id = "infoSection" class="info" >
     <ion-card class="" *ngFor="let item of localInfo; let i = index;">
       <ion-card-header>
         <ion-card-title>{{item.title}}</ion-card-title>
