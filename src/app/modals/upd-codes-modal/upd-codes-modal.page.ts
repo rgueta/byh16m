@@ -12,8 +12,10 @@ import { ToolsService } from "../../services/tools.service";
 import html2canvas from "html2canvas";
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Share } from "@capacitor/share";
+import uid from "short-unique-id";
 
 const USERID = 'my-userId';
+const uID = new uid({length:6});
 
 @Component({
   selector: 'app-upd-codes-modal',
@@ -72,7 +74,7 @@ export class UpdCodesModalPage implements OnInit {
 
     this.code_expiry = Number(await localStorage.getItem('code_expiry'));
 
-    this.code = this.genCode().toString();
+    this.code = this.genCode();
     this.getVisitors();
     this.initDates();
     this.getPlatform();
@@ -175,10 +177,16 @@ async setupCode(event:any){
   }
 
   newCode(){
-    this.code = this.genCode().toString();
+    this.code = this.genCode();
   }
 
    genCode(){
+   const UID = uID.rnd(6);
+   console.log('UID: ', UID);
+   return UID;
+  }
+
+  genCode_(){
     var result           = [];
     var characters       = '0123456789ABCD';
     var charactersLength = characters.length;
