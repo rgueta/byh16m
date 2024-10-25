@@ -24,7 +24,7 @@ package-lock.json
 /plugins
 /android
 /ios
-**/environment.*
+/src/environments
 
 # Compiled output
 /dist
