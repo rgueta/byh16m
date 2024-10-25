@@ -12,10 +12,12 @@ import { SMS } from "@ionic-native/sms/ngx";
 import { Sim } from "@ionic-native/sim/ngx";
 import { UpdCodesModalPageRoutingModule } from 
 "./modals/upd-codes-modal/upd-codes-modal-routing.module";
-// import { QrCodeModule } from "ng-qrcode";
+import { QrCodeModule } from "ng-qrcode";
 
-@NgModule({ declarations: [AppComponent],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+@NgModule({ 
+    declarations: [AppComponent],
+    bootstrap: [AppComponent], 
+    imports: [BrowserModule,
         IonicModule.forRoot({ innerHTMLTemplatesEnabled: true }),
         AppRoutingModule,
         FormsModule,
@@ -23,7 +25,7 @@ import { UpdCodesModalPageRoutingModule } from
         UpdCodesModalPageRoutingModule], providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        ScreenOrientation, SMS, Sim,
+        ScreenOrientation, SMS, Sim,QrCodeModule,
         provideHttpClient(withInterceptorsFromDi())
     ] })
 export class AppModule {}

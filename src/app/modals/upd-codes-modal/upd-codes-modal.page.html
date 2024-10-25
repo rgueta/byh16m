@@ -17,7 +17,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-item class="qrWrap">
+  <ion-item id="qrWrap" class="qrWrap">
     <!-- <div>
       <ion-button class="custom-fab-code" shape="round" (click)="captureQRscreen()">
         <ion-icon name="share-social-outline" size="large"></ion-icon>
@@ -26,9 +26,9 @@
 
       <div id="qrImage" >
         <div class="qrIn">
-          <qr-code  value={{code}} size="200" errorCorrectionLevel="M"/>
+          <qr-code value={{code}} size="200" errorCorrectionLevel="M"/>
         </div>
-        <div class="qrLabel">{{code}}</div>
+        <label class="qrLabel" >{{code}}</label>
       </div>
 
 
