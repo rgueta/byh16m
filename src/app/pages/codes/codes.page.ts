@@ -67,7 +67,6 @@ export class CodesPage implements OnInit {
       this.expiry = this.CodeList[0].expiry;
       });
 
-      // await this.HrsRange();
   }
 
   async doRefresh(event:any){

@@ -38,6 +38,7 @@ export class UpdCodesModalPage implements OnInit {
   initial: any = new Date().toISOString();
   expiry : any = new Date().toISOString();
   diff: any;
+  expiry_hrs : 0;
   userId = {};
   StrPlatform = '';
   comment = '';
@@ -235,23 +236,27 @@ async setupCode(event:any){
 
             const respId = await Object.values(resp)[1];
 
-            const pckgToCore = await 'codigo,' + this.code +','+ 
-            Utils.convDate(new Date(this.expiry)) + ',' + 
-            this.userId + ',' + this.visitorSim + ',' + respId
+          // #region Send code to Core  ----------------------  
 
-        // Send code to Core
-          // Check if core has sim to send sms
-          if (coreSim){
-            await this.sendSMS(coreSim, pckgToCore)
-            .then(() =>{console.log('yes sending sms')})
-            .catch((e:any) => {
-                this.loadingController.dismiss();
-                this.toolService.showAlertBasic('','Error, send sms to core:'
-                  ,e,['Ok']);
-                  this.closeModal();
-                  return
-            })
-          }
+          // const pckgToCore = await 'codigo,' + this.code +','+ 
+          // Utils.convDate(new Date(this.expiry)) + ',' + 
+          // this.userId + ',' + this.visitorSim + ',' + respId
+
+        
+          // // Check if core has sim to send sms
+          // if (coreSim){
+          //   await this.sendSMS(coreSim, pckgToCore)
+          //   .then(() =>{console.log('yes sending sms')})
+          //   .catch((e:any) => {
+          //       this.loadingController.dismiss();
+          //       this.toolService.showAlertBasic('','Error, send sms to core:'
+          //         ,e,['Ok']);
+          //         this.closeModal();
+          //         return
+          //   })
+          // }
+
+          // #endregion  --------------
           
           //  send code to visitor
           if(SendVisitor){
