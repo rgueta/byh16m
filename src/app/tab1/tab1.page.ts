@@ -361,12 +361,7 @@ async sendSMS(){
                 this.loadingController.dismiss();
                 await this.showAlert('','', 'Usuario bloqueado','btns', 'Ok','');
               }
-
-            
           });
-            
-         
-    
         }else{
           this.api.postData('api/twilio/open/' + 
           this.userId + '/' + this.msg + '/' + this.sim,'');
