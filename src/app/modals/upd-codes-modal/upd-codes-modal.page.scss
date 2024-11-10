@@ -55,6 +55,7 @@ ion-modal {
 
 .filterDate{
     // display: flex;
+    color:#777;
     font-size:1em;
     vertical-align: middle;
     margin: 0 20px 0 5px;
@@ -64,6 +65,12 @@ ion-modal {
 
 }
 
+.horas{
+  #diff {
+  color: #777 !important;
+  font-size:1em;
+  }
+}
 
 .newCode{
     font-size: 1.5rem;
@@ -136,31 +143,22 @@ ion-modal {
 }
 
 .qrIn{
-  border-bottom: -20px;
-  padding-bottom: -20px;
-  margin-bottom: -20px;
   z-index: 98;
 }
 
 .qrLabel{
   border-top: 0;
-  margin-bottom: 3px;
-  padding-top: 0;
-  border-bottom: 3px;
+  color: #777;
+  // margin-bottom: 3px;
   text-align: center;
   width: 100%;
   z-index: 99;
 }
 
 #qrImage{
-  margin:0px;
-  padding: 0px;
-  border: 0px;
-  height: 265px;
-  // width: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
