@@ -12,10 +12,8 @@ import { ToolsService } from "../../services/tools.service";
 import html2canvas from "html2canvas";
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Share } from "@capacitor/share";
-import uid from "short-unique-id";
 
 const USERID = 'my-userId';
-const uID = new uid({length:6});
 
 @Component({
   selector: 'app-upd-codes-modal',
@@ -178,20 +176,14 @@ async setupCode(event:any){
   }
 
   newCode(){
-    this.code = this.genCode();
+    this.code = this.genCode(7);
   }
 
-   genCode(){
-   const UID = uID.rnd(6);
-   console.log('UID: ', UID);
-   return UID;
-  }
-
-  genCode_(){
+  genCode(len:number){
     var result           = [];
     var characters       = '0123456789ABCD';
     var charactersLength = characters.length;
-    for ( var i = 0; i < 6; i++ ) {
+    for ( var i = 0; i < len; i++ ) {
        result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
 
    }
