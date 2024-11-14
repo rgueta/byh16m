@@ -233,12 +233,9 @@ async setupCode(event:any){
           const pckgToCore = await 'codigo,' + this.code +','+ 
           Utils.convDate(new Date(this.expiry)) + ',' + 
           this.userId + ',' + this.visitorSim + ',' + respId
-
-         
         
-          // // Check if core has sim to send sms
+          // Check if core has sim to send sms
           if (coreSim){
-            await console.log(`coreSim True; TpckgToCore... --> ${pckgToCore}`);
 
             await this.sendSMS(coreSim, pckgToCore)
             .then(() =>{console.log('yes sending sms')})
