@@ -120,37 +120,6 @@ getPlatform(){
   
   }
 
-
-  // async onChangeInitial(init:any){
-  //   if(new Date(init) >= new Date(this.expiry)){
-  //     alert('Tiempo inicial debe ser menor al tiempo final');
-  //     this.initDates();
-  //     return;
-  //   }else{
-  //     // var initTemp = new Date(init);
-  //     this.initial = await new Date(init);
-  //     this.expiry = await new Date(this.expiry);
-
-  //     this.diff =  await (Math.abs(this.initial.getTime() - 
-  //       this.expiry.getTime()) / 3600000).toFixed(1);
-  //   }
-
-  // }
-
-  // async onChangeExpiry(expiry:any){
-  //   if(new Date(expiry) <= new Date(this.initial)){
-  //     alert('Tiempo final debe ser meyor al tiempo inicial');
-  //     this.initDates();
-  //     return;
-  //   }else{
-  //     this.initial = await new Date(this.initial);
-  //     this.expiry = await new Date(expiry);
-
-  //     this.diff = await (Math.abs(this.initial.getTime() - 
-  //     this.expiry.getTime()) / 3600000).toFixed(1);
-  //   }
-  // }
-
   async onRangeChange(event:any){
     var expiry = new Date();
     this.diff = event.detail.value;

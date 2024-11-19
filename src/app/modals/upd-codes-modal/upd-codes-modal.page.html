@@ -64,45 +64,7 @@
         </ion-input>
     </ion-item>
 
-<!-- Initial  -------------------------------------------------------------------- -->
-      <!-- <ion-item id="open-Initial" class="itemFilter">
-        <ion-label class='labelInput'>Inicio :</ion-label>
-        <ion-note class="filterDate" slot="end">{{initial | date:'dd MMM YYYY hh:mm a'}}</ion-note>
-        <ion-icon color="white" slot="end" name="calendar-outline" ></ion-icon>
-      </ion-item>
-      <ion-modal trigger="open-Initial" [cssClass]="'bottom-end'">
-        <ng-template>
-          <ion-datetime  class="dateFilter" [showDefaultTitle]="true"
-            locale="es-ES" presentation="date-time" size="cover" [preferWheel]="true"
-            #myInitial displayFormat="D MMM YYYY hh:mm a" min="2022" max="2060" 
-            [showDefaultButtons]="true" doneText="Cambiar" cancelText="Ignorar"
-            (ionChange)="onChangeInitial(myInitial.value)"
-            >
-            <span slot="title">Fecha de inicio</span>
-        </ion-datetime>
-        </ng-template>
-      </ion-modal>  -->
-
-<!-- Expiry ----------------------------------------------------------------------------- -->
-
-      <!-- <ion-item id="open-Expiry" class="itemFilter">
-        <ion-label class='lblFilterDate'>Fin :</ion-label>
-        <ion-note class="filterDate" slot="end">{{expiry | date:'dd MMM YYYY hh:mm a'}}</ion-note>
-        <ion-icon color="white" slot="end" name="calendar-outline" ></ion-icon>
-      </ion-item>
-      <ion-modal trigger="open-Expiry" [cssClass]="'bottom-end'">
-        <ng-template>
-          <ion-datetime  class="dateFilter" [showDefaultTitle]="true"
-            locale="es-ES" presentation="date-time" size="cover" [preferWheel]="true"
-            #myExpiry display-format="D MMM YYYY hh:mm" min="2021"  max="2060" 
-            [showDefaultButtons]="true" doneText="Cambiar" cancelText="Ignorar"
-            (ionChange)="onChangeExpiry(myExpiry.value)"
-            >
-            <span slot="title">Fecha que expira</span>
-        </ion-datetime>
-        </ng-template>
-      </ion-modal> -->
-
+    <!-- Expiry range -->
       <ion-item>
         <ion-range
           aria-label="Tiempo activo: "
