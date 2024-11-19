@@ -5,6 +5,10 @@ const config: CapacitorConfig = {
     appName: 'byh16m',
     webDir: 'www',
     bundledWebRuntime: false,
+	android: {
+		allowMixedContent: true
+	  },
+	
 
     plugins:{
         LocalNotifications:{
@@ -29,6 +33,8 @@ const config: CapacitorConfig = {
 		// 	// "useDialog": true
 		}
     }
+	
+
 };
 
 export default config;
