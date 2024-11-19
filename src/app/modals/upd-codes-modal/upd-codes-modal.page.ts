@@ -117,6 +117,7 @@ getPlatform(){
 
     this.initial = await new Date().toISOString();
     this.expiry =  await new Date(new Date().setHours(new Date().getHours() + this.code_expiry)).toISOString();
+  
   }
 
 
@@ -148,6 +149,15 @@ getPlatform(){
       this.diff = await (Math.abs(this.initial.getTime() - 
       this.expiry.getTime()) / 3600000).toFixed(1);
     }
+  }
+
+  async onRangeChange(event:any){
+    var expiry = new Date();
+    this.diff = event.detail.value;
+
+    this.expiry = expiry.setHours(expiry.getHours() + Number(event.detail.value));
+
+    console.log(`Initial: ${new Date(this.initial)} - Expiry: ${new Date(this.expiry)} `);
   }
 
   async getVisitors(){

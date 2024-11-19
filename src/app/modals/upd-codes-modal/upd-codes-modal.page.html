@@ -103,6 +103,19 @@
         </ng-template>
       </ion-modal>
 
+      <ion-item>
+        <ion-range
+          aria-label="Tiempo activo: "
+          [min]="0"
+          [max]="8"
+          [value]="code_expiry"
+          [pin]="true"
+          [ticks]="true"
+          [snaps]="true"
+          (ionChange)="onRangeChange($event)">
+        </ion-range>
+      </ion-item>
+
 <!-- ----------------------------------- -->
     
       <ion-item class="horas">
