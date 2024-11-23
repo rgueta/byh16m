@@ -184,21 +184,20 @@ async setupCode(event:any){
     const expire = await ((new Date(this.expiry).getTime() - 
       new Date().getTime() ) / 3600000).toFixed(1)
 
-    this.updSelectedVisitor(this.selectedVisitor);
-    
-    this.loadingController.create({
-      message: ' Mandando codigo ...',
-      translucent: true
-    }).then(async (res:any) => {
-      res.present();
 
+      this.loadingController.create({
+        message: ' Mandando codigo ...',
+        translucent: true
+      }).then(async (res:any) => {
+        res.present();
+      
         try{
 
           this.api.postData('api/codes/' + this.userId,{'code':this.code,
           'sim':this.visitorSim,
           'initial': Utils.convDate(new Date(this.initial)),
           'expiry' : Utils.convDate(new Date(this.expiry)),
-          'visitorSim' : this.visitorSim,'visitorName' : this.selectedVisitor.name,
+          'visitorSim' : 'n/a','visitorName' : 'n/a',
           'comment': this.localComment,
           'source': {'user' : this.userId,'platform' : this.StrPlatform,
           'id' : userSim}})
@@ -211,7 +210,7 @@ async setupCode(event:any){
 
           const pckgToCore = await 'codigo,' + this.code +','+ 
           Utils.convDate(new Date(this.expiry)) + ',' + 
-          this.userId + ',' + this.visitorSim + ',' + respId
+          this.userId + ',n/a,' + respId
         
           // Check if core has sim to send sms
           if (coreSim){
@@ -228,17 +227,6 @@ async setupCode(event:any){
           }
 
           // #endregion  --------------
-          
-          //  send code to visitor
-          if(SendVisitor){
-            await this.sendSMS(this.visitorSim,'codigo ' + coreName 
-              + ': ' + this.code + '  Expira en ' + expire + ' Hrs.' )
-            .then()
-            .catch((e:any)=>{
-              this.toolService.showAlertBasic('','code not send to visitor'
-                  ,'error, ' + e,['Ok']);
-            })
-          }
 
           this.loadingController.dismiss();
           this.closeModal();
@@ -255,10 +243,12 @@ async setupCode(event:any){
           this.toolService.showAlertBasic('','Can not create code'
             ,'error: ' + err,['Ok']);
         }
-
+      
       });
 
+
   }
+
 
   async sendSMS(sim:string,text:string){
     var options:SmsOptions={
@@ -305,7 +295,6 @@ async setupCode(event:any){
 
     
     const loading = await this.loadingController.create({
-      // message: ' Mandando codigo ...',
       translucent: true,
       spinner: 'crescent'
     });
@@ -317,18 +306,19 @@ async setupCode(event:any){
         directory: Directory.Cache,
       })
       .then(async (res:any) => {
+        
         let uri = res.uri;
         await Share.share({
           url: uri
         })
-        .then(async () =>{
+        .then(async (resp:any) =>{
           await Filesystem.deleteFile({
             path,
             directory:Directory.Cache
           })
 
           // send code to mongo and core device 
-          this.onSubmitTemplate(false)
+          this.onSubmitTemplate(false);
         })
         .catch((err:any) => {
           console.log('error sharing, ' + err.message)

@@ -29,9 +29,9 @@
         <ion-icon slot="end" name="chevron-forward-outline" *ngIf="!item.open"></ion-icon>
         <ion-icon slot="end" name="chevron-down-outline" *ngIf="item.open"></ion-icon>
         <ion-label class="ion-text-wrap" *ngIf="item.expired">
-          {{item.visitorName}}, codigo expirado </ion-label>
+          {{item.code}}, codigo expirado </ion-label>
         <ion-label class="ion-text-wrap" *ngIf="!item.expired" >
-          {{item.visitorName}} [ activo ] Expira en {{item.range}} horas </ion-label>
+          {{item.code}} [ activo ] Expira en {{item.range}} horas </ion-label>
       </ion-item>
 
       <form tappable *ngIf="item.open" class="detail">

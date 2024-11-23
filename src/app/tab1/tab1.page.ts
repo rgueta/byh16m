@@ -233,8 +233,6 @@ async collectInfo(){
                 Object.entries(result).forEach(async ([key,item]) =>{
                   this.localInfo.push(item)
                 });
-                
-                console.log('localInfo pushed : ', await this.localInfo);
 
               }else{
                 this.localInfo = result;

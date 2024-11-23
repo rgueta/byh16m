@@ -48,7 +48,7 @@
 
 
  <form [formGroup] = "RegisterForm" >
-      <ion-item class="visitor-item-select"  color="primary">
+      <!-- <ion-item class="visitor-item-select"  color="primary">
         <ion-input class="visitorOption" href="#" placeholder="Selecciona Visitante" 
         formControlName="ValidVisitorName" (click)="openVisitorModal()" 
         [(ngModel)]="visitorCode"
@@ -62,19 +62,21 @@
           [value]="visitorSim" formControlName="ValidVisitorSim" 
           [(ngModel)]="visitorSim">
         </ion-input>
-    </ion-item>
+    </ion-item> -->
 
     <!-- Expiry range -->
       <ion-item>
         <ion-range
           aria-label="Tiempo activo: "
-          [min]="0"
-          [max]="8"
+          min="1"
+          max="8"
           [value]="code_expiry"
           [pin]="true"
           [ticks]="true"
           [snaps]="true"
           (ionChange)="onRangeChange($event)">
+          <ion-label class="limits" slot="start">1</ion-label>
+          <ion-label class="limits" slot="end">8</ion-label>
         </ion-range>
       </ion-item>
 
@@ -85,8 +87,8 @@
         <ion-label id='diff'>{{diff}}</ion-label>
       </ion-item>
 
-      <ion-item  class="wrap-input">
-      <ion-label class="labelInput">Comentario: </ion-label>
+      <ion-item  class="motivo">
+        <ion-label class="labelInput">Motivo: </ion-label>
         <ion-textarea #mycomment class='input' 
         (ionChange)="onChangeComment(mycomment.value)" 
         name="comment" value={{comment}}></ion-textarea>
@@ -94,7 +96,7 @@
 
       <ion-item class="wrap-input">
         <ion-button type="submit" class="submit titleButtonBlue" mode="ios"
-        [disabled] = "!RegisterForm.valid" expand="full"  
+         expand="full"  
         (click)="captureQRscreen()" >Enviar</ion-button>
       </ion-item>
   </form>

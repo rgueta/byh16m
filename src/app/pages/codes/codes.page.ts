@@ -65,6 +65,7 @@ export class CodesPage implements OnInit {
       this.CodeList[0].open = true;
       this.initial = this.CodeList[0].initial;
       this.expiry = this.CodeList[0].expiry;
+
       });
 
   }

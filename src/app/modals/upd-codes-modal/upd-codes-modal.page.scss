@@ -162,6 +162,18 @@ ion-modal {
   align-items: center;
 }
 
+.motivo{
+  display: flex;
+  justify-items: center;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 0px;
+}
+
+.input{
+  margin-top: 10px;
+  margin-left: 10px;
+}
 
 // ---- Lines used to fix ion-select-option width (
     .alert-tappable.alert-radio{
@@ -186,58 +198,27 @@ ion-modal {
 
 
 // RANGE SECTION  -------------------
-
-
-    ion-range::part(tick) {
-      background: #a2d2ff;
-      height: 10px;
-      width: 10px;
-      top: 16px;
-      border-radius: 50%;
+    .limits{
+      color: #a2d2ff !important;
+      font-size: 1.3em !important;
     }
-    
-    ion-range::part(tick-active) {
-      background: #f67943e3;
-      // background: #a2d2ff;
-      height: 7px;
-      width: 7px;
-      top: 18px;
-      border-radius: 50%;
+
+    ion-range{
+     margin-top: 20px;
+    --bar-background: #a2d2ff;
+    --bar-background-active: #bde0fe;
+    --bar-height: 6px;
+    --bar-border-radius: 8px;
+    --knob-background: #e46d83fb;
+    --knob-size: 40px;
+    --pin-background: #dd344ef9;
+    --pin-color: #fff;
     }
     
     ion-range::part(pin) {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3em;
-    
-      background: #f16a9c;
-      color: #fff;
-    
-      border-radius: 50%;
       transform: scale(1.01);
-    
-      top: -30px;
-    
-      min-width: 38px;
-      height: 38px;
-      transition: transform 120ms ease, background 120ms ease;
+      top: -20px;
     }
-    
-    ion-range::part(pin)::before {
-      content: none;
-    }
-    
-    ion-range::part(knob) {
-      background: #e78bae;
-    }
-    
-    ion-range::part(bar) {
-      background: #a2d2ff;
-    }
-    
-    ion-range::part(bar-active) {
-      background: #bde0fe;
-    }
+  
 
 
