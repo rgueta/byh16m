@@ -64,7 +64,14 @@ export class AdminPage implements OnInit {
 
     {'id':16,'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'false',
       'name':'Remove rotate mode','confirm':'Set rotate Off?'},
-            ]
+
+    {'id':17,'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'true',
+      'name':'Save code events','confirm':'Yes save code events?'},
+
+    {'id':18,'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'false',
+      'name':'Not save code events','confirm':'Not save code events?'},
+
+  ]
 
   public SourcePage:string = 'admin';
   public CoresList:any;

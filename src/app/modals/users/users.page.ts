@@ -234,7 +234,7 @@ export class UsersPage implements OnInit {
     const adminId = localStorage.getItem('my-userId');
     const titleMsg = (userStatus ?  'Desbloqueo' : 'Bloqueo')
     const status = (userStatus ?  'unlock' : 'lock')
-    const pkg = status + ',' + name + ',' + house + ',' + sim + ',' + id ;
+    const pkg = 'updStatus_' + status + ',' + name + ',' + house + ',' + sim + ',' + id ;
 
     let alert = await this.alertCtrl.create({
       subHeader: 'Continuar con ' + titleMsg,
