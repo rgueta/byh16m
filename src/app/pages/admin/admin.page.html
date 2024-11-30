@@ -142,7 +142,7 @@
                         <ion-list slot="content" style="padding-top: 0px; padding-bottom: 0px;"
                         *ngFor="let routine of routineOptions.slice(0,5); let i=index;">
                           <ion-item button (click)="routineSelected($event, i, item)"
-                          >{{routine.name}}</ion-item>
+                          style="color:white;--background:#3e5165; margin-top: 2px;">{{routine.name}}</ion-item>
                         </ion-list>
                       </ion-accordion>
                     </ion-accordion-group>
@@ -155,7 +155,7 @@
                         <ion-list slot="content" style="padding-top: 0px; padding-bottom: 0px;" 
                         *ngFor="let routine of routineOptions.slice(5); let i=index;">
                           <ion-item button (click)="routineSelected($event, i+5, item)"
-                            >{{routine.name}}</ion-item>
+                          style="color:white;--background:#3e5165; margin-top: 2px;">{{routine.name}}</ion-item>
                         </ion-list>
                       </ion-accordion>
                     </ion-accordion-group>
