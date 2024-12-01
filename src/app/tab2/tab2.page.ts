@@ -80,7 +80,7 @@ export class Tab2Page implements OnInit {
     this.end = await new Date($event);
 
     await this.start.setHours(0,0,0,0);
-    await this.end.setHours(23,59,59,0);
+    await this.end.setHours(23,59,59,1);
 
     console.log('start: ',this.start.toISOString());
     console.log('end: ',this.end.toISOString());

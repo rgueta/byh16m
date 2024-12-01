@@ -19,11 +19,16 @@
           locale="es-ES"
           presentation="date"
           size="cover"
-          #myInitial display-format="D MMM YYYY" min="2021" 
-          max="2060" value={{filterDay}} 
+          #myInitial display-format="D MMM YYYY" min="2024" 
+          max="2064" value={{filterDay}} 
           [showDefaultButtons]="true"
+          cancelText="Cancelar"
+          doneText="Aceptar"
           (ionChange)="getEvents(myInitial.value)"
+          [showDefaultTitle]="true"
+          [highlightedDates]="true"
         >
+        <span slot="title">Selecciona la fecha</span>
       </ion-datetime>
       </ng-template>
     </ion-modal>
