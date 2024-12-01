@@ -56,7 +56,7 @@ export class Tab2Page implements OnInit {
     // this.getEvents();
   }
 
-  async getEvents($event:any){
+  async getEvents_($event:any){
     console.log('$event: ', $event)
 
     this.start = await new Date($event);
@@ -69,7 +69,7 @@ export class Tab2Page implements OnInit {
     console.log('end: ',this.end.toISOString());
   }
 
-  async getEvents_($event:any){
+  async getEvents($event:any){
 
     if(! await this.toolsService.verifyNetStatus()){
       this.toolsService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
@@ -79,8 +79,8 @@ export class Tab2Page implements OnInit {
     this.start = await new Date($event);
     this.end = await new Date($event);
 
-    await this.start.setHours(0,0,0,0);
-    await this.end.setHours(23,59,59,0);
+    await this.start.setHours(0,0,0);
+    await this.end.setHours(23,59,59);
 
     console.log('start: ',this.start.toISOString());
     console.log('end: ',this.end.toISOString());
