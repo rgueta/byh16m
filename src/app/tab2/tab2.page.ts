@@ -46,22 +46,9 @@ export class Tab2Page implements OnInit {
   }
 
   async ionViewWillEnter() {
-    // const time = Date.now();
-    // const today  = new Date(time);
-    // today.setHours(23,59,59).toLocaleString();
-    // // today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
-    
-    // this.end  = today.toLocaleString();
-    // // this.start = this.selected = today.toISOString();
-    // console.log('start before : ',this.end);
-    // this.filterDay = today.toISOString();
-
-
     this.myUserId = await localStorage.getItem(USERID);
     this.myToken = await localStorage.getItem(TOKEN_KEY);
     this.Core_sim = await localStorage.getItem(CORE_SIM);
-
-    // this.getEvents();
   }
 
 <<<<<<< HEAD
