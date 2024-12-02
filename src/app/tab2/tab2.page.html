@@ -10,7 +10,7 @@
   <ion-list>
     <ion-item id="open-modal2" class="itemFilter">
       <ion-label class='lblFilterDate'>Eventos de:</ion-label>
-      <ion-note class="filterDate" slot="end">{{start | date}}</ion-note>
+      <ion-note class="filterDate" slot="end">{{end | date}}</ion-note>
       <ion-icon color="white" slot="end" name="search" ></ion-icon>
     </ion-item>
     <ion-modal trigger="open-modal2" [cssClass]="'bottom-end'">
@@ -19,14 +19,13 @@
           locale="es-ES"
           presentation="date"
           size="cover"
-          #myInitial display-format="D MMM YYYY" min="2024" 
-          max="2064" value={{filterDay}} 
+          display-format="D MMM YYYY" min="2024-11-01T00:00:00" 
+          max="2064-11-01T00:00:00" [(ngModel)]="filterDay" 
           [showDefaultButtons]="true"
           cancelText="Cancelar"
           doneText="Aceptar"
-          (ionChange)="getEvents(myInitial.value)"
+          (ionChange)="getEvents($event)"
           [showDefaultTitle]="true"
-          [highlightedDates]="true"
         >
         <span slot="title">Selecciona la fecha</span>
       </ion-datetime>
@@ -51,7 +50,7 @@
          <ion-label> Ocurrio: <b>{{item.createdAt | date:'dd MMM YYYY hh:mm a'}}</b></ion-label>
        </ion-item>
        <ion-item class='detail-item'>
-        <ion-label> Casa: <b>{{item.casa}}</b></ion-label>
+        <ion-label> Casa: <b>{{item.house}}</b></ion-label>
       </ion-item>
         <ion-item class='detail-item'>
           <ion-label> Codigo: <b>{{item.code}}</b></ion-label>

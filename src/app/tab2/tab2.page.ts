@@ -35,20 +35,28 @@ export class Tab2Page implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
+    const time = Date.now();
+    const today  = new Date(time);
+    today.setUTCHours(0,0,0).toLocaleString();
+    // today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+    
+    this.filterDay = today.toISOString();
+    this.start  = today.toISOString();
+
   }
 
   async ionViewWillEnter() {
-    const time = Date.now();
-    const today  = new Date(time);
-    today.setUTCHours(0,0,0);
-    // today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+    // const time = Date.now();
+    // const today  = new Date(time);
+    // today.setHours(23,59,59).toLocaleString();
+    // // today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
     
-    this.start  = new Date(today);
-    // this.start = this.selected = today.toISOString();
-    console.log('start before : ',this.start);
+    // this.end  = today.toLocaleString();
+    // // this.start = this.selected = today.toISOString();
+    // console.log('start before : ',this.end);
+    // this.filterDay = today.toISOString();
 
 
-    this.filterDay = today.toISOString();
     this.myUserId = await localStorage.getItem(USERID);
     this.myToken = await localStorage.getItem(TOKEN_KEY);
     this.Core_sim = await localStorage.getItem(CORE_SIM);
@@ -56,44 +64,45 @@ export class Tab2Page implements OnInit {
     // this.getEvents();
   }
 
-  async getEvents($event:any){
-    console.log('$event: ', $event)
+  async getEvents_(event:any){
 
-    this.start = await new Date($event);
-    this.end = await new Date($event);
+    this.start = await new Date( event.detail.value);
+    this.end = await new Date( event.detail.value);
+    
+    this.filterDay = this.start.toISOString();
 
-    await this.start.setUTCHours(0,0,0);
-    await this.end.setUTCHours(23,59,59);
-
-    console.log('start: ',this.start.toISOString());
-    console.log('end: ',this.end.toISOString());
   }
 
-  async getEvents_($event:any){
+  async getEvents(event:any){
+    this.start = await new Date( event.detail.value);
+    this.end = await new Date( event.detail.value);
+
+    await this.start.setHours(0,0,0).toLocaleString();
+    await this.end.setHours(23,59,59).toLocaleString();
+
+    const initial = new Date(this.start.getTime() - 
+      (this.start.getTimezoneOffset() * 60000)).toISOString();
+
+    const final = new Date(this.end.getTime() - 
+      (this.end.getTimezoneOffset() * 60000)).toISOString();
+
+    this.filterDay = initial;
 
     if(! await this.toolsService.verifyNetStatus()){
       this.toolsService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
       return;
     }
 
-    this.start = await new Date($event);
-    this.end = await new Date($event);
-
-    await this.start.setHours(0,0,0,0);
-    await this.end.setHours(23,59,59,1);
-
-    console.log('start: ',this.start.toISOString());
-    console.log('end: ',this.end.toISOString());
-
     // this.start = await Utils.convDate(await 
     //   Utils.convertLocalDateToUTCDate(new Date(this.start)));
     // this.end = await Utils.convDate(await 
     //   Utils.convertLocalDateToUTCDate(new Date(this.end)));
 
+
+
     try{
       await this.api.getData('api/codeEvent/' + 
-        this.myUserId + '/' + this.start.toISOString() + '/' + 
-        this.end.toISOString()).subscribe(async result =>{
+        this.myUserId + '/' + initial + '/' + final).subscribe(async result =>{
         console.log('events -->', result)
         this.EventsList = await result;
       
