@@ -1,11 +1,91 @@
+
+
+.wripper-filter{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    // flex-wrap: wrap;
+    padding-left: 5px;
+    width: 100%;
+    // color: #fff;
+    ion-item{
+        color: #fff;
+    --ion-item-background: #6599CE !important;
+    }
+}
+
+
+.FilterFrom{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    // color: #fff;
+    // --ion-item-background: #6599CE;
+    height: 50px;
+    margin-right: 10px;
+    width: 100%;
+
+    ion-label{
+        font-size: .9em;
+    }
+
+    ion-note{
+        padding: 0px;
+    }
+}
+
+.FilterTo{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    // color: #fff;
+    // --ion-item-background: #6599CE;
+    // height: 50px;
+    margin-left: 10px;
+    width: 100%;
+
+    ion-label{
+        font-size: .9em;
+    }
+
+    ion-note{
+        padding: 0px;
+    }
+}
+
 .itemFilter{
-    color: #fff;
-    --ion-item-background: #6599CE;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: baseline;
+    // color: #fff;
+    // --ion-item-background: #6599CE;
+    font-size: .8em;
+    width: 100%;
 }
 
 .dateFilter{
     font-size: 1.2rem;
     font-weight: bold;
+}
+
+.filterDate{
+    display: flex;
+    // color: white;
+    font-size: 1em;
+    vertical-align: middle;
+    // margin: 0 20px 0 5px;
+    text-align: center;
+    width: 50%;
+    padding: 15px;
+}
+
+.lblFilterDate{
+    display: inline;
+
 }
 
 .accordion-list{
@@ -97,19 +177,3 @@ ion-modal {
       }
     }
   }
-
-.filterDate{
-    display: flex;
-    color: white;
-    font-size: medium;
-    vertical-align: middle;
-    margin: 0 20px 0 5px;
-    text-align: center;
-    width: 50%;
-    padding: 15px;
-}
-
-.lblFilterDate{
-    display: inline;
-
-}

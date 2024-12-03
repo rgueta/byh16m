@@ -23,7 +23,8 @@ export class Tab2Page implements OnInit {
   public myEventsList:any;
   automaticClose = false;
   Core_sim : any;
-  public filterDay : string = '';
+  public Initial : string = '';
+  public Final : string = '';
   myToken : any;
   myRefreshToken : any;
   myToast:any;
@@ -40,7 +41,7 @@ export class Tab2Page implements OnInit {
     today.setUTCHours(0,0,0).toLocaleString();
     // today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
     
-    this.filterDay = today.toISOString();
+    this.Initial = this.Final = today.toISOString();
     this.start  = today.toISOString();
 
   }
@@ -51,16 +52,16 @@ export class Tab2Page implements OnInit {
     this.Core_sim = await localStorage.getItem(CORE_SIM);
   }
 
-  async getEvents_(event:any){
+  async getEventsFinal(event:any){
 
     this.start = await new Date( event.detail.value);
     this.end = await new Date( event.detail.value);
     
-    this.filterDay = this.start.toISOString();
+    this.Initial = this.start.toISOString();
 
   }
 
-  async getEvents(event:any){
+  async getEventsInitial(event:any){
     this.start = await new Date( event.detail.value);
     this.end = await new Date( event.detail.value);
 
@@ -73,7 +74,7 @@ export class Tab2Page implements OnInit {
     const final = new Date(this.end.getTime() - 
       (this.end.getTimezoneOffset() * 60000)).toISOString();
 
-    this.filterDay = initial;
+    this.Initial = initial;
 
     if(! await this.toolsService.verifyNetStatus()){
       this.toolsService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
@@ -120,7 +121,7 @@ export class Tab2Page implements OnInit {
 
   async doRefresh(event:any) {
     this.EventsList = null;
-    this.getEvents(this.start);
+    this.getEventsFinal(this.start);
     setTimeout(() => {
       event.target.complete();
     }, 2000);
