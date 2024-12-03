@@ -51,12 +51,7 @@ export class Tab2Page implements OnInit {
     this.Core_sim = await localStorage.getItem(CORE_SIM);
   }
 
-<<<<<<< HEAD
-  async getEvents_($event:any){
-    console.log('$event: ', $event)
-=======
   async getEvents_(event:any){
->>>>>>> code_events_fix_date_select
 
     this.start = await new Date( event.detail.value);
     this.end = await new Date( event.detail.value);
@@ -65,9 +60,6 @@ export class Tab2Page implements OnInit {
 
   }
 
-<<<<<<< HEAD
-  async getEvents($event:any){
-=======
   async getEvents(event:any){
     this.start = await new Date( event.detail.value);
     this.end = await new Date( event.detail.value);
@@ -82,25 +74,12 @@ export class Tab2Page implements OnInit {
       (this.end.getTimezoneOffset() * 60000)).toISOString();
 
     this.filterDay = initial;
->>>>>>> code_events_fix_date_select
 
     if(! await this.toolsService.verifyNetStatus()){
       this.toolsService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
       return;
     }
 
-<<<<<<< HEAD
-    this.start = await new Date($event);
-    this.end = await new Date($event);
-
-    await this.start.setHours(0,0,0);
-    await this.end.setHours(23,59,59);
-
-    console.log('start: ',this.start.toISOString());
-    console.log('end: ',this.end.toISOString());
-
-=======
->>>>>>> code_events_fix_date_select
     // this.start = await Utils.convDate(await 
     //   Utils.convertLocalDateToUTCDate(new Date(this.start)));
     // this.end = await Utils.convDate(await 
