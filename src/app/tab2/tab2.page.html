@@ -8,32 +8,37 @@
 <ion-content [fullscreen]="true">
 
   <ion-list>
-    <!-- <ion-item class="wrapper-filter-main"> -->
       <ion-item class="wrapper-filter">
-        
         <div id="open-modal1" class="FilterFrom">
           <div>
-            <ion-label class='lblFilterDate'>Desde:</ion-label>
+            <ion-label>Desde:</ion-label>
           </div>
           <div id="open-modal1" class="itemFilter">
             <ion-note class="filterDate" slot="end">{{end | date}}</ion-note>
-            <ion-icon color="white" slot="end" name="calendar" ></ion-icon>
+            <ion-icon slot="end" name="calendar" ></ion-icon>
           </div>
         </div>
   
         <div id="open-modal2" class="FilterTo">
           <div>
-            <ion-label class='lblFilterDate'>Hasta:</ion-label>
+            <ion-label>Hasta:</ion-label>
           </div>
           <div id="open-modal2" class="itemFilter">
             <ion-note class="filterDate" slot="end">{{end | date}}</ion-note>
-            <ion-icon color="white" slot="end" name="calendar" ></ion-icon>
+            <ion-icon slot="end" name="calendar"></ion-icon>
+          </div>
+        </div>
+
+        <div class="search" (click)="getEvents()">
+          <div>
+            <ion-label>Buscar:</ion-label>
+          </div>
+          <div id="open-modal2" class="itemFilter">
+            <ion-icon slot="end" name="search"></ion-icon>
           </div>
         </div>
 
       </ion-item>
-  
-    <!-- </ion-item> -->
     
     <ion-modal trigger="open-modal1" [cssClass]="'bottom-end'">
       <ng-template>

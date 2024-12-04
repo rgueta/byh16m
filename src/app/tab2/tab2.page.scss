@@ -1,36 +1,28 @@
 
-
 .wripper-filter{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    // flex-wrap: wrap;
+    margin: 5px;
     padding-left: 5px;
     width: 100%;
-    color: #fff;
-    --ion-item-background: #6599CE !important;
-    
 }
 
+
+
+ion-item{
+    color: #fff;
+    --ion-item-background: #6599CE !important;
+}
 
 .FilterFrom{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    // color: #fff;
-    // background: #6599CE !important;
-    height: 50px;
-    margin-right: 10px;
-    width: 100%;
+    width: 80%;
+    border-right:solid 1px;
 
-    ion-label{
-        font-size: .9em;
-    }
-
-    ion-note{
-        padding: 0px;
-    }
 }
 
 .FilterTo{
@@ -38,31 +30,28 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    // color: #fff;
-    // --ion-item-background: #6599CE;
-    // height: 50px;
     margin-left: 10px;
-    width: 100%;
-
-    ion-label{
-        font-size: .9em;
-    }
-
-    ion-note{
-        padding: 0px;
-    }
+    width: 80%;
+    border-right:solid 1px;
 }
 
 .itemFilter{
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
     justify-content: space-between;
-    align-items: baseline;
-    // color: #fff;
-    // --ion-item-background: #6599CE;
-    font-size: .8em;
+    vertical-align: middle;
+    align-items:center;
     width: 100%;
+
+    ion-note{
+        width: 70%;
+        color:white
+    }
+
+    ion-icon{
+        font-size: 2em;
+        padding: 10px ;
+    }
 }
 
 .dateFilter{
@@ -70,20 +59,18 @@
     font-weight: bold;
 }
 
-.filterDate{
+.search{
     display: flex;
-    // color: white;
-    font-size: 1em;
-    vertical-align: middle;
-    // margin: 0 20px 0 5px;
-    text-align: center;
-    width: 50%;
-    padding: 15px;
-}
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 10px;
+    width: 30%;
 
-.lblFilterDate{
-    display: inline;
-
+    ion-icon{
+        font-size: 2em;
+        padding-left: 20px ;
+    }
 }
 
 .accordion-list{

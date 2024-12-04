@@ -38,11 +38,25 @@ export class Tab2Page implements OnInit {
   async ngOnInit(): Promise<void> {
     const time = Date.now();
     const today  = new Date(time);
-    today.setUTCHours(0,0,0).toLocaleString();
-    // today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+    this.start = today.setUTCHours(0,0,0).toLocaleString();
+    this.end = today.setUTCHours(23,59,59).toLocaleString();
+
+    // await this.start.setHours(0,0,0).toLocaleString();
+    // await this.end.setHours(23,59,59).toLocaleString();
+
+    // this.Initial = new Date(this.start.getTime() - 
+    //   (this.start.getTimezoneOffset() * 60000)).toISOString();
+
+    // this.Final = new Date(this.end.getTime() - 
+    //   (this.end.getTimezoneOffset() * 60000)).toISOString();
     
-    this.Initial = this.Final = today.toISOString();
-    this.start  = today.toISOString();
+    // this.Initial = this.Final = today.toISOString();
+    // this.start  = today.toISOString();
+
+
+    console.log('--- OnInit ----')
+    console.log('Initial: ', this.start);
+    console.log('Final: ', this.end);
 
   }
 
@@ -50,16 +64,32 @@ export class Tab2Page implements OnInit {
     this.myUserId = await localStorage.getItem(USERID);
     this.myToken = await localStorage.getItem(TOKEN_KEY);
     this.Core_sim = await localStorage.getItem(CORE_SIM);
-  }
 
-  async getEventsFinal(event:any){
 
-    this.start = await new Date( event.detail.value);
-    this.end = await new Date( event.detail.value);
+    const time = Date.now();
+    const today  = new Date(time);
+    this.start = today.setUTCHours(0,0,0).toLocaleString();
+    this.end = today.setUTCHours(23,59,59).toLocaleString();
+
+    // await this.start.setHours(0,0,0).toLocaleString();
+    // await this.end.setHours(23,59,59).toLocaleString();
+
+    this.Initial = new Date(this.start.getTime() - 
+      (this.start.getTimezoneOffset() * 60000)).toISOString();
+
+    // this.Final = new Date(this.end.getTime() - 
+    //   (this.end.getTimezoneOffset() * 60000)).toISOString();
     
-    this.Initial = this.start.toISOString();
+    // this.Initial = this.Final = today.toISOString();
+    // this.start  = today.toISOString();
 
+
+    console.log('--- OnInit ----')
+    console.log('Initial: ', this.start);
+    console.log('Final: ', this.end);
   }
+
+
 
   async getEventsInitial(event:any){
     this.start = await new Date( event.detail.value);
@@ -76,21 +106,40 @@ export class Tab2Page implements OnInit {
 
     this.Initial = initial;
 
+    console.log('Initial: ', this.Initial);
+    console.log('Final: ', this.Final);
+
+
     if(! await this.toolsService.verifyNetStatus()){
       this.toolsService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
       return;
     }
 
-    // this.start = await Utils.convDate(await 
-    //   Utils.convertLocalDateToUTCDate(new Date(this.start)));
-    // this.end = await Utils.convDate(await 
-    //   Utils.convertLocalDateToUTCDate(new Date(this.end)));
+  }
+
+  async getEventsFinal(event:any){
+
+    this.end = await new Date( event.detail.value);
+    
+    this.Final = this.start.toISOString();
+
+    console.log('Initial: ', this.Initial)
+    console.log('Final: ', this.Final)
+
+  }
+
+  async getEvents(){
+    console.log('Buscar!')
+    console.log('Initial: ', this.Initial);
+    console.log('Final: ', this.Final);
+  }
 
 
-
+  async getEvents_(){
+    
     try{
       await this.api.getData('api/codeEvent/' + 
-        this.myUserId + '/' + initial + '/' + final).subscribe(async result =>{
+        this.myUserId + '/' + this.Initial + '/' + this.Final).subscribe(async result =>{
         console.log('events -->', result)
         this.EventsList = await result;
       
