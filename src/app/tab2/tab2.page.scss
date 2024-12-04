@@ -7,11 +7,9 @@
     // flex-wrap: wrap;
     padding-left: 5px;
     width: 100%;
-    // color: #fff;
-    ion-item{
-        color: #fff;
+    color: #fff;
     --ion-item-background: #6599CE !important;
-    }
+    
 }
 
 
@@ -21,7 +19,7 @@
     justify-content: space-between;
     align-items: center;
     // color: #fff;
-    // --ion-item-background: #6599CE;
+    // background: #6599CE !important;
     height: 50px;
     margin-right: 10px;
     width: 100%;
