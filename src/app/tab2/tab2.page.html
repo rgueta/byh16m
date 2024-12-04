@@ -7,14 +7,15 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-list>
-      <ion-item class="wrapper-filter">
+  <ion-list class="wrapper-filter">
+      <ion-item
+        [ngStyle]="{ '--background': '#6599CE', 'color':'white' }">
         <div id="open-modal1" class="FilterFrom">
           <div>
             <ion-label>Desde:</ion-label>
           </div>
           <div id="open-modal1" class="itemFilter">
-            <ion-note class="filterDate" slot="end">{{end | date}}</ion-note>
+            <ion-note class="filterDate" slot="end">{{start | date}}</ion-note>
             <ion-icon slot="end" name="calendar" ></ion-icon>
           </div>
         </div>
@@ -47,25 +48,17 @@
           presentation="date"
           size="cover"
           display-format="D MMM YYYY" min="2024-11-01T00:00:00" 
-          max="2064-11-01T00:00:00" [(ngModel)]="Initial" 
+          max="2064-11-01T00:00:00" value={{Initial}} 
           [showDefaultButtons]="true"
           cancelText="Cancelar"
           doneText="Aceptar"
           (ionChange)="getEventsInitial($event)"
-          [showDefaultTitle]="true"
-        >
+          [showDefaultTitle]="true" >
         <span slot="title">Selecciona la fecha</span>
       </ion-datetime>
       </ng-template>
     </ion-modal>
-  </ion-list>
 
-  <ion-list>
-    <!-- <ion-item id="open-modal2" class="itemFilter">
-      <ion-label class='lblFilterDate'>Hasta:</ion-label>
-      <ion-note class="filterDate" slot="end">{{end | date}}</ion-note>
-      <ion-icon color="white" slot="end" name="calendar" ></ion-icon>
-    </ion-item> -->
     <ion-modal trigger="open-modal2" [cssClass]="'bottom-end'">
       <ng-template>
         <ion-datetime  class="dateFilter" 
@@ -73,13 +66,12 @@
           presentation="date"
           size="cover"
           display-format="D MMM YYYY" min="2024-11-01T00:00:00" 
-          max="2064-11-01T00:00:00" [(ngModel)]="Final" 
+          max="2064-11-01T00:00:00" value={{Final}} 
           [showDefaultButtons]="true"
           cancelText="Cancelar"
           doneText="Aceptar"
           (ionChange)="getEventsFinal($event)"
-          [showDefaultTitle]="true"
-        >
+          [showDefaultTitle]="true">
         <span slot="title">Selecciona la fecha</span>
       </ion-datetime>
       </ng-template>
