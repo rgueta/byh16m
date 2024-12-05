@@ -121,7 +121,7 @@ export class Tab2Page implements OnInit {
 
   async doRefresh(event:any) {
     this.EventsList = null;
-    this.getEventsFinal(this.start);
+    this.getEvents();
     setTimeout(() => {
       event.target.complete();
     }, 2000);
