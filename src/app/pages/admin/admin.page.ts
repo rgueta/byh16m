@@ -25,6 +25,7 @@ export class AdminPage implements OnInit {
   routineOptions = [
     {'id':0,'cmd':'ModuleRST','name':'Reboot module','confirm':'Reboot module ?'},
     {'id':1,'cmd':'getSIMstatus','name':'Module status','confirm':'Request module status?'},
+    {'id':1,'cmd':'getConfig','name':'Config status','confirm':'Request config status?'},
     {'id':2,'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
     {'id':3,'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
     {'id':4,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
@@ -485,6 +486,10 @@ toggleSectionSim(){
                 break;
               case 'getSIMstatus':
                   this.sendSms(item.Sim, 'status,gral')
+                break;
+              
+                case 'getConfig':
+                  this.sendSms(item.Sim, 'status,getConfig')
                 break;
               case 'RestraintStatus':
                     await this.sendSms(item.Sim,'status,restraint');
