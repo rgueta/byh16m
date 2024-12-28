@@ -320,6 +320,31 @@ ion-content{
     margin-bottom:1px;
 }
 
+
+// RANGE SECTION  -------------------
+.limits{
+    color: #a2d2ff !important;
+    font-size: 1.3em !important;
+  }
+
+  ion-range{
+   margin-top: 20px;
+  --bar-background: #a2d2ff;
+  --bar-background-active: #bde0fe;
+  --bar-height: 6px;
+  --bar-border-radius: 8px;
+  --knob-background: #e46d83fb;
+  --knob-size: 40px;
+  --pin-background: #dd344ef9;
+  --pin-color: #fff;
+  }
+  
+  ion-range::part(pin) {
+    transform: scale(1.01);
+    top: -20px;
+  }
+
+
 // ---- Lines used to fix ion-select-option width (
 // .alert-tappable.alert-radio{
 //     height: auto;
@@ -340,19 +365,6 @@ ion-content{
 //    height: auto;
 //    contain: content;
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // ion-alert.select-alert {

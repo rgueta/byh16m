@@ -94,21 +94,21 @@ export class UpdCodesModalPage implements OnInit {
 
   }
 
-getPlatform(){
-  console.log('Platform : ' + this.platform.platforms);
-  if (this.platform.is('android')){
-    this.StrPlatform = 'android';
+  getPlatform(){
+    console.log('Platform : ' + this.platform.platforms);
+    if (this.platform.is('android')){
+      this.StrPlatform = 'android';
+    }
+    else if(this.platform.is('ios')){
+      this.StrPlatform = 'ios';
+    }else if(this.platform.is('desktop')){
+      this.StrPlatform = 'desktop';
+    }else if(this.platform.is('mobile')){
+      this.StrPlatform = 'mobile';
+    }else{
+      this.StrPlatform = 'other';
+    }
   }
-  else if(this.platform.is('ios')){
-    this.StrPlatform = 'ios';
-  }else if(this.platform.is('desktop')){
-    this.StrPlatform = 'desktop';
-  }else if(this.platform.is('mobile')){
-    this.StrPlatform = 'mobile';
-  }else{
-    this.StrPlatform = 'other';
-  }
-}
 
   async initDates(){
     this.initial = new Date();
@@ -137,10 +137,10 @@ getPlatform(){
 
 }
 
-async setupCode(event:any){
-  this.visitorSim = this.selectedVisitor.sim;
-  this.visitorSelectRef.disabled;
-}
+  async setupCode(event:any){
+    this.visitorSim = this.selectedVisitor.sim;
+    this.visitorSelectRef.disabled;
+  }
 
   async updSelectedVisitor(item:any){
     for(var i = 0; i < this.myVisitors.length; i++ ){
@@ -298,6 +298,7 @@ async setupCode(event:any){
       translucent: true,
       spinner: 'crescent'
     });
+    
       await loading.present();
 
       await Filesystem.writeFile({

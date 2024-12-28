@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from '../../services/database.service';
-import { ModalController,
-         AnimationController } from '@ionic/angular';
+import { ModalController,AnimationController,
+  AlertController } from '@ionic/angular';
 import { UpdCodesModalPage } from '../../modals/upd-codes-modal/upd-codes-modal.page';
 import { Utils } from '../../tools/tools';
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { environment } from 'src/environments/environment';
 import { ToolsService } from "../../services/tools.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-codes',
@@ -22,27 +23,36 @@ export class CodesPage implements OnInit {
   codeEnabled:any;
 
   initial: any;
-  expiry : any;
+  // expiry : any;
   diff: any;
   myRoles:{};
   myToken:any;
   load_codes : true;
+  public MyRole : string = 'visitor';
+  expiry : any = new Date().toISOString();
+  code_expiry:any;
 
   constructor(public api : DatabaseService,
               public modalController: ModalController,
               public animationController : AnimationController,
               private sms: SMS,
-              private toolsService:ToolsService
+              private toolsService:ToolsService,
+              public alertCtrl: AlertController,
+              public router: Router
               ) { }
 
   async ngOnInit() {
-    
+    this.MyRole = localStorage.getItem('my-role');
     this.myToken = await localStorage.getItem('my-token');
     let uId = await localStorage.getItem('my-userId');
     this.userId = await uId;
     this.myRoles = await localStorage.getItem('my-roles');
+    this.code_expiry = Number(await localStorage.getItem('code_expiry'));
 
-    // console.log('ngOnInit at codes.page roles --> ', this.myRoles);
+    this.initial = new Date();
+    this.expiry = new Date(new Date().setHours(new Date().getHours() + this.code_expiry));
+    this.diff =  await (Math.abs(this.initial.getTime() - this.expiry.getTime()) / 3600000).toFixed(0);
+
     this.collectCodes(); 
   }
 
@@ -85,6 +95,16 @@ export class CodesPage implements OnInit {
       .filter((item:{}, itemIndex:number) => itemIndex != index)
       .map((item:any) => item.open = false);
     }
+  }
+
+  async onRangeChange(event:any){
+    var expiry = new Date();
+    this.diff = event.detail.value;
+
+    this.expiry = expiry.setHours(expiry.getHours() + Number(event.detail.value));
+
+    console.log(`Initial: ${new Date()} - Expiry: ${new Date(this.expiry)} 
+    \n Diff: ${this.diff}`);
   }
 
   async sendCode(visitorId:string){
@@ -139,16 +159,19 @@ export class CodesPage implements OnInit {
   }
 
   async ResendCode(code:string,visitorId:string,Initial:any,Expiry:any){
-    // var pkg : {};
+    this.expiry = this.initial = new Date();
+    this.initial = Utils.convDate(new Date(this.initial));
     var pkg = {'code':'','_id':'','initial':'','expiry':''};
 
-    console.log('Resend code --> ', 'codigo : ' + code + 
-    ' ,Initial : ' + Initial + ' ,Expiry : ' + Expiry + 
-    ', _id : ' + visitorId)
+    this.expiry = this.expiry.setHours(this.expiry.getHours() + Number(this.diff));
+    this.expiry = Utils.convDate(new Date(this.expiry));
 
+    // console.log('Resend code --> ', 'codigo : ' + code + 
+    // ' ,Initial : ' + this.initial + ' ,Expiry : ' + this.expiry + 
+    // ', _id : ' + visitorId, ', Diff: ' + this.diff)
 
-    return;
-
+    await this.showAlert('','', `Reenviar con ${this.diff} hrs.?`,'btns', 'Si', 'No');
+  
     var options:SmsOptions={
       replaceLineBreaks:false,
       android:{
@@ -160,8 +183,12 @@ export class CodesPage implements OnInit {
 
     pkg['code'] = code;
     pkg['_id'] = visitorId;
-    pkg['initial'] = Utils.convDate(Initial);
-    pkg['expiry'] = Utils.convDate(Expiry);
+    pkg['initial'] = this.initial;
+    pkg['expiry'] = this.expiry;
+
+    console.log(pkg);
+
+    return;
 
     try{
       if(environment.app.debugging_send_sms){
@@ -212,6 +239,35 @@ export class CodesPage implements OnInit {
       console.log('Initial : ' + Utils.convDate(this.initial) + '\nExpiry :  ' + Utils.convDate(this.expiry) + '\nDiff hrs. ' + this.diff);
     }
   }
+
+
+  // -------   toast control alerts    ---------------------
+
+async showAlert(Header:string, subHeader:string, msg:string, btns:any,
+  txtConfirm:string, txtCancel:string) {
+  const alert = await this.alertCtrl.create({
+    header: Header,
+    subHeader: subHeader,
+    message: msg,
+    backdropDismiss:false,
+    buttons: [
+      {
+      text:txtCancel,
+      role: 'cancel'
+    },
+    {
+      text:txtConfirm,
+      handler: async () => {
+        await this.api.logout();
+        this.router.navigateByUrl('/',{replaceUrl:true});
+        Utils.cleanLocalStorage();
+            }
+    
+    }]
+  });
+
+  await alert.present();
+}
 
         // ---- Animation controller  ----------------------------------
 
