@@ -113,22 +113,6 @@
             <ion-label *ngIf="item.range <= 0"> Ya expiro en dias: ({{((item.range/24) * -1).toFixed(1)}})</ion-label>
             <ion-label *ngIf="item.range > 0"> Expira en {{item.range}} horas </ion-label>
           </ion-item>
-
-          <!-- <ion-item class='detail-item'>
-            <ion-button class='titleButtonBlue'
-            (click)='ResendCode(item.code,item._id,myInitial.value,myExpiry.value)' 
-            expand="full">Reenviar codigo</ion-button>
-        </ion-item> -->
-        
-          <!-- <ion-item *ngIf="item.range > 0" class='detail-item'>
-            <ion-label class='labelInput'> Activo : </ion-label>
-            <ion-toggle slot="end" [ngModelOptions] = "{standalone:true}" [ngModel]="item.enable" 
-            [checked]="codeEnabled" (ionChange)="EnableCode($event,item._id,item.expiry)"></ion-toggle>
-          </ion-item> -->
-
-          <!-- <ion-button class='titleButtonBlue' *ngIf="item.changed"
-          (click)='sendCode(item._id)' expand="full">Aplicar cambios</ion-button> -->
-
       </form>
 
     </ion-list>

@@ -31,6 +31,7 @@ export class CodesPage implements OnInit {
   public MyRole : string = 'visitor';
   expiry : any = new Date().toISOString();
   code_expiry:any;
+  pkg : any = {}
 
   constructor(public api : DatabaseService,
               public modalController: ModalController,
@@ -107,68 +108,50 @@ export class CodesPage implements OnInit {
     \n Diff: ${this.diff}`);
   }
 
-  async sendCode(visitorId:string){
-    var pkg : {};
-
-    var options:SmsOptions={
-      replaceLineBreaks:false,
-      android:{
-        intent:''
-      }
-    }
-
+  async sendCode(pkg:any){
     const sim =  await localStorage.getItem('my-core-sim');
 
-    await Object.entries(this.CodeList).forEach(async (key,  item:any) =>{
-      if(item['_id'] === visitorId){
-        let pkg = item;
-        pkg['initial'] = await Utils.convDate(this.initial);
-        pkg['expiry'] = await Utils.convDate(this.expiry);
-        pkg['enable'] = await  this.codeEnabled;
-        delete pkg['expired'];
-        delete pkg['open'];
-        // delete pkg['visitorSim'];
-        delete pkg['visitorName'];
-        delete pkg['email'];
 
-        try{
-          if(await this.toolsService.verifyNetStatus()){
-            await this.api.putData('api/codes/update/' +  
-                            pkg['userId'] + '/' + pkg['_id'] ,pkg)
-          }else{
-            this.toolsService.toastAlert('No hay acceso a internet',0,['Ok'],'middle');
-          }
-
-        }catch(err){
-            this.toolsService.showAlertBasic('Aviso','Ocurrio una excepcion',
-            'Error: ' + err,['Ok'])
-        }
-      }
-    });
-    
-   
     try{
-        this.collectCodes(); 
-        this.toolsService.toastAlert('Codigo enviado a '+ sim,0,['Ok'],'bottom');
+      if(environment.app.debugging_send_sms){
+        await this.sms.send(sim,'codigo,' + this.pkg['code'] +','+ this.pkg['expiry'] + ',' + this.pkg['_id']);
+        
+        this.toolsService.toastAlert('Texto fue enviado',0,['Ok'],'middle');
+      }else{
+        this.toolsService.toastAlert('debugging_send_sms = false',0,['Ok'],'middle');
+      }
+
+      try{
+        if(await this.toolsService.verifyNetStatus()){
+          await this.api.putData('api/codes/update/' +  
+                          this.userId + '/' + pkg['_id'] ,pkg)
+
+          this.collectCodes(); 
+        }else{
+          this.toolsService.toastAlert('No hay acceso a internet',0,['Ok'],'middle');
+        }
+
+      }catch(err){
+          this.toolsService.showAlertBasic('Aviso','Ocurrio una excepcion',
+          'Error: ' + err,['Ok'])
+      }
+
+        
     }
     catch(e:any){
       this.toolsService.showAlertBasic('Aviso','Ocurrio una excepcion',
-      `Error: ` + e.message,['Ok']);
+      'Error: ' + e,['Ok']);
       }
 
   }
 
-  async ResendCode(code:string,visitorId:string,Initial:any,Expiry:any){
+  async ResendCode(code:string,codeId:string,Initial:any,Expiry:any){
     this.expiry = this.initial = new Date();
     this.initial = Utils.convDate(new Date(this.initial));
-    var pkg = {'code':'','_id':'','initial':'','expiry':''};
+    this.pkg = {'code':'','_id':'','initial':'','expiry':''};
 
     this.expiry = this.expiry.setHours(this.expiry.getHours() + Number(this.diff));
     this.expiry = Utils.convDate(new Date(this.expiry));
-
-    // console.log('Resend code --> ', 'codigo : ' + code + 
-    // ' ,Initial : ' + this.initial + ' ,Expiry : ' + this.expiry + 
-    // ', _id : ' + visitorId, ', Diff: ' + this.diff)
 
     await this.showAlert('','', `Reenviar con ${this.diff} hrs.?`,'btns', 'Si', 'No');
   
@@ -178,32 +161,17 @@ export class CodesPage implements OnInit {
         intent:''
       }
     }
-    // const sim =  await this.storage.get('my-core-sim');
     const sim =  await localStorage.getItem('my-core-sim');
 
-    pkg['code'] = code;
-    pkg['_id'] = visitorId;
-    pkg['initial'] = this.initial;
-    pkg['expiry'] = this.expiry;
+    this.pkg['code'] = code;
+    this.pkg['_id'] = codeId;
+    this.pkg['initial'] = this.initial;
+    this.pkg['expiry'] = this.expiry;
 
-    console.log(pkg);
+    
 
-    return;
 
-    try{
-      if(environment.app.debugging_send_sms){
-        await this.sms.send(sim,'codigo,' + pkg['code'] +','+ pkg['expiry'] + ',' + pkg['_id']);
-
-          this.collectCodes(); 
-          this.toolsService.toastAlert('Texto fue enviado',0,['Ok'],'middle');
-      }  
-        
-    }
-    catch(e:any){
-      this.toolsService.showAlertBasic('Aviso','Ocurrio una excepcion',
-      'Error: ' + e,['Ok']);
-      }
-
+    
   }
 
   async onChangeExpiry(codeId:string,initial:any,expiry:any){
@@ -258,9 +226,7 @@ async showAlert(Header:string, subHeader:string, msg:string, btns:any,
     {
       text:txtConfirm,
       handler: async () => {
-        await this.api.logout();
-        this.router.navigateByUrl('/',{replaceUrl:true});
-        Utils.cleanLocalStorage();
+        await this.sendCode(this.pkg)
             }
     
     }]
