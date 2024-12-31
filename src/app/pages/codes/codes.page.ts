@@ -114,7 +114,8 @@ export class CodesPage implements OnInit {
 
     try{
       if(environment.app.debugging_send_sms){
-        await this.sms.send(sim,'codigo,' + this.pkg['code'] +','+ this.pkg['expiry'] + ',' + this.pkg['_id']);
+        await this.sms.send(sim,'codigo,' + this.pkg['code'] + ',' + 
+          this.pkg['expiry'] + ',' + this.userId + ',n/a,' + this.pkg['_id']);
         
         this.toolsService.toastAlert('Texto fue enviado',0,['Ok'],'middle');
       }else{

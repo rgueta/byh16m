@@ -1,3 +1,4 @@
+
 export const Utils = {
     convDate: function(today:Date){
         var day:string = ("0" + today.getDate()).slice(-2);
@@ -96,12 +97,26 @@ export const Utils = {
     },
 
     convertUTCDateToLocalDate: async (date:Date) => {
+
       var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
   
+      console.log('newDate antes: ', newDate)
+      
+
       var offset = date.getTimezoneOffset() / 60;
       var hours = date.getHours();
   
       newDate.setHours(hours - offset);
+
+      console.log('offset: ', offset)
+
+      console.log('hours: ', hours)
+      console.log('getTime : ', date.getTime())
+
+      console.log('diff: ', newDate.setHours(hours - offset))
+
+      console.log('newDate: ', 
+            new Date(new Date().setHours(new Date().getHours() - offset)))
   
       return newDate;
   },
