@@ -325,20 +325,18 @@ async sendSMS(){
   const uuid =  await localStorage.getItem('device-uuid');
   // const local_sim =  await this.storage.get('my-core-sim');
 
+  // create milliseconds block  for local timestamp -------
+
   var myDate = new Date();
   var offset = myDate.getTimezoneOffset() * 60 * 1000;
 
   var withOffset = myDate.getTime();
   var withoutOffset = withOffset - offset;
-  console.log('withOffset: ',withOffset);
-  console.log('withoutOffset: ',withoutOffset);
-
-
 
   this.sim = local_sim;
   this.msg = this.msg + ',' + uuid + ',' + withoutOffset;
 
-  console.log('msg: ',  this.msg)
+  // --------------------------------
 
 
   if(!local_sim){
