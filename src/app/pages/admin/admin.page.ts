@@ -29,6 +29,7 @@ export class AdminPage implements OnInit {
     {'id':2,'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
     {'id':3,'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
     {'id':4,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
+    {'id':4,'cmd':'uploadCoreEvents','name':'Upload core events','confirm':'Upload events?'},
 
     {'id':5,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
       'name':'Code open Gate','confirm':'Open gate with code?'},
@@ -505,6 +506,11 @@ toggleSectionSim(){
               case 'getActiveCodes':
                   await this.sendSms(item.Sim,'active_codes,sim');
                 break;
+
+              case 'uploadCoreEvents':
+                  await this.sendSms(item.Sim,'uploadEvents,sim');
+                break;
+
               case 'setOpen':
                   await this.sendSms(item.Sim,'setOpenCode,' + item.option1);
                 break;
