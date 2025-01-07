@@ -25,52 +25,55 @@ export class AdminPage implements OnInit {
   routineOptions = [
     {'id':0,'cmd':'ModuleRST','name':'Reboot module','confirm':'Reboot module ?'},
     {'id':1,'cmd':'getSIMstatus','name':'Module status','confirm':'Request module status?'},
-    {'id':1,'cmd':'getConfig','name':'Config status','confirm':'Request config status?'},
-    {'id':2,'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
-    {'id':3,'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
-    {'id':4,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
-    {'id':4,'cmd':'uploadCoreEvents','name':'Upload core events','confirm':'Upload events?'},
+    {'id':2,'cmd':'getConfig','name':'Config status','confirm':'Request config status?'},
+    {'id':3,'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
+    {'id':4,'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
+    {'id':5,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
+    {'id':6,'cmd':'uploadCoreEvents','name':'Upload core events','confirm':'Upload events?'},
 
-    {'id':5,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
+    {'id':7,'cmd':'cfgCHG','option1':'app','option2':'coreId','option3':'',
+      'name':'Change core Id','confirm':'Change core Id?'},
+
+    {'id':8,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
       'name':'Code open Gate','confirm':'Open gate with code?'},
 
-    {'id':6,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
+    {'id':9,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
       'name':'Code open Magnet','confirm':'Open magnet with code?'},
 
-    {'id':7,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
+    {'id':10,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
       'name':'Set Keypad flex','confirm':'Set keypad flex?'},
 
-    {'id':8,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
+    {'id':11,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
       'name':'Set Keypad hard plastic','confirm':'Set keypad hardPlastic?'},
 
-    {'id':9,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
+    {'id':12,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
       'name':'Set debug mode','confirm':'Set debug On?'},
 
-    {'id':10,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
+    {'id':13,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
       'name':'Remove debug mode','confirm':'Set debug Off?'},
 
-    {'id':11,'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
+    {'id':14,'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
       'name':'Change settings Code','confirm':'Change settingsCode ?'},
 
-    {'id':12,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
+    {'id':15,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
       'name':'Change pwdRST','confirm':'Change pwdRST ?'},
 
-    {'id':13,'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'true',
+    {'id':16,'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'true',
       'name':'Set demo mode','confirm':'Set demo On?'},
 
-    {'id':14,'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'false',
+    {'id':17,'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'false',
       'name':'Remove demo mode','confirm':'Set demo Off?'},
 
-    {'id':15,'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'true',
+    {'id':18,'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'true',
       'name':'Set rotate mode','confirm':'Set rotate On?'},
 
-    {'id':16,'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'false',
+    {'id':19,'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'false',
       'name':'Remove rotate mode','confirm':'Set rotate Off?'},
 
-    {'id':17,'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'true',
+    {'id':20,'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'true',
       'name':'Save code events','confirm':'Yes save code events?'},
 
-    {'id':18,'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'false',
+    {'id':21,'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'false',
       'name':'Not save code events','confirm':'Not save code events?'},
 
   ]
@@ -242,7 +245,7 @@ export class AdminPage implements OnInit {
 
     this.alertCtrlEvent(event, item,'Confirm', 
       this.routineOptions[index]['confirm'],
-      this.routineOptions[index]['cmd'], 'Yes', 'Cancel');
+      this.routineOptions[index]['cmd'], 'Yes', 'Cancel',index);
   }
 
   
@@ -348,10 +351,18 @@ toggleSectionSim(){
 
 //region ------- alert controlers region   ---------------------
 
-  async alertCtrlEvent(event:any,item:any,titleMsg:string,Message:string,option:string, txtConfirm:string, txtCancel:string){
+  async alertCtrlEvent(event:any,item:any,titleMsg:string,Message:string,
+    option:string, txtConfirm:string, txtCancel:string, index: number = 0){
     let element = <HTMLInputElement> document.getElementById("disableToggle");
-    
-   
+
+    // generate timestamp ------------------
+    var myDate = new Date();
+    var offset = myDate.getTimezoneOffset() * 60 * 1000;
+
+    var withOffset = myDate.getTime();
+    var withoutOffset = withOffset - offset;
+    // --------------------------------------
+
 
     let inputs = [{}];
 
@@ -388,8 +399,6 @@ toggleSectionSim(){
           text: txtConfirm,
           cssClass: 'icon-color',
           handler: async data => {
-            
-
             switch(option){
               case 'chgStatusCore':
                 if(event.target.checked){
@@ -444,7 +453,8 @@ toggleSectionSim(){
                                 intent:''
                               }
                             } 
-                            await this.sms.send(item.Sim,'cfgCHG,sim,value,' + this.sim, options)
+                            await this.sms.send(item.Sim,'cfgCHG,' + withoutOffset + 
+                              ',sim,value,' + this.sim, options)
                             .then(() =>{
                               this.sim = '';
                               this.getCores();
@@ -486,14 +496,14 @@ toggleSectionSim(){
                 });
                 break;
               case 'getSIMstatus':
-                  this.sendSms(item.Sim, 'status,gral')
+                  this.sendSms(item.Sim, 'status,' + withoutOffset + ',gral')
                 break;
               
                 case 'getConfig':
-                  this.sendSms(item.Sim, 'status,getConfig')
+                  this.sendSms(item.Sim, 'status,' + withoutOffset + ',getConfig')
                 break;
               case 'RestraintStatus':
-                    await this.sendSms(item.Sim,'status,restraint');
+                    await this.sendSms(item.Sim,'status,' + withoutOffset + ',restraint');
                   break;
               
               case 'status,extrange':
@@ -501,34 +511,44 @@ toggleSectionSim(){
                 break;
 
               case 'ModuleRST':
-                  await this.sendSms(item.Sim,'rst,sim');
+                  await this.sendSms(item.Sim,'rst,' + withoutOffset + ',sim');
                 break;
               case 'getActiveCodes':
-                  await this.sendSms(item.Sim,'active_codes,sim');
+                  await this.sendSms(item.Sim,'active_codes,' + withoutOffset + ',sim');
                 break;
 
               case 'uploadCoreEvents':
-                  await this.sendSms(item.Sim,'uploadEvents,sim');
+                  await this.sendSms(item.Sim,'uploadEvents,' + withoutOffset + ',sim');
                 break;
 
               case 'setOpen':
-                  await this.sendSms(item.Sim,'setOpenCode,' + item.option1);
+                  await this.sendSms(item.Sim,'setOpenCode,' + withoutOffset 
+                      + ',' + item.option1);
                 break;
               case 'setKeypad':
-                  await this.sendSms(item.Sim,'setKeypad,' + item.option1);
+                  await this.sendSms(item.Sim,'setKeypad,' + withoutOffset 
+                      + ',' + item.option1);
                 break;
               case 'cfgCHG':
                 try{
+
                   if(this.input){
-                    await this.sendSms(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
-                      + ',' + data.inputValue);
+                    await this.sendSms(item.Sim,'cfgCHG,' + withoutOffset + ',' + 
+                      item.option1 + ',' + item.option2 + ',' + data.inputValue);
                   }else{
-                      await this.sendSms(item.Sim,'cfgCHG,' + item.option1 + ',' + item.option2
-                      + ',' + item.option3);
+                    if (this.routineOptions[index]['option2'] == 'coreId'){
+                      await this.sendSms(item.Sim,'cfgCHG,' + withoutOffset + ',' + 
+                        item.option1 + ',' + item.option2 + ',' + item._id);
+
+                    }else{
+                      await this.sendSms(item.Sim,'cfgCHG,' + withoutOffset + ',' + 
+                        item.option1 + ',' + item.option2 + ',' + item.option3);
+                    }
                   }
                 }
                 catch(e){
-                    this.toolService.toastAlert('No enviado, error:<br>' + JSON.stringify(e),0, ['Ok'], 'bottom');
+                    this.toolService.toastAlert('No enviado, error:<br>' + 
+                        JSON.stringify(e),0, ['Ok'], 'bottom');
                   }
                 break;
             }

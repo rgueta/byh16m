@@ -292,14 +292,14 @@ async collectInfo(){
     modal.present()
   }
 
-  sendOpening(Door : string){
-    if(Door == ''){
-      // return 0;
-    }else{
-      this.msg = Door;
-      this.sendSMS();
-    }
-  }
+  // sendOpening(Door : string){
+  //   if(Door == ''){
+  //     // return 0;
+  //   }else{
+  //     this.msg = Door;
+  //     this.sendSMS();
+  //   }
+  // }
 
 
 async openUrl(url:string){
@@ -308,7 +308,7 @@ async openUrl(url:string){
 
 // Send a text message using default options
 
-async sendSMS(){
+async sendSMS(door:string){
   if(this.msg == ''){
     this.toolService.toastAlert('Message empty !',0,['Ok'],'bottom')
     return;
@@ -334,7 +334,7 @@ async sendSMS(){
   var withoutOffset = withOffset - offset;
 
   this.sim = local_sim;
-  this.msg = this.msg + ',' + uuid + ',' + withoutOffset;
+  this.msg = 'open,' + withoutOffset + ',' + door + ',' + uuid;
 
   // --------------------------------
 
@@ -357,7 +357,7 @@ async sendSMS(){
           // Check if user is locked
           this.api.getData('api/users/notLocked/' + this.userId)
             .subscribe({
-              next: async (res) => { 
+              next: async (res) => {
                   await this.sms.send(this.sim,this.msg,options)
                   .then(() => this.loadingController.dismiss())
                   .catch((e:any) => {

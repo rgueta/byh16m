@@ -107,9 +107,9 @@
     <!-- Bi-color -->
     <div slot="fixed" class="aperturas" *ngIf="btnVisible && remote" >
         <ion-button class="doorsButton-green" 
-          (click)="sendOpening('open,peatonal')" mode="ios">Peatonal</ion-button>
+          (click)="sendSMS('peatonal')" mode="ios">Peatonal</ion-button>
         <ion-button class="doorsButton-blue" 
-          (click)="sendOpening('open,vehicular')" mode="ios">Vehicular</ion-button>
+          (click)="sendSMS('vehicular')" mode="ios">Vehicular</ion-button>
     </div> 
 
     <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
