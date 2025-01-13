@@ -23,57 +23,58 @@ const EMAIL_TO_CORE = 'emailToCore'
 
 export class AdminPage implements OnInit {
   routineOptions = [
-    {'id':0,'cmd':'ModuleRST','name':'Reboot module','confirm':'Reboot module ?'},
-    {'id':1,'cmd':'getSIMstatus','name':'Module status','confirm':'Request module status?'},
-    {'id':2,'cmd':'getConfig','name':'Config status','confirm':'Request config status?'},
-    {'id':3,'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
-    {'id':4,'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
-    {'id':5,'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
-    {'id':6,'cmd':'uploadCoreEvents','name':'Upload core events','confirm':'Upload events?'},
+    {'cmd':'ModuleRST','name':'Reboot module','confirm':'Reboot module ?'},
+    {'cmd':'getSIMstatus','name':'Module status','confirm':'Request module status?'},
+    {'cmd':'getConfig','name':'Config status','confirm':'Request config status?'},
+    {'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
+    {'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
+    {'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
+    {'cmd':'uploadCoreEvents','name':'Upload core events','confirm':'Upload events?'},
+    {'cmd':'uploadRestraint','name':'Upload restraint','confirm':'Upload restraint?'},
 
-    {'id':7,'cmd':'cfgCHG','option1':'app','option2':'coreId','option3':'',
+    {'cmd':'cfgCHG','option1':'app','option2':'coreId','option3':'',
       'name':'Change core Id','confirm':'Change core Id?'},
 
-    {'id':8,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
+    {'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'gate',
       'name':'Code open Gate','confirm':'Open gate with code?'},
 
-    {'id':9,'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
+    {'cmd':'cfgCHG','option1':'app','option2':'openByCode','option3':'magnet',
       'name':'Code open Magnet','confirm':'Open magnet with code?'},
 
-    {'id':10,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
+    {'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'flex',
       'name':'Set Keypad flex','confirm':'Set keypad flex?'},
 
-    {'id':11,'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
+    {'cmd':'cfgCHG','option1':'keypad_matrix','option2':'default','option3':'hardPlastic',
       'name':'Set Keypad hard plastic','confirm':'Set keypad hardPlastic?'},
 
-    {'id':12,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
+    {'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'true',
       'name':'Set debug mode','confirm':'Set debug On?'},
 
-    {'id':13,'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
+    {'cmd':'cfgCHG','option1':'app','option2':'debugging','option3':'false',
       'name':'Remove debug mode','confirm':'Set debug Off?'},
 
-    {'id':14,'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
+    {'cmd':'cfgCHG','input':true,'option1':'app','option2':'settingsCode',
       'name':'Change settings Code','confirm':'Change settingsCode ?'},
 
-    {'id':15,'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
+    {'cmd':'cfgCHG','input':true,'option1':'app','option2':'pwdRST',
       'name':'Change pwdRST','confirm':'Change pwdRST ?'},
 
-    {'id':16,'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'true',
+    {'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'true',
       'name':'Set demo mode','confirm':'Set demo On?'},
 
-    {'id':17,'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'false',
+    {'cmd':'cfgCHG','option1':'app','option2':'demo','option3':'false',
       'name':'Remove demo mode','confirm':'Set demo Off?'},
 
-    {'id':18,'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'true',
+    {'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'true',
       'name':'Set rotate mode','confirm':'Set rotate On?'},
 
-    {'id':19,'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'false',
+    {'cmd':'cfgCHG','option1':'app','option2':'rotate','option3':'false',
       'name':'Remove rotate mode','confirm':'Set rotate Off?'},
 
-    {'id':20,'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'true',
+    {'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'true',
       'name':'Save code events','confirm':'Yes save code events?'},
 
-    {'id':21,'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'false',
+    {'cmd':'cfgCHG','option1':'sim','option2':'sendCodeEvents','option3':'false',
       'name':'Not save code events','confirm':'Not save code events?'},
 
   ]
@@ -511,15 +512,19 @@ toggleSectionSim(){
                 break;
 
               case 'ModuleRST':
-                  await this.sendSms(item.Sim,'rst,' + withoutOffset + ',sim');
+                  await this.sendSms(item.Sim,'rst,' + withoutOffset);
                 break;
               case 'getActiveCodes':
-                  await this.sendSms(item.Sim,'active_codes,' + withoutOffset + ',sim');
+                  await this.sendSms(item.Sim,'active_codes,' + withoutOffset);
                 break;
 
               case 'uploadCoreEvents':
-                  await this.sendSms(item.Sim,'uploadEvents,' + withoutOffset + ',sim');
+                  await this.sendSms(item.Sim,'uploadEvents,' + withoutOffset);
                 break;
+
+              case 'uploadRestraint':
+                await this.sendSms(item.Sim,'uploadRestraint,' + withoutOffset);
+              break;
 
               case 'setOpen':
                   await this.sendSms(item.Sim,'setOpenCode,' + withoutOffset 

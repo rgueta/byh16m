@@ -142,16 +142,31 @@
       </ion-textarea>
     </ion-item>
 
-    <ion-item *ngIf = "sourcePage == 'login' " class="wrap-input">
-      <ion-button type="submit" [disabled]="RegisterForm.invalid" 
+    <ion-item *ngIf = "sourcePage == 'login'" [disabled]="RegisterForm.invalid" > 
+      <!-- <ion-button type="submit" [disabled]="RegisterForm.invalid" 
       class="submit titleButtonBlue" expand="full"  
-      (click)="onSubmitItSelf(localCpu,localCore,name,username,email,sim,house,gender)" >Grabar</ion-button>
+      (click)="onSubmitItSelf(localCpu,localCore,name,username,email,sim,house,gender)" >
+      Grabar</ion-button> -->
+      <div class="item-wripper">
+        <input class="button-17 submit" type="button"  
+        (click)="onSubmitItSelf(localCpu,localCore,name,
+          username,email,sim,house,gender)"
+        value="Grabar">
+      </div>
+   
     </ion-item>
     
-    <ion-item *ngIf = "sourcePage != 'login' " class="wrap-input">
-      <ion-button type="submit" [disabled]="RegisterForm.invalid" 
+    <ion-item *ngIf = "sourcePage != 'login' " 
+      class="wrap-input" [disabled]="RegisterForm.invalid">
+      <!-- <ion-button type="submit" [disabled]="RegisterForm.invalid" 
       class="submit titleButtonBlue" expand="full"  
-      (click)="onSubmit()" >Grabar</ion-button>
+      (click)="onSubmit()" >Grabar</ion-button> -->
+
+      <div class="item-wripper">
+        <input class="button-17 submit" type="button"  
+        (click)="onSubmit()"
+        value="Grabar">
+      </div>
     </ion-item>
 
   </form>

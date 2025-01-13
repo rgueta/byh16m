@@ -284,7 +284,14 @@ export class UpdUsersPage implements OnInit {
                       intent:''
                     }
                   }
-                  const pkgDevice =  'newUser,' + 
+
+                  var myDate = new Date();
+                  var offset = myDate.getTimezoneOffset() * 60 * 1000;
+
+                  var withOffset = myDate.getTime();
+                  var withoutOffset = withOffset - offset;
+
+                  const pkgDevice =  'newUser,' + withoutOffset + ',' +
                     this.RegisterForm.get('Name').value + ',' + 
                     this.RegisterForm.get('House').value + ',' + 
                     this.RegisterForm.get('Sim').value + ',' + 
@@ -352,7 +359,9 @@ async onSubmitItSelf(cpu:string,core:string,name:string,username:string,
       {
         text: 'Si',
         handler: async () => {
-            this.sendUserReq(pkg);
+            if (await this.sendUserReq(pkg) == true) {
+              this.modalController.dismiss();
+            }
         }
       }
     ]
@@ -364,28 +373,23 @@ async onSubmitItSelf(cpu:string,core:string,name:string,username:string,
 
 }
 
-  async sendUserReq(pkg:any){
-    const admin_sim = JSON.parse(localStorage.getItem('admin_sim'));
-    // var options:SmsOptions={
-    //   replaceLineBreaks:false,
-    //   android:{
-    //     intent:''
-    //   }
-    // }
+async sendUserReq(pkg:any):Promise<any>{
+  const admin_sim = JSON.parse(localStorage.getItem('admin_sim'));
+  this.showLoading(2500);
+  this.api.postData('api/backstage/',pkg)
+  .then( async (result:any) =>{
+    this.toolService.showAlertBasic('','Requerimiento enviado',
+      'Pronto recibiras un correo',['Ok'])
 
-    this.showLoading(2500);
-    this.api.postData('api/backstage/',pkg)
-    .then( async (result:any) =>{
-      this.toolService.showAlertBasic('','Requerimiento enviado',
-        'Pronto recibiras un correo',['Ok'])
-
-      this.modalController.dismiss();
-    })
-    .catch((err) => {
-      this.toolService.showAlertBasic('','Error', 
-        JSON.stringify(err['error']['msg']),['Ok'])
-    })
-  }
+      return true;
+    
+  })
+  .catch((err) => {
+    this.toolService.showAlertBasic('','Error', 
+      JSON.stringify(err['error']['msg']),['Ok'])
+      return false;
+  })
+}
 
   async closeModal(){
     var empty : Boolean = true;

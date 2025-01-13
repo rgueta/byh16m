@@ -92,9 +92,13 @@
               <ion-icon slot="end" name="toggle-outline" (click)="toggleButtons()">
               </ion-icon>
           </ion-item>
-          <ion-item id="logout1-alert" [button]="true" [detail]="false" 
-            (click)="logout()">Cerrar sesion
-            {{myEmail}}
+          <ion-item id="logout1-alert" *ngIf="MyRole == 'admin'" 
+            [button]="true" [detail]="false" (click)="logout()" >
+            <div class="logged">Cerrar sesion: {{myEmail}}</div>
+          </ion-item>
+          <ion-item id="logout1-alert" *ngIf="MyRole != 'admin'" 
+            [button]="true" [detail]="false" (click)="logout()">
+            Cerrar sesion
           </ion-item>
         </ion-item-group>
       </ion-list>

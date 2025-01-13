@@ -69,13 +69,15 @@ export class UsersPage implements OnInit {
       url = 'api/users/coreNeighbor/';
     }
 
-    await this.api.getData(url + this.coreId + '/' +
-    localStorage.getItem('my-userId')
+    await this.api.getData(url + this.coreId + '/' + localStorage.getItem('my-userId')
     ).subscribe(async (result:any) => {
       if(result)
       this.users = result;
       this.users[0].open = true;
+      console.log('users:', await result)
     });
+
+    
   }
 
   onEditSim(){
@@ -116,8 +118,11 @@ export class UsersPage implements OnInit {
                   await this.api.postData('api/users/updSim/' + this.userId ,
                     {'userId':neighborId, 'newSim':this.sim})
                     .then(async (result) => {
-                      // Change sim on pcb
-                      await this.sms.send(coreSim,'updSim,' + actualSim + ',' + this.sim, options)
+
+                      // Change sim on pcbthis.sim 
+                      await this.sms.send(coreSim,'updSim,'+ this.getTimestamp() + ',' + 
+                          actualSim + ',' + this.sim, options)
+
                       .then(() =>{
                         this.sim = '';
                         this.getUsers();
@@ -168,6 +173,17 @@ export class UsersPage implements OnInit {
     this.editRole = !this.editRole;
   }
 
+  // generate timestamp ------------------
+  async getTimestamp(){
+    
+    var myDate = new Date();
+    var offset = myDate.getTimezoneOffset() * 60 * 1000;
+
+    var withOffset = myDate.getTime();
+    var withoutOffset = withOffset - offset;
+
+    return withoutOffset;
+  }
 
   async doRefresh(event:any){
     this.getUsers();
@@ -234,7 +250,7 @@ export class UsersPage implements OnInit {
     const adminId = localStorage.getItem('my-userId');
     const titleMsg = (userStatus ?  'Desbloqueo' : 'Bloqueo')
     const status = (userStatus ?  'unlock' : 'lock')
-    const pkg = 'updStatus_' + status + ',' + name + ',' + house + ',' + sim + ',' + id ;
+    
 
     let alert = await this.alertCtrl.create({
       subHeader: 'Continuar con ' + titleMsg,
@@ -250,6 +266,12 @@ export class UsersPage implements OnInit {
         {
           text: 'Ok',
           handler: async data => {
+
+            
+
+            const pkg = 'updStatus_' + status + ',' + this.getTimestamp() 
+              + ',' + name + ',' + house + ',' + sim + ',' + id ;
+
             const options:SmsOptions={
               replaceLineBreaks:false,
               android:{
@@ -293,7 +315,7 @@ export class UsersPage implements OnInit {
 
 async delUser(userId:string, name:string,coreSim:string){
   const adminId = localStorage.getItem('my-userId');
-  const cmd = 'delete,' + userId ;
+  
 
     let alert = await this.alertCtrl.create({
       subHeader: 'Continuar con borrar',
@@ -326,6 +348,7 @@ async delUser(userId:string, name:string,coreSim:string){
                 // console.log('cmd: ', cmd);
                 // this.loadingController.dismiss();
 
+                const cmd = 'delete,'+ this.getTimestamp() + ',' + userId ;
                 await this.sms.send(coreSim, cmd ,options)
                 .then(() => this.loadingController.dismiss())
                 .catch((e:any) => {

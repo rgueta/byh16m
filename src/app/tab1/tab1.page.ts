@@ -327,6 +327,7 @@ async sendSMS(door:string){
 
   // create milliseconds block  for local timestamp -------
 
+  // timestamp ------------------------
   var myDate = new Date();
   var offset = myDate.getTimezoneOffset() * 60 * 1000;
 
