@@ -32,11 +32,13 @@
           <ion-textarea type="string" placeholder="Comentario" formControlName="comment"></ion-textarea>
         </ion-item>
 
-      </div>
-      <hr>
-      <ion-button class="loginButton" type="submit" expand="block" 
-        [disabled]="!validator.valid">Mandar</ion-button>
+        <ion-item class="" [disabled]="!validator.valid" >
+          <div class="item-wripper">
+            <input class="button-17 submit" type="submit" value="Mandar">
+          </div>
+        </ion-item>
 
+      </div>
     </form>
 
 </ion-content>
