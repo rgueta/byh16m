@@ -124,6 +124,7 @@ export class DatabaseService {
     const token = localStorage.getItem(TOKEN_KEY);
     let  options = {
       headers : {
+    
     'content-type' : 'application/json',
     'authorization' : `Bearer ${token}`,
     }
@@ -141,7 +142,7 @@ export class DatabaseService {
       'Accept': 'application/json',
       'content-type' :'application/json',
       'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': 'capacitor://localhost',
       'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT'
     }
   }
