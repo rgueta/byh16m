@@ -123,13 +123,13 @@ export class DatabaseService {
  getData(collection:String) {
     const token = localStorage.getItem(TOKEN_KEY);
     let  options = {
-      headers : {
+      headers : new HttpHeaders ({
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Origin': 'capacitor://localhost',
     'content-type' : 'application/json',
     'authorization' : `Bearer ${token}`,
-    }
+    })
     }
 
     return this.http.get(this.REST_API_SERVER + collection ,options);
