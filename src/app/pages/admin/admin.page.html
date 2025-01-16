@@ -191,6 +191,11 @@
         </ion-list>
 
         <ion-item class="wrap-input" mode="ios">
+          <ion-toggle id="remoteToggle" labelPlacement="start" checked="{{item.remote}}" 
+          (ionChange)="chgRemoteButton($event,item)">Remote buttons : </ion-toggle>
+        </ion-item>
+
+        <ion-item class="wrap-input" mode="ios">
           <ion-toggle id="disableToggle" labelPlacement="start" checked="{{item.enable}}" 
           (ionChange)="chgStatusCore($event,item)">Enabled core : </ion-toggle>
         </ion-item>

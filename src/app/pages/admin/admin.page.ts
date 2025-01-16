@@ -272,8 +272,22 @@ export class AdminPage implements OnInit {
     console.log(`Id ${id}, name: ${name}`)
   }
 
+
+  async chgRemoteButton(event:any,item:any) {
+    let titleMsg = ' Remote to false: ';
+
+    if(event.target.checked)
+    {
+      titleMsg = 'Remote to true: ';
+    }
+
+    if(event.target.checked != item.remote){
+      this.alertCtrlEvent(event,item,'Confirm', titleMsg + ' ' + item.name + ' ?',
+       'chgRemoteButtons', 'Yes', 'Cancel')
+    }
+  }
+
   async chgStatusCore(event:any,item:any) {
-    let element = <HTMLInputElement> document.getElementById("disableToggle");
     let titleMsg = 'Disable ';
 
     if(event.target.checked)
@@ -354,7 +368,11 @@ toggleSectionSim(){
 
   async alertCtrlEvent(event:any,item:any,titleMsg:string,Message:string,
     option:string, txtConfirm:string, txtCancel:string, index: number = 0){
-    let element = <HTMLInputElement> document.getElementById("disableToggle");
+    
+    let element = <HTMLInputElement> document.getElementById(event.srcElement.id);
+
+    // console.log('event: ', event.srcElement.id);
+    // return;
 
     // generate timestamp ------------------
     var myDate = new Date();
@@ -389,6 +407,7 @@ toggleSectionSim(){
           handler: () => {
             switch(option){
               case 'chgStatusCore':
+              case 'chgRemoteButtons':
                 element.checked = !event.target.checked;
                 break;
               default:
@@ -402,34 +421,41 @@ toggleSectionSim(){
           handler: async data => {
             switch(option){
               case 'chgStatusCore':
-                if(event.target.checked){
+              case 'chgRemoteButtons':
                   if(await this.toolService.verifyNetStatus()){
-                    await this.api.postData('api/cores/enable/' + 
-                      this.userId,{'coreId' : item._id}).then(async (onResolve) =>{
+                    let jsonItem : any;
+                    let valueItem = '';
+                    switch(option){
+                      case 'chgStatusCore':
+                       valueItem = 'enable';
+                        break
+                      case 'chgRemoteButtons':
+                        valueItem = 'remote';
+                        break
+                    }
+                    const strJson = '{"coreId" : "' + item._id + '","item" : { "' 
+                      + valueItem + '" : ' +  event.target.checked + '}}';
+
+                    jsonItem = JSON.parse(strJson);
+
+                    await this.api.postData('api/cores/chgItem/' + this.userId,
+                      jsonItem).then(async (onResolve) =>{
+                      if(option == 'chgRemoteButtons'){
+                        localStorage.setItem('remote',event.target.checked.toString())
+                      }
+
                       await this.getCores();
                     },
                     (onReject) =>{
                       this.toolService.toastAlert('Can not enable core, error: <br>' + 
                         JSON.stringify(onReject),0,['Ok'],'bottom');
                     });
+
+
                   }else{
                     this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
                   }
-                }else{
-                    if(await this.toolService.verifyNetStatus()){
-                      await this.api.postData('api/cores/disable/' + 
-                      this.userId,{'coreId' : item._id}).then(async (onResolve) =>{
-                    await this.getCores();
-                    },
-                    (onReject) =>{
-                      this.toolService.toastAlert('Cannot disable core, error: <br>' + 
-                        JSON.stringify(onReject),0,['Ok'],'bottom');
-                    });
-                  }else{
-                    this.toolService.toastAlert('No hay Acceso a internet',0,['Ok'],'middle');
-                  }
-                }
-              break;
+                break;
               case 'simChange':
 
               this.loadingController.create({

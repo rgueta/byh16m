@@ -126,7 +126,7 @@ export class DatabaseService {
       headers :{
     'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
     'Access-Control-Allow-Headers': 'x-requested-with, Content-Type, origin, authorization, accept, client-security-token',
-    'Access-Control-Allow-Origin': 'capacitor://localhost',
+    'Access-Control-Allow-Origin': '*',
     'content-type' : 'application/json',
     'authorization' : `Bearer ${token}`,
     }
@@ -166,6 +166,9 @@ export class DatabaseService {
     let  options = {
       headers : {
     'content-type' : 'application/json',
+    'Access-Control-Allow-Headers': 'x-requested-with, Content-Type, origin, authorization, accept, client-security-token',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
     'authorization' : `Bearer ${token}`,
     }
     }
