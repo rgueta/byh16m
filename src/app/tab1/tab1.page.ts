@@ -292,20 +292,20 @@ async collectInfo(){
     modal.present()
   }
 
-  // sendOpening(Door : string){
-  //   if(Door == ''){
-  //     // return 0;
-  //   }else{
-  //     this.msg = Door;
-  //     this.sendSMS();
-  //   }
-  // }
-
 
 async openUrl(url:string){
   window.open(url)
 }
 
+async getTimestamp(){
+  var myDate = new Date();
+  var offset = myDate.getTimezoneOffset() * 60 * 1000;
+
+  var withOffset = myDate.getTime();
+  var withoutOffset = withOffset - offset;
+  return withoutOffset;
+
+}
 // Send a text message using default options
 
 async sendSMS(door:string){
@@ -328,14 +328,10 @@ async sendSMS(door:string){
   // create milliseconds block  for local timestamp -------
 
   // timestamp ------------------------
-  var myDate = new Date();
-  var offset = myDate.getTimezoneOffset() * 60 * 1000;
 
-  var withOffset = myDate.getTime();
-  var withoutOffset = withOffset - offset;
 
   this.sim = local_sim;
-  this.msg = 'open,' + withoutOffset + ',' + door + ',' + uuid;
+  this.msg = 'open,' + await this.getTimestamp() + ',' + door + ',' + uuid;
 
   // --------------------------------
 

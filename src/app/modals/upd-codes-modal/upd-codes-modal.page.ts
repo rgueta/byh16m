@@ -95,7 +95,6 @@ export class UpdCodesModalPage implements OnInit {
   }
 
   getPlatform(){
-    console.log('Platform : ' + this.platform.platforms);
     if (this.platform.is('android')){
       this.StrPlatform = 'android';
     }
@@ -125,8 +124,6 @@ export class UpdCodesModalPage implements OnInit {
     this.diff = event.detail.value;
 
     this.expiry = expiry.setHours(expiry.getHours() + Number(event.detail.value));
-
-    console.log(`Initial: ${new Date(this.initial)} - Expiry: ${new Date(this.expiry)} `);
   }
 
   async getVisitors(){
@@ -287,6 +284,13 @@ export class UpdCodesModalPage implements OnInit {
       }
   }
 
+  async sendQR(){
+    const txtHrs = this.diff > 1 ? ' hrs. ?' : ' hr. ?'  ;
+    
+    await this.showAlert('','Confirmar', 'Mandar codigo de ' +
+      Number(this.diff).toFixed(0) + txtHrs,'btns', 'Si', 'No');
+  }
+
   //#region -----------------------   QR -----------------------------
 
   captureQRscreen(){
@@ -343,24 +347,28 @@ export class UpdCodesModalPage implements OnInit {
   //#endregion -------------------  QR --------------------------------
 
    // -------   show alerts              ---------------------------------
-   async showAlerts(header:string,message:string){
-    const MsgAlert = await this.alertController.create({
-      cssClass : "basic-alert",
-      header: header,
-      message: message,
+   async showAlert(Header:string, subHeader:string, msg:string, btns:any,
+    txtConfirm:string, txtCancel:string) {
+    const alert = await this.alertController.create({
+      header: Header,
+      subHeader: subHeader,
+      message: msg,
+      backdropDismiss:false,
       buttons: [
-        { text : 'OK',
-        handler : () => {
-          this.closeModal();
-          // const url = '/codes'
-          // this.router.navigateByUrl(url, {replaceUrl: true});
-          // this.router.navigate([url] , { state : { from : 'login'}  }); //send parameters
-        }
-
-      }
-      ],
+        {
+        text:txtCancel,
+        role: 'cancel'
+      },
+      {
+        text:txtConfirm,
+        handler: async () =>{
+          await this.captureQRscreen();
+              }
+      
+      }]
     });
-    await MsgAlert.present();
+  
+    await alert.present();
   }
 
 

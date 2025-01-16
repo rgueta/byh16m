@@ -96,9 +96,15 @@
       </ion-item>
 
       <ion-item class="wrap-input">
-        <ion-button type="submit" class="submit titleButtonBlue" mode="ios"
+        <!-- <ion-button type="submit" class="submit titleButtonBlue" mode="ios"
          expand="full"  
-        (click)="captureQRscreen()" >Enviar</ion-button>
+        (click)="captureQRscreen()" >Enviar</ion-button> -->
+
+        <div class="item-wripper">
+          <input class="button-17 submit" type="button"  
+          (click)="sendQR()"
+          value="Mandar">
+        </div>
       </ion-item>
   </form>
 </ion-content>
