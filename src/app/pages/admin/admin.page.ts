@@ -364,24 +364,21 @@ toggleSectionSim(){
 
 // endregion   --------------------------------------------
 
+async getTimestamp(){
+  var myDate = new Date();
+  var offset = myDate.getTimezoneOffset() * 60 * 1000;
+
+  var withOffset = myDate.getTime();
+  var withoutOffset = withOffset - offset;
+  return withoutOffset
+}
+
 //region ------- alert controlers region   ---------------------
 
   async alertCtrlEvent(event:any,item:any,titleMsg:string,Message:string,
     option:string, txtConfirm:string, txtCancel:string, index: number = 0){
     
     let element = <HTMLInputElement> document.getElementById(event.srcElement.id);
-
-    // console.log('event: ', event.srcElement.id);
-    // return;
-
-    // generate timestamp ------------------
-    var myDate = new Date();
-    var offset = myDate.getTimezoneOffset() * 60 * 1000;
-
-    var withOffset = myDate.getTime();
-    var withoutOffset = withOffset - offset;
-    // --------------------------------------
-
 
     let inputs = [{}];
 
@@ -480,7 +477,7 @@ toggleSectionSim(){
                                 intent:''
                               }
                             } 
-                            await this.sms.send(item.Sim,'cfgCHG,' + withoutOffset + 
+                            await this.sms.send(item.Sim,'cfgCHG,' + this.getTimestamp() + 
                               ',sim,value,' + this.sim, options)
                             .then(() =>{
                               this.sim = '';
@@ -523,14 +520,14 @@ toggleSectionSim(){
                 });
                 break;
               case 'getSIMstatus':
-                  this.sendSms(item.Sim, 'status,' + withoutOffset + ',gral')
+                  this.sendSms(item.Sim, 'status,' + this.getTimestamp() + ',gral')
                 break;
               
                 case 'getConfig':
-                  this.sendSms(item.Sim, 'status,' + withoutOffset + ',getConfig')
+                  this.sendSms(item.Sim, 'status,' + this.getTimestamp() + ',getConfig')
                 break;
               case 'RestraintStatus':
-                    await this.sendSms(item.Sim,'status,' + withoutOffset + ',restraint');
+                    await this.sendSms(item.Sim,'status,' + this.getTimestamp() + ',restraint');
                   break;
               
               case 'status,extrange':
@@ -538,41 +535,41 @@ toggleSectionSim(){
                 break;
 
               case 'ModuleRST':
-                  await this.sendSms(item.Sim,'rst,' + withoutOffset);
+                  await this.sendSms(item.Sim,'rst,' + this.getTimestamp());
                 break;
               case 'getActiveCodes':
-                  await this.sendSms(item.Sim,'active_codes,' + withoutOffset);
+                  await this.sendSms(item.Sim,'active_codes,' + this.getTimestamp());
                 break;
 
               case 'uploadCoreEvents':
-                  await this.sendSms(item.Sim,'uploadEvents,' + withoutOffset);
+                  await this.sendSms(item.Sim,'uploadEvents,' + this.getTimestamp());
                 break;
 
               case 'uploadRestraint':
-                await this.sendSms(item.Sim,'uploadRestraint,' + withoutOffset);
+                await this.sendSms(item.Sim,'uploadRestraint,' + this.getTimestamp());
               break;
 
               case 'setOpen':
-                  await this.sendSms(item.Sim,'setOpenCode,' + withoutOffset 
+                  await this.sendSms(item.Sim,'setOpenCode,' + this.getTimestamp() 
                       + ',' + item.option1);
                 break;
               case 'setKeypad':
-                  await this.sendSms(item.Sim,'setKeypad,' + withoutOffset 
+                  await this.sendSms(item.Sim,'setKeypad,' + this.getTimestamp() 
                       + ',' + item.option1);
                 break;
               case 'cfgCHG':
                 try{
 
                   if(this.input){
-                    await this.sendSms(item.Sim,'cfgCHG,' + withoutOffset + ',' + 
+                    await this.sendSms(item.Sim,'cfgCHG,' + this.getTimestamp() + ',' + 
                       item.option1 + ',' + item.option2 + ',' + data.inputValue);
                   }else{
                     if (this.routineOptions[index]['option2'] == 'coreId'){
-                      await this.sendSms(item.Sim,'cfgCHG,' + withoutOffset + ',' + 
+                      await this.sendSms(item.Sim,'cfgCHG,' + this.getTimestamp() + ',' + 
                         item.option1 + ',' + item.option2 + ',' + item._id);
 
                     }else{
-                      await this.sendSms(item.Sim,'cfgCHG,' + withoutOffset + ',' + 
+                      await this.sendSms(item.Sim,'cfgCHG,' + this.getTimestamp() + ',' + 
                         item.option1 + ',' + item.option2 + ',' + item.option3);
                     }
                   }

@@ -208,7 +208,7 @@ export class UpdCodesModalPage implements OnInit {
 
           // #region Send code to Core  ----------------------  
 
-          const pckgToCore = await 'codigo,' + this.code +','+ 
+          const pckgToCore = await 'codigo,'+ this.getTimestamp() + ',' + this.code +','+ 
           Utils.convDate(new Date(this.expiry)) + ',' + 
           this.userId + ',n/a,' + respId
         
@@ -249,6 +249,14 @@ export class UpdCodesModalPage implements OnInit {
 
   }
 
+  async getTimestamp(){
+    var myDate = new Date();
+    var offset = myDate.getTimezoneOffset() * 60 * 1000;
+  
+    var withOffset = myDate.getTime();
+    var withoutOffset = withOffset - offset;
+    return withoutOffset
+  }
 
   async sendSMS(sim:string,text:string){
     var options:SmsOptions={
