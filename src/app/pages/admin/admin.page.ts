@@ -477,7 +477,7 @@ async getTimestamp(){
                                 intent:''
                               }
                             } 
-                            await this.sms.send(item.Sim,'cfgCHG,' + this.getTimestamp() + 
+                            await this.sms.send(item.Sim,'cfgCHG,' + await this.getTimestamp() + 
                               ',sim,value,' + this.sim, options)
                             .then(() =>{
                               this.sim = '';
@@ -520,14 +520,14 @@ async getTimestamp(){
                 });
                 break;
               case 'getSIMstatus':
-                  this.sendSms(item.Sim, 'status,' + this.getTimestamp() + ',gral')
+                  this.sendSms(item.Sim, 'status,' + await this.getTimestamp() + ',gral')
                 break;
               
                 case 'getConfig':
-                  this.sendSms(item.Sim, 'status,' + this.getTimestamp() + ',getConfig')
+                  this.sendSms(item.Sim, 'status,' + await this.getTimestamp() + ',getConfig')
                 break;
               case 'RestraintStatus':
-                    await this.sendSms(item.Sim,'status,' + this.getTimestamp() + ',restraint');
+                    await this.sendSms(item.Sim,'status,' + await this.getTimestamp() + ',restraint');
                   break;
               
               case 'status,extrange':
@@ -535,41 +535,41 @@ async getTimestamp(){
                 break;
 
               case 'ModuleRST':
-                  await this.sendSms(item.Sim,'rst,' + this.getTimestamp());
+                  await this.sendSms(item.Sim,'rst,' + await this.getTimestamp());
                 break;
               case 'getActiveCodes':
-                  await this.sendSms(item.Sim,'active_codes,' + this.getTimestamp());
+                  await this.sendSms(item.Sim,'active_codes,' + await this.getTimestamp());
                 break;
 
               case 'uploadCoreEvents':
-                  await this.sendSms(item.Sim,'uploadEvents,' + this.getTimestamp());
+                  await this.sendSms(item.Sim,'uploadEvents,' + await this.getTimestamp());
                 break;
 
               case 'uploadRestraint':
-                await this.sendSms(item.Sim,'uploadRestraint,' + this.getTimestamp());
+                await this.sendSms(item.Sim,'uploadRestraint,' + await this.getTimestamp());
               break;
 
               case 'setOpen':
-                  await this.sendSms(item.Sim,'setOpenCode,' + this.getTimestamp() 
+                  await this.sendSms(item.Sim,'setOpenCode,' + await this.getTimestamp() 
                       + ',' + item.option1);
                 break;
               case 'setKeypad':
-                  await this.sendSms(item.Sim,'setKeypad,' + this.getTimestamp() 
+                  await this.sendSms(item.Sim,'setKeypad,' + await this.getTimestamp() 
                       + ',' + item.option1);
                 break;
               case 'cfgCHG':
                 try{
 
                   if(this.input){
-                    await this.sendSms(item.Sim,'cfgCHG,' + this.getTimestamp() + ',' + 
+                    await this.sendSms(item.Sim,'cfgCHG,' + await this.getTimestamp() + ',' + 
                       item.option1 + ',' + item.option2 + ',' + data.inputValue);
                   }else{
                     if (this.routineOptions[index]['option2'] == 'coreId'){
-                      await this.sendSms(item.Sim,'cfgCHG,' + this.getTimestamp() + ',' + 
+                      await this.sendSms(item.Sim,'cfgCHG,' + await this.getTimestamp() + ',' + 
                         item.option1 + ',' + item.option2 + ',' + item._id);
 
                     }else{
-                      await this.sendSms(item.Sim,'cfgCHG,' + this.getTimestamp() + ',' + 
+                      await this.sendSms(item.Sim,'cfgCHG,' + await this.getTimestamp() + ',' + 
                         item.option1 + ',' + item.option2 + ',' + item.option3);
                     }
                   }

@@ -208,7 +208,7 @@ export class UpdCodesModalPage implements OnInit {
 
           // #region Send code to Core  ----------------------  
 
-          const pckgToCore = await 'codigo,'+ this.getTimestamp() + ',' + this.code +','+ 
+          const pckgToCore = await 'codigo,'+ await this.getTimestamp() + ',' + this.code +','+ 
           Utils.convDate(new Date(this.expiry)) + ',' + 
           this.userId + ',n/a,' + respId
         

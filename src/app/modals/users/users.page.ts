@@ -120,7 +120,7 @@ export class UsersPage implements OnInit {
                     .then(async (result) => {
 
                       // Change sim on pcbthis.sim 
-                      await this.sms.send(coreSim,'updSim,'+ this.getTimestamp() + ',' + 
+                      await this.sms.send(coreSim,'updSim,'+ await this.getTimestamp() + ',' + 
                           actualSim + ',' + this.sim, options)
 
                       .then(() =>{
@@ -269,7 +269,7 @@ export class UsersPage implements OnInit {
 
             
 
-            const pkg = 'updStatus_' + status + ',' + this.getTimestamp() 
+            const pkg = 'updStatus_' + status + ',' + await this.getTimestamp() 
               + ',' + name + ',' + house + ',' + sim + ',' + id ;
 
             const options:SmsOptions={
@@ -348,7 +348,7 @@ async delUser(userId:string, name:string,coreSim:string){
                 // console.log('cmd: ', cmd);
                 // this.loadingController.dismiss();
 
-                const cmd = 'delete,'+ this.getTimestamp() + ',' + userId ;
+                const cmd = 'delete,'+ await this.getTimestamp() + ',' + userId ;
                 await this.sms.send(coreSim, cmd ,options)
                 .then(() => this.loadingController.dismiss())
                 .catch((e:any) => {
