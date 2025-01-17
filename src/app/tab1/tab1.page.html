@@ -98,7 +98,7 @@
           </ion-item>
           <ion-item id="logout1-alert" *ngIf="MyRole != 'admin'" 
             [button]="true" [detail]="false" (click)="logout()">
-            Cerrar sesion
+            <div class="logged">Cerrar sesion: {{myName}}</div>
           </ion-item>
         </ion-item-group>
       </ion-list>

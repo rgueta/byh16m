@@ -15,6 +15,7 @@ const TOKEN_EXP = 'token-exp';
 const TOKEN_IAT = 'token-iat';
 
 const TOKEN_KEY = 'my-token';
+const USER_NAME = 'my-name';
 const USERID = 'my-userId';
 const USER_ROLES = 'my-roles';
 const MY_SIM = 'my-sim';
@@ -83,7 +84,8 @@ export class AuthenticationService {
         
         localStorage.setItem('my-email',tokens.email);
         localStorage.setItem(TOKEN_PX,tokens.pwd);
-        localStorage.setItem(USERID,tokens.userId);
+        localStorage.setItem(USERID,tokens.userId)
+        localStorage.setItem(USER_NAME,tokens.userName);;
         localStorage.setItem(USER_ROLES,JSON.stringify(tokens.roles));
         localStorage.setItem(CORE_SIM,tokens.core_sim);
         localStorage.setItem(MY_SIM,tokens.sim);

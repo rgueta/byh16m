@@ -49,6 +49,7 @@ export class Tab1Page implements OnInit {
   
   infoPanel : any;
   myEmail = '';
+  myName = '';
   REST_API_SERVER = environment.cloud.server_url;
   iosOrAndroid: boolean;
   demoMode:boolean = false;
@@ -72,9 +73,8 @@ export class Tab1Page implements OnInit {
   async ionViewWillEnter(){
     this.MyRole = localStorage.getItem('my-role');
     this.myEmail = localStorage.getItem('my-email');
+    this.myName = localStorage.getItem('my-name');
     this.remote = await localStorage.getItem('remote') === 'true';
-
-    
 
     if (localStorage.getItem('demoMode')){
       this.demoMode = localStorage.getItem('demoMode') == 'true' ? true : false
