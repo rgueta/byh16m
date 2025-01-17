@@ -22,8 +22,8 @@
     <img src="../../../assets/logo_v2.png"/>
    </div> 
   
-   <form (ngSubmit)="sendRequest()" [formGroup]="validator">
-     <div class="input-group">
+   <form class="formInput" (ngSubmit)="Validate()" [formGroup]="validator">
+     <div class="">
         <ion-item>
           <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
         </ion-item>
@@ -31,14 +31,13 @@
         <ion-item>
           <ion-textarea type="string" placeholder="Comentario" formControlName="comment"></ion-textarea>
         </ion-item>
-
-        <ion-item class="" [disabled]="!validator.valid" >
+      </div>
+        <hr>
+       <ion-item class="" [disabled]="!validator.valid" >
           <div class="item-wripper">
             <input class="button-17 submit" type="submit" value="Mandar">
           </div>
         </ion-item>
-
-      </div>
     </form>
 
 </ion-content>

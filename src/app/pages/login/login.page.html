@@ -11,7 +11,7 @@
   <div class="version">version {{version}}</div>
  </div> 
 
- <form (ngSubmit)="login()" [formGroup]="credentials">
+ <form class="formInput" (ngSubmit)="login()" [formGroup]="credentials">
    <div class="input-group">
       <ion-item>
         <ion-input type="email" placeholder="Email"  (keyup.enter)="login()"
@@ -38,10 +38,10 @@
 
       <ion-button class="loginButton" expand="block" (click)="newUser()"
       >Usuario nuevo</ion-button>
-      <hr>
 
-      <ion-button class="loginButton" expand="block" (click)='openStore()'>
-        Soy visitante</ion-button>
+      <hr>
+      <!-- <ion-button class="loginButton" expand="block" (click)='openStore()'>
+        Soy visitante</ion-button> -->
 
     <div class="resetPwd-Link">
       <a (click)="pwdReset()">Recuperar contraseña</a>

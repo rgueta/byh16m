@@ -7,6 +7,10 @@ ion-content {
     // --background: url('../../../assets/logo_v2.png') 0 0/100% 100% no-repeat;
 }
 
+.formInput{
+    margin-top: -90px;
+}
+
 .mainTitle{
     display: flex;
     justify-content: center;
@@ -36,7 +40,7 @@ ion-content {
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 15px;
-    margin-top: -40px;
+    // margin-top: -40px;
 }
  
 .errors {
@@ -55,7 +59,7 @@ ion-content {
     align-items: center;
     justify-content:center ;
     height: 200px;
-    top:-90px;
+    top:-100px;
 
     img{
         border-radius: 50%;

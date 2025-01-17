@@ -54,22 +54,27 @@ export class RequestsPage implements OnInit {
     });
   }
 
+  async Validate(){
+    this.showAlert('sendRequest','Confirmar','', 'Mandar requerimiento ?', 'btns','Si','No');
+
+  }
+
   sendRequest(){
       this.api.postData('api/pwdResetReq/' + this.email.value,
       this.devicePkg).then(async result => {  
 
         if(Object.values(result)[1] == 'Locked'){
-          this.showAlert('Alerta','', 'Este usuario esta bloqueado', ['Ok']);
+          this.showAlert('','Alerta','', 'Este usuario esta bloqueado', 'btns','Ok','');
         }else{
-          this.showAlert('Alerta','', 
-            'Reciviras un correo para recuperar tu contraseña', ['Ok']);
+          this.showAlert('','Alerta','', 
+            'Reciviras un correo para recuperar tu contraseña', 'btns','Ok','');
         }
 
         
       },err =>{
         console.log('pwdRST_request Error -- >', err);
-        this.showAlert('Alerta','', 
-            'El correo no esta relacionado a una cuenta', ['Ok']);
+        this.showAlert('','Alerta','', 
+            'El correo no esta relacionado a una cuenta', 'btns','Ok','');
       });
 
   }
@@ -85,17 +90,38 @@ export class RequestsPage implements OnInit {
     });
   }
 
-  async showAlert(Header:string, subHeader:string, msg:string, btns:any) {
+  // -------   show alerts              ---------------------------------
+  async showAlert(option:string,Header:string, subHeader:string, msg:string, btns:any,
+    txtConfirm:string, txtCancel:string) {
     const alert = await this.alertCtrl.create({
       header: Header,
       subHeader: subHeader,
       message: msg,
-      buttons: [{
-        text:'Ok',
+      backdropDismiss:false,
+      buttons: [
+        {
+        text:txtCancel,
+        role: 'cancel'
+      },
+      {
+        text:txtConfirm,
         handler: async () =>{
-          this.closeModal();
+          switch(option){
+            case 'salir':
+              this.closeModal();
+              break;
+            case 'sendRequest':
+              await this.sendRequest();
+              break;
+            
+            default:
+              break;
+
+          }
+          
         }
-    }],
+      
+      }]
     });
   
     await alert.present();

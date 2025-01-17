@@ -14,7 +14,7 @@ ion-content {
     align-items: center;
     justify-content:center ;
     height: 200px;
-    top:-60px;
+    top:-80px;
 
     img{
         border-radius: 50%;
@@ -52,6 +52,10 @@ ion-content {
     }
 
   }
+
+  .formInput{
+    margin-top: -10vh;
+}
 
   .centralize{
     margin-left:-60px;

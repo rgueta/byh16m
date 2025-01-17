@@ -332,14 +332,4 @@ async showAlert(Header:string, subHeader:string, msg:string, btns:any) {
   await alert.present();
 }
 
-// toastEvent(msg:string,duration:number,btns:any){
-//   const toast : any = toast.create({
-//     message:msg,
-//     duration:duration,
-//     buttons: btns
-//   });
-//   this.toast.present();
-
-// }
-
 }
