@@ -213,7 +213,7 @@ export class UpdCodesModalPage implements OnInit {
           if (coreSim){
 
             await this.sendSMS(coreSim, pckgToCore)
-            .then(() =>{console.log('yes sending sms')})
+            .then(() =>{console.log('Sending sms')})
             .catch((e:any) => {
                 this.loadingController.dismiss();
                 this.toolService.showAlertBasic('','Error, send sms to core:'

@@ -338,7 +338,7 @@ async sendSMS(door:string){
 
   if(!local_sim){
     // this.toolService.toastAlert('Privada sin Sim ',0, ['Ok'], 'bottom');
-    this.toolService.showAlertBasic('Alerta','Privada sin Sim'
+    this.toolService.showAlertBasic('Alerta','Privada no tiene Sim'
       ,'',['Ok'])
     return
   }
@@ -359,7 +359,8 @@ async sendSMS(door:string){
                   .then(() => this.loadingController.dismiss())
                   .catch((e:any) => {
                       this.loadingController.dismiss();
-                      this.toolService.showAlertBasic('Alerta','Error',e,['Ok']);
+                      this.toolService.showAlertBasic('Alerta','Error',
+                        'Falla conexion a red telefonica',['Ok']);
                   });
               },
               error:async (err) => {

@@ -488,8 +488,8 @@ async getTimestamp(){
                             })
                             .catch((err) =>{
                               this.loadingController.dismiss();
-                              this.toolService.toastAlert('No se envio sms, error: <br>' + 
-                                err,0, ['Ok'], 'bottom')
+                              this.toolService.toastAlert('Falla conexion a red telefonica'
+                                ,0, ['Ok'], 'bottom')
                                 return
                             })
                             
@@ -608,8 +608,8 @@ async getTimestamp(){
                   .then(() => this.loadingController.dismiss())
                   .catch((e:any) => {
                     this.loadingController.dismiss();
-                    this.toolService.showAlertBasic('Alerta','Error send sms'
-                    ,e,['Ok'])
+                    this.toolService.showAlertBasic('Alerta','Falla conexion a red telefonica'
+                    ,'',['Ok'])
                   });
         this.toolService.toastAlert('Msg. enviado a ' + sim,0, ['Ok'], 'bottom');
       }catch(e){

@@ -114,36 +114,40 @@ export class UsersPage implements OnInit {
           handler: async () => {
             try{
               if (this.sim.length >= 10 ){
-                if(await this.toolService.verifyNetStatus()){
-                  await this.api.postData('api/users/updSim/' + this.userId ,
-                    {'userId':neighborId, 'newSim':this.sim})
-                    .then(async (result) => {
+                if(actualSim != this.sim){
+                  if(await this.toolService.verifyNetStatus()){
+                    await this.api.postData('api/users/updSim/' + this.userId ,
+                      {'userId':neighborId, 'newSim':this.sim})
+                      .then(async (result) => {
 
-                      // Change sim on pcbthis.sim 
-                      await this.sms.send(coreSim,'updSim,'+ await this.getTimestamp() + ',' + 
-                          actualSim + ',' + this.sim, options)
+                        // Change sim on pcbthis.sim 
+                        await this.sms.send(coreSim,'updSim,'+ await this.getTimestamp() + ',' + 
+                            actualSim + ',' + this.sim, options)
+                        .then(() =>{
+                          this.sim = '';
+                          this.getUsers();
+                          this.simSectionOpen = false;
+                          this.toolService.showAlertBasic('','Sim cambiado','',['Ok']);
+                        })
+                        .catch((err) =>{
+                          this.toolService.showAlertBasic('Error','Falla conexion a red telefonica',
+                        '',['Ok']);
+                        })
+                        
+                    })
+                      .catch((err) => {
+                        this.toolService.showAlertBasic('','updSim API error: <br>',
+                        JSON.stringify(err),['Ok']);
 
-                      .then(() =>{
-                        this.sim = '';
-                        this.getUsers();
-                        this.simSectionOpen = false;
-                        this.toolService.showAlertBasic('','Sim cambiado','',['Ok']);
-                      })
-                      .catch((err) =>{
-                        this.toolService.showAlertBasic('','No se envio sms, error: <br>',
-                      JSON.stringify(err),['Ok']);
-                      })
-                      
-                  })
-                    .catch((err) => {
-                      this.toolService.showAlertBasic('','updSim API error: <br>',
-                      JSON.stringify(err),['Ok']);
-
-                    });
-        
+                      });
+          
+                  }else{
+                    this.toolService.showAlertBasic('','No hay Acceso a internet','',['Ok']);
+                  }
                 }else{
-                  this.toolService.showAlertBasic('','No hay Acceso a internet','',['Ok']);
+                  this.toolService.showAlertBasic('','El sim nuevo es igual al actual','',['Ok']);
                 }
+
               }else{
                 this.toolService.showAlertBasic('','Formato Invalido','',['Ok']);
               }
@@ -292,8 +296,8 @@ export class UsersPage implements OnInit {
                 .then(() => this.loadingController.dismiss())
                 .catch((e:any) => {
                   this.loadingController.dismiss();
-                  this.toolService.showAlertBasic('Alerta','Error send sms'
-                  ,e,['Ok'])
+                  this.toolService.showAlertBasic('Alerta','Falla conexion a red telefonica'
+                  ,'',['Ok'])
                 });
 
                 await this.getUsers();
@@ -353,8 +357,8 @@ async delUser(userId:string, name:string,coreSim:string){
                 .then(() => this.loadingController.dismiss())
                 .catch((e:any) => {
                   this.loadingController.dismiss();
-                  this.toolService.showAlertBasic('Alerta','Error send sms'
-                  ,e,['Ok'])
+                  this.toolService.showAlertBasic('Alerta','Falla conexion a red telefonica'
+                  ,'',['Ok'])
                 });
 
                 await this.getUsers();
