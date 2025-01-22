@@ -28,9 +28,10 @@ export class AdminPage implements OnInit {
     {'cmd':'getConfig','name':'Config status','confirm':'Request config status?'},
     {'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
     {'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
-    {'cmd':'getActiveCodes','name':'Active codes','confirm':'Request active codes?'},
-    {'cmd':'uploadCoreEvents','name':'Upload core events','confirm':'Upload events?'},
+    {'cmd':'getActiveCodes','name':'Active codes SMS','confirm':'Request active codes?'},
+    {'cmd':'uploadEvents','name':'Upload core events','confirm':'Upload events?'},
     {'cmd':'uploadRestraint','name':'Upload restraint','confirm':'Upload restraint?'},
+    {'cmd':'uploadCodes','name':'Upload codes','confirm':'Upload codes?'},
 
     {'cmd':'cfgCHG','option1':'app','option2':'coreId','option3':'',
       'name':'Change core Id','confirm':'Change core Id?'},
@@ -455,7 +456,7 @@ async getTimestamp(){
                 break;
               case 'simChange':
 
-              this.loadingController.create({
+                this.loadingController.create({
                 message: 'Cambiando numero sim...',
                 translucent: true
                 }).then(async (res) => {
@@ -523,7 +524,7 @@ async getTimestamp(){
                   this.sendSms(item.Sim, 'status,' + await this.getTimestamp() + ',gral')
                 break;
               
-                case 'getConfig':
+              case 'getConfig':
                   this.sendSms(item.Sim, 'status,' + await this.getTimestamp() + ',getConfig')
                 break;
               case 'RestraintStatus':
@@ -541,13 +542,11 @@ async getTimestamp(){
                   await this.sendSms(item.Sim,'active_codes,' + await this.getTimestamp());
                 break;
 
-              case 'uploadCoreEvents':
-                  await this.sendSms(item.Sim,'uploadEvents,' + await this.getTimestamp());
-                break;
-
+              case 'uploadEvents':
               case 'uploadRestraint':
-                await this.sendSms(item.Sim,'uploadRestraint,' + await this.getTimestamp());
-              break;
+              case 'uploadCodes':
+                  await this.sendSms(item.Sim,option + ',' + await this.getTimestamp());
+                break;
 
               case 'setOpen':
                   await this.sendSms(item.Sim,'setOpenCode,' + await this.getTimestamp() 
