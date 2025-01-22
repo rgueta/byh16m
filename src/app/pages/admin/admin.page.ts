@@ -29,9 +29,10 @@ export class AdminPage implements OnInit {
     {'cmd':'RestraintStatus','name':'Restraint status','confirm':'Request restraint status?'},
     {'cmd':'status,extrange','name':'Extrange status','confirm':'Request extrange status?'},
     {'cmd':'getActiveCodes','name':'Active codes SMS','confirm':'Request active codes?'},
-    {'cmd':'uploadEvents','name':'Upload core events','confirm':'Upload events?'},
+    {'cmd':'uploadEvents','name':'Upload events','confirm':'Upload events?'},
     {'cmd':'uploadRestraint','name':'Upload restraint','confirm':'Upload restraint?'},
     {'cmd':'uploadCodes','name':'Upload codes','confirm':'Upload codes?'},
+    {'cmd':'uploadExtrange','name':'Upload extrange','confirm':'Upload extrange?'},
 
     {'cmd':'cfgCHG','option1':'app','option2':'coreId','option3':'',
       'name':'Change core Id','confirm':'Change core Id?'},
@@ -545,6 +546,7 @@ async getTimestamp(){
               case 'uploadEvents':
               case 'uploadRestraint':
               case 'uploadCodes':
+              case 'uploadExtrange':
                   await this.sendSms(item.Sim,option + ',' + await this.getTimestamp());
                 break;
 

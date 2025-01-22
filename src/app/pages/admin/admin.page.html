@@ -153,7 +153,7 @@
                           <ion-label>Information</ion-label>
                         </ion-item>
                         <ion-list slot="content" style="padding-top: 0px; padding-bottom: 0px;"
-                        *ngFor="let routine of routineOptions.slice(0,9); let i=index;">
+                        *ngFor="let routine of routineOptions.slice(0,10); let i=index;">
                           <ion-item button (click)="routineSelected($event, i, item)"
                             style="color:white;--background:#3e5165; margin-top: 2px;">
                             <ion-icon color="white" slot="start" name="arrow-forward-circle-outline"></ion-icon>
@@ -172,8 +172,8 @@
                           <ion-label>configuration</ion-label>
                         </ion-item>
                         <ion-list slot="content" style="padding-top: 0px; padding-bottom: 0px;" 
-                        *ngFor="let routine of routineOptions.slice(9); let i=index;">
-                          <ion-item button (click)="routineSelected($event, i+9, item)"
+                        *ngFor="let routine of routineOptions.slice(10); let i=index;">
+                          <ion-item button (click)="routineSelected($event, i+10, item)"
                             style="color:white;--background:#3e5165; margin-top: 2px;">
                             <ion-icon color="white" slot="start" name="arrow-forward-circle-outline"></ion-icon>
                             <ion-label>{{routine.name}}</ion-label>
