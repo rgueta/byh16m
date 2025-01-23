@@ -452,6 +452,7 @@ async sendUserReq(pkg:any):Promise<any>{
 
 
   async newExtrange(){
+    const coreSim = localStorage.getItem('my-core-sim');
      const options:SmsOptions={
       replaceLineBreaks:false,
       android:{
@@ -474,13 +475,13 @@ async sendUserReq(pkg:any):Promise<any>{
         {
           text: 'Si',
           handler: async () => {
-
+            
             const pkgDevice =  'blockExtrange,' + await this.getTimestamp() + ',' +
             this.RegisterForm.get('Name').value + ',' + 
             this.RegisterForm.get('Sim').value + ',' + 
             localStorage.getItem('my-userId')
-
-          await this.sms.send(this.coreSim,pkgDevice ,options)
+            
+          await this.sms.send(coreSim,pkgDevice ,options)
           .then(()=>{
               // exit model
               this.modalController.dismiss();})
