@@ -104,35 +104,39 @@ export class UpdUsersPage implements OnInit {
     }
 
     // if(this.sourcePage == 'tab1NewNeighbor'){
-      if(this.MyRole == 'admin' || this.MyRole == 'neighborAdmin'){
+    if(this.MyRole == 'admin' || this.MyRole == 'neighborAdmin'){
       this.RegisterForm.get('Cpu').setValue('byh16');
       this.RegisterForm.get('Core').setValue(localStorage.getItem('core-id'));
       this.location = localStorage.getItem('location');
       this.getRoles();
     }
 
-    if(this.sourcePage == 'login' || this.sourcePage == 'adminNew' ){
+    if(this.sourcePage == 'login' || 
+      this.sourcePage == 'adminNew' || 
+      this.sourcePage == 'adminNewExtrange'){
       this.getCpus();
       this.RegisterForm.get('Uuid').setValue(localStorage.getItem('device-uuid'));
     }
     
+  
+
     // if(this.sourcePage == 'admin'){
       if(this.navParams.data['pkg']){
         this.pkgUser = this.navParams.data['pkg'];
         this.coreName = this.pkgUser['coreName'];
         this.fillData();
       }
-    // }
-    // else if(this.sourcePage == 'adminNew'){
-    //   // this.locationReadonly = false;
-    //   this.uuidReadonly = false;
-    // }
-    // else{
-    //   // just to enable button because formGroup for user itself
-    //   this.RegisterForm.get('Roles').setValue('some value');
-    //   this.RegisterForm.get('Location').setValue('some value');
-    //   this.RegisterForm.get('Uuid').setValue(localStorage.getItem('device-uuid'));
-    // }
+
+      if (this.sourcePage == 'adminNewExtrange'){
+        this.RegisterForm.get('House').setValue("NA");
+        this.RegisterForm.controls['Cpu'].clearValidators();
+        this.RegisterForm.controls['Core'].clearValidators();
+        this.RegisterForm.controls['UserName'].clearValidators();
+        this.RegisterForm.controls['Email'].clearValidators();
+        this.RegisterForm.controls['House'].clearValidators();
+        this.RegisterForm.controls['Gender'].clearValidators();
+        this.RegisterForm.controls['Location'].clearValidators();
+      }
   }
 
   async fillData(){
@@ -286,14 +290,7 @@ export class UpdUsersPage implements OnInit {
                       intent:''
                     }
                   }
-
-                  var myDate = new Date();
-                  var offset = myDate.getTimezoneOffset() * 60 * 1000;
-
-                  var withOffset = myDate.getTime();
-                  var withoutOffset = withOffset - offset;
-
-                  const pkgDevice =  'newUser,' + withoutOffset + ',' +
+                  const pkgDevice =  'newUser,' + await this.getTimestamp() + ',' +
                     this.RegisterForm.get('Name').value + ',' + 
                     this.RegisterForm.get('House').value + ',' + 
                     this.RegisterForm.get('Sim').value + ',' + 
@@ -443,5 +440,41 @@ async sendUserReq(pkg:any):Promise<any>{
       }
 
   } 
+
+  async getTimestamp(){
+    var myDate = new Date();
+    var offset = myDate.getTimezoneOffset() * 60 * 1000;
+
+    var withOffset = myDate.getTime();
+    var withoutOffset = withOffset - offset;
+
+    return withoutOffset;
+  }
+
+
+  async newExtrange(){
+
+    this.showLoading(2000);
+     const options:SmsOptions={
+      replaceLineBreaks:false,
+      android:{
+        intent:''
+      }
+    }
+    
+    const pkgDevice =  'blockExtrange,' + await this.getTimestamp() + ',' +
+      this.RegisterForm.get('Name').value + ',' + 
+      this.RegisterForm.get('Sim').value + ',' + 
+      localStorage.getItem('my-userId')
+
+    await this.sms.send(this.coreSim,pkgDevice ,options)
+    .then(()=>{
+        // exit model
+        this.modalController.dismiss();})
+    .catch((e:any) => 
+      this.toolService.showAlertBasic('Error','Falla conexion a red telefonica',
+      '',['Ok']));
+
+  }
 
 }

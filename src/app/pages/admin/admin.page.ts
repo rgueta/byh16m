@@ -257,7 +257,23 @@ export class AdminPage implements OnInit {
     ' ?', 'simChange', 'Yes','Cancel');
  }
 
-  async setupCode(visitorId:string){}
+async setupCode(visitorId:string){
+
+}
+
+async newExtrange(CoreId:string,CoreName:string, pathLocation:string){
+   const modal = await this.modalController.create({
+      component: UpdUsersPage,
+      componentProps:{
+        'SourcePage': 'adminNewExtrange',
+        'CoreName': CoreName,
+        'CoreId': CoreId,
+        'pathLocation': pathLocation
+       }
+    });
+    
+     await modal.present();
+}
 
   async collectUsers(coreId:string,core:string) {
     const modal = await this.modalController.create({

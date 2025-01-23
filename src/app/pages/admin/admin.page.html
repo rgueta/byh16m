@@ -137,6 +137,10 @@
               <ion-icon color="white" slot="start" name="person-add-outline"></ion-icon>
               <ion-label>New user</ion-label>
             </ion-item>
+            <ion-item class="detail-item" (click)="newExtrange(item._id,item.name,item.location)">
+              <ion-icon color="white" slot="start" name="person-add-outline"></ion-icon>
+              <ion-label>New extrange</ion-label>
+            </ion-item>
 
             <ion-item class="detail-item">
               <ion-accordion-group style="width: 100%;">
