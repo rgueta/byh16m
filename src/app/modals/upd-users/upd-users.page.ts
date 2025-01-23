@@ -452,8 +452,6 @@ async sendUserReq(pkg:any):Promise<any>{
 
 
   async newExtrange(){
-
-    this.showLoading(2000);
      const options:SmsOptions={
       replaceLineBreaks:false,
       android:{
@@ -461,18 +459,43 @@ async sendUserReq(pkg:any):Promise<any>{
       }
     }
     
-    const pkgDevice =  'blockExtrange,' + await this.getTimestamp() + ',' +
-      this.RegisterForm.get('Name').value + ',' + 
-      this.RegisterForm.get('Sim').value + ',' + 
-      localStorage.getItem('my-userId')
+    let alert = await this.alertCtrl.create({
+      subHeader: 'Agregar ',
+      message: 'Agregar extrange ?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: (
 
-    await this.sms.send(this.coreSim,pkgDevice ,options)
-    .then(()=>{
-        // exit model
-        this.modalController.dismiss();})
-    .catch((e:any) => 
-      this.toolService.showAlertBasic('Error','Falla conexion a red telefonica',
-      '',['Ok']));
+          ) => {
+          }
+        },
+        {
+          text: 'Si',
+          handler: async () => {
+
+            const pkgDevice =  'blockExtrange,' + await this.getTimestamp() + ',' +
+            this.RegisterForm.get('Name').value + ',' + 
+            this.RegisterForm.get('Sim').value + ',' + 
+            localStorage.getItem('my-userId')
+
+          await this.sms.send(this.coreSim,pkgDevice ,options)
+          .then(()=>{
+              // exit model
+              this.modalController.dismiss();})
+          .catch((e:any) => 
+            this.toolService.showAlertBasic('Error','Falla conexion a red telefonica',
+            '',['Ok']));
+
+          }
+        }
+      ]
+    });
+
+    return await alert.present();
+
+    
 
   }
 
