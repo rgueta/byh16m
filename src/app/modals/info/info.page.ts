@@ -126,10 +126,16 @@ export class InfoPage implements OnInit {
  
 
   async countrySelection(country:any){
-    // let countryObj = this.RegisterForm.controls['frmCtrl_country'].value
-    this.collectStates(country);
+    let countryObj = this.RegisterForm.controls['frmCtrl_country'].value
+    if(country){
+      this.collectStates(country);
+      this.localCountry = country;
+    }else{
+      console.log('no contry selected')
+    }
+    
     // this.localCountry = countryObj.name;
-    this.localCountry = country;
+    
   }
 
   async stateSelection(state:any){

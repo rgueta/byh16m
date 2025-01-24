@@ -33,15 +33,17 @@
           </ion-select>
         </ion-item>
 
-        <ion-item>
+        <ion-item [disabled]="!localCountry">
           <ion-label class='labelInput' floating>State:</ion-label>
-          <ion-select [(ngModel)]="localState" ok-text="Seleccionar" cancel-text="Cancelar" 
-              (ionChange)="stateSelection(localState)" formControlName="frmCtrl_state" >
-            <ion-select-option *ngFor="let item of statesList" value={{item.shortName}}>{{item.name}}</ion-select-option>
+          <ion-select [(ngModel)]="localState" ok-text="Seleccionar" 
+            cancel-text="Cancelar" (ionChange)="stateSelection(localState)"
+            formControlName="frmCtrl_state" >
+            <ion-select-option *ngFor="let item of statesList" 
+              value={{item.shortName}}>{{item.name}}</ion-select-option>
           </ion-select>
         </ion-item>
 
-        <ion-item>
+        <ion-item [disabled]="!localState">
           <ion-label class='labelInput' floating>City:</ion-label>
           <ion-select  multiple [(ngModel)]="localCity" ok-text="Seleccionar" cancel-text="Cancelar" 
               (ionChange)="citySelection(localCity)" formControlName="frmCtrl_city" >
@@ -49,7 +51,7 @@
           </ion-select>
         </ion-item>
 
-        <ion-item>
+        <ion-item [disabled]="!localCity">
           <ion-label class='labelInput' floating>Division:</ion-label>
           <ion-select [(ngModel)]="localDivision" ok-text="Seleccionar" cancel-text="Cancelar" 
               (ionChange)="divisionSelection(localDivision);" formControlName="frmCtrl_division" >
@@ -58,7 +60,7 @@
           </ion-select>
         </ion-item>
 
-    <ion-item>
+    <ion-item [disabled]="!localDivision">
       <ion-label class='labelInput' floating>Cpu:</ion-label>
       <ion-select [(ngModel)]="localCpu" ok-text="Seleccionar" cancel-text="Cancelar" 
           (ionChange)="cpuSelection(localCpu)" formControlName="frmCtrl_cpu" >
@@ -66,7 +68,7 @@
       </ion-select>
     </ion-item>
 
-    <ion-item>
+    <ion-item [disabled]="!localCpu">
       <ion-label class='labelInput' floating>Core:</ion-label>
       <ion-select [(ngModel)]="localCore" ok-text="Seleccionar" cancel-text="Cancelar" 
       [selectedText]="localCore"
@@ -81,13 +83,18 @@
       (click)="getImage()">Get Image</ion-button>
     </ion-item> -->
 
-    <ion-item>
-        <ion-label class='labelInput' floating>File size:</ion-label>
-        <ion-range class="range" aria-label="Range with pin" debounce="500"
-        [pin]="true" [snaps]="true" (ionChange)="rangeChange($event)"
-        [pinFormatter]="pinFormatter" [min]="0" [max]="100" step="10"
-        [value]="{ upper: 10 }"
-        >
+    <ion-item class="">
+        <ion-label class='labelRange' floating>Image size:</ion-label>
+        <ion-range class="range wrapper_range" 
+          aria-label="Range with pin"
+          [pin]="true"
+          [snaps]="true" 
+          min="0"
+          max="100"
+          step="10"
+          (ionChange)="rangeChange($event)"
+          [pinFormatter]="pinFormatter" 
+          [value]="{ upper: 10 }">
 
         <ion-icon slot="start" size="small" name="image-outline"></ion-icon>
         <ion-icon slot="end" name="image-outline"></ion-icon>
