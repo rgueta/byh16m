@@ -176,6 +176,7 @@
     <ion-item *ngIf = "sourcePage == 'commentApp'" class="wrap-input">
       <div class="item-wripper">
         <input class="button-17 submit" type="button"  
+         [disabled] = "localComment == ''"
         (click)="newComment()" value="Mandar cometario">
       </div>
     </ion-item>
