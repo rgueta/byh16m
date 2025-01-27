@@ -505,7 +505,7 @@ async sendUserReq(pkg:any):Promise<any>{
   async newComment(){
     
     let alert = await this.alertCtrl.create({
-      subHeader: 'Agregar ',
+      subHeader: 'Confirmar',
       message: 'Mandar comentario ?',
       buttons: [
         {
@@ -524,7 +524,7 @@ async sendUserReq(pkg:any):Promise<any>{
       
             try{
             
-                this.api.postData('api/comments/' + coreId + '/' + userId,
+                this.api.postData('api/commentsApp/new/' + coreId + '/' + userId,
                   {'comment':this.localComment})
                 .then(async resp => {            
                   const respId = await Object.values(resp)[1];
@@ -536,7 +536,7 @@ async sendUserReq(pkg:any):Promise<any>{
                 error =>{
                   this.loadingController.dismiss();
                   this.toolService.showAlertBasic('','Can not sent comment'
-                  ,'error: ' + error,['Ok']);
+                  ,'error: ' + JSON.stringify(error),['Ok']);
                 });
       
               }catch(err){
