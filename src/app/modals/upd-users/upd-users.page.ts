@@ -22,6 +22,7 @@ export class UpdUsersPage implements OnInit {
   @Input() house:string = '';
   @Input() roles: any = [];
   @Input() avatar: string = '';
+  @Input() localComment: string = '';
 
   sourcePage:string = '';
   RoleList: any = [];
@@ -43,7 +44,7 @@ export class UpdUsersPage implements OnInit {
   uuidReadonly : boolean = true;
   demoMode:boolean = false;
   public MyRole : string = 'visitor';
-
+  comment = ''
 
   constructor(
     private modalController: ModalController,
@@ -495,9 +496,62 @@ async sendUserReq(pkg:any):Promise<any>{
     });
 
     return await alert.present();
+  }
 
+  async onChangeComment($event:any){
+    this.localComment = $event;
+  }
+
+  async newComment(){
     
+    let alert = await this.alertCtrl.create({
+      subHeader: 'Agregar ',
+      message: 'Mandar comentario ?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: (
 
+          ) => {
+          }
+        },
+        {
+          text: 'Si',
+          handler: async () => {
+            const coreId = localStorage.getItem('core-id');
+            const userId = localStorage.getItem('my-userId');
+      
+            try{
+            
+                this.api.postData('api/comments/' + coreId + '/' + userId,
+                  {'comment':this.localComment})
+                .then(async resp => {            
+                  const respId = await Object.values(resp)[1];
+      
+                this.loadingController.dismiss();
+                this.closeModal();
+      
+                },
+                error =>{
+                  this.loadingController.dismiss();
+                  this.toolService.showAlertBasic('','Can not sent comment'
+                  ,'error: ' + error,['Ok']);
+                });
+      
+              }catch(err){
+                this.loadingController.dismiss();
+                this.toolService.showAlertBasic('','Can not sent comment'
+                  ,'error: ' + err,['Ok']);
+              }
+
+
+          }
+        }
+      ]
+    });
+
+    return await alert.present();
   }
 
 }

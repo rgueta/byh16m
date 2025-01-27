@@ -441,6 +441,18 @@ async ModalUsers(){
   modal.present()
 }
 
+
+async comentar(){
+  const modal = await this.modalController.create({
+    component: UpdUsersPage,
+    componentProps:{
+      'SourcePage': 'commentApp'
+     }
+  });
+  
+   await modal.present();
+}
+
 //#region ---- Animation controller  ----------------------------------
 
 async modalVisitors() {

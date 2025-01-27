@@ -96,6 +96,12 @@
             [button]="true" [detail]="false" (click)="logout()" >
             <div class="logged">Cerrar sesion: {{myEmail}}</div>
           </ion-item>
+
+          <ion-item id="logout1-alert" *ngIf="MyRole != 'admin'" 
+            [button]="true" [detail]="false" (click)="comentar()">
+            <div class="logged">Comenta la aplicacion</div>
+          </ion-item>
+          
           <ion-item id="logout1-alert" *ngIf="MyRole != 'admin'" 
             [button]="true" [detail]="false" (click)="logout()">
             <div class="logged">Cerrar sesion: {{myName}}</div>

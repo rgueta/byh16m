@@ -10,8 +10,9 @@
       </div>
 
       <div class="column middle centralize_Title">
-        <ion-title *ngIf = "sourcePage != 'adminNewExtrange'">Usuario Nuevo</ion-title>
+        <ion-title *ngIf = "sourcePage == 'adminNew'">Usuario Nuevo</ion-title>
         <ion-title *ngIf = "sourcePage == 'adminNewExtrange'">New extrange</ion-title>
+        <ion-title *ngIf = "sourcePage == 'commentApp'">Comentar de la aplicacion</ion-title>
       </div>  
 
       <div class="column right">
@@ -29,130 +30,134 @@
 </ion-header>
 
 <ion-content  [fullscreen]="true">
-
-  <div *ngIf = "sourcePage == 'admin' || sourcePage == 'tab1NewNeighbor'" 
-    class="titleCore">
-    <div class="divlblCoreName">
-      <label style="width: 100%;">{{coreName}}</label>
-    </div>
-    <div class="divToggleDemo" *ngIf="MyRole == 'admin'">
-      <ion-item class="wrap-input itemToggleDemo">
-        <ion-toggle id="twilioToggle" class="ToggleDemo" labelPlacement="start" 
-          [ngModel]="demoMode" [checked]="false"  
-          (ionChange)="DemoMode()">
-          Demo mode
-        </ion-toggle>
-      </ion-item>
-    </div>
-  </div>
-   
-  <form [formGroup] = "RegisterForm">
-
-    <ion-item *ngIf = "sourcePage == 'login'" >
-      <ion-select id="cmbCpu" justify="space-between" interface="action-sheet"
-       label="Tu colonia: " placeholder="Colonias" cancel-text="Cancelar"
-       [(ngModel)]="localCpu" ok-text="Seleccionar" 
-       (ionChange)="onChangeCpu()"
-       
-        formControlName="Cpu">
-        <ion-select-option *ngFor="let item of CpuList"
-          [value] = '{id:item._id,name:item.name,location:item.location}'>{{item.name}}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item *ngIf = "sourcePage == 'login'" >
-      <ion-select justify="space-between" interface="action-sheet"
-        label="Tu privada: " placeholder="Privadas" cancel-text="Cancelar"
-        [(ngModel)]="localCore" ok-text="Seleccionar" 
-        (ionChange) = "onChangeCore()" formControlName="Core">
-        <ion-select-option *ngFor="let item of CoreList" 
-        [value] = '{id:item._id, name:item.name, shortName:item.shortName}'>{{item.name}}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item class="wrap-input">
-      <ion-input class='input' type="text" name='name' required placeholder="Nombre" 
-      formControlName="Name" value={{name}} [(ngModel)]="name" label="Nombre:"></ion-input>
-    </ion-item>
-
-    <ion-item class="wrap-input" *ngIf = "sourcePage != 'adminNewExtrange' ">
-      <ion-input class='input' type="text" name='username' label="Usuario: "
-        required placeholder="Usuario" formControlName="UserName" 
-        value={{username}} [(ngModel)]="username"></ion-input>
-    </ion-item>
-
-    <ion-item class="wrap-input"  *ngIf = "sourcePage != 'adminNewExtrange' ">
-      <ion-input class='input' type="text" name='email' label="email: "
-        required placeholder="Correo" formControlName="Email" value={{email}}
-        [(ngModel)]="email"></ion-input>
-    </ion-item>
-    
-    <ion-item class="wrap-input">
-      <ion-input class='input' type="text" name='sim'  label="Cell: "
-        required placeholder="# celular" formControlName="Sim" 
-        value={{sim}} [(ngModel)]="sim"></ion-input>
-    </ion-item>
-
-    <ion-item class="wrap-input" *ngIf = "sourcePage != 'adminNewExtrange'">
-      <ion-input class='input' type="text" name='house' label="Casa: "
-        required placeholder="# de casa" formControlName="House" value={{house}} 
-        [(ngModel)]="house"></ion-input>
-    </ion-item>
-
-    <ion-item *ngIf = "sourcePage == 'admin'" class="wrap-input" >
-      <ion-input *ngIf = "sourcePage == 'admin' " class='input' type="text" 
-        name='location' placeholder="Location" 
-        [readonly] = "locationReadonly" formControlName="Location" value={{location}} 
-        [(ngModel)]="location">
-      </ion-input>
-    </ion-item>
-
-    <ion-item *ngIf = "sourcePage == 'adminNew'" class="wrap-input" > 
-      <ion-input *ngIf = "sourcePage == 'adminNew'" class='input' type="text" name='uuid'  placeholder = "uuid"
-      [readonly] = "uuidReadonly"
-      formControlName="Uuid" value={{uuid}} [(ngModel)]="uuid"></ion-input>
-    </ion-item>
-
-    <ion-item class="wrap-input" *ngIf = "sourcePage != 'adminNewExtrange'" >
-      <ion-select value="gender" [(ngModel)]="gender" label="Genero:"
-        formControlName="Gender" 
-        okText="Aceptar" cancelText="Cancelar" >
-          <ion-select-option value="M" >Hombre</ion-select-option>
-          <ion-select-option value="F" >Mujer</ion-select-option>
-          <ion-select-option value="O" >Otro</ion-select-option>
-      </ion-select>
-    </ion-item>
   
-    <ion-item *ngIf = "sourcePage != 'login' && sourcePage != 'adminNewExtrange' " >
-      <ion-select *ngIf = "sourcePage != 'login' " [(ngModel)]="localRole" 
-      ok-text="Seleccionar" 
-        label="Roles:" cancel-text="Cancelar" 
-        formControlName="Roles" [multiple]="true">
-        <ion-select-option *ngFor="let item of RoleList" 
-          [value]='{id:item._id,name:item.name}'>{{item.name}}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item *ngIf = "sourcePage == 'login' " class="wrap-input">
-      <ion-textarea class='input' placeholder="Comentario" 
-        id="comment"
-        aria-multiline = 'true'>
-      </ion-textarea>
-    </ion-item>
-
-    <ion-item *ngIf = "sourcePage == 'login'" [disabled]="RegisterForm.invalid" > 
-      <div class="item-wripper">
-        <input class="button-17 submit" type="button"  
-        (click)="onSubmitItSelf(localCpu,localCore,name,
-          username,email,sim,house,gender)" value="Grabar">
+    <div *ngIf = "sourcePage == 'admin' || sourcePage == 'tab1NewNeighbor'" 
+      class="titleCore">
+      <div class="divlblCoreName">
+        <label style="width: 100%;">{{coreName}}</label>
       </div>
-   
-    </ion-item>
+      <div class="divToggleDemo" *ngIf="MyRole == 'admin'">
+        <ion-item class="wrap-input itemToggleDemo">
+          <ion-toggle id="twilioToggle" class="ToggleDemo" labelPlacement="start" 
+            [ngModel]="demoMode" [checked]="false"  
+            (ionChange)="DemoMode()">
+            Demo mode
+          </ion-toggle>
+        </ion-item>
+      </div>
+    </div>
     
-    <ion-item *ngIf = "sourcePage != 'login' && sourcePage != 'adminNewExtrange'" 
+    <form [formGroup] = "RegisterForm">
+
+      <div *ngIf = "sourcePage != 'commentApp'" >
+
+        <ion-item *ngIf = "sourcePage == 'login'" >
+          <ion-select id="cmbCpu" justify="space-between" interface="action-sheet"
+          label="Tu colonia: " placeholder="Colonias" cancel-text="Cancelar"
+          [(ngModel)]="localCpu" ok-text="Seleccionar" 
+          (ionChange)="onChangeCpu()"
+          
+            formControlName="Cpu">
+            <ion-select-option *ngFor="let item of CpuList"
+              [value] = '{id:item._id,name:item.name,location:item.location}'>{{item.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf = "sourcePage == 'login'" >
+          <ion-select justify="space-between" interface="action-sheet"
+            label="Tu privada: " placeholder="Privadas" cancel-text="Cancelar"
+            [(ngModel)]="localCore" ok-text="Seleccionar" 
+            (ionChange) = "onChangeCore()" formControlName="Core">
+            <ion-select-option *ngFor="let item of CoreList" 
+            [value] = '{id:item._id, name:item.name, shortName:item.shortName}'>{{item.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="wrap-input">
+          <ion-input class='input' type="text" name='name' required placeholder="Nombre" 
+          formControlName="Name" value={{name}} [(ngModel)]="name" label="Nombre:"></ion-input>
+        </ion-item>
+
+        <ion-item class="wrap-input" *ngIf = "sourcePage != 'adminNewExtrange' ">
+          <ion-input class='input' type="text" name='username' label="Usuario: "
+            required placeholder="Usuario" formControlName="UserName" 
+            value={{username}} [(ngModel)]="username"></ion-input>
+        </ion-item>
+
+        <ion-item class="wrap-input"  *ngIf = "sourcePage != 'adminNewExtrange' ">
+          <ion-input class='input' type="text" name='email' label="email: "
+            required placeholder="Correo" formControlName="Email" value={{email}}
+            [(ngModel)]="email"></ion-input>
+        </ion-item>
+        
+        <ion-item class="wrap-input">
+          <ion-input class='input' type="text" name='sim'  label="Cell: "
+            required placeholder="# celular" formControlName="Sim" 
+            value={{sim}} [(ngModel)]="sim"></ion-input>
+        </ion-item>
+
+        <ion-item class="wrap-input" *ngIf = "sourcePage != 'adminNewExtrange'">
+          <ion-input class='input' type="text" name='house' label="Casa: "
+            required placeholder="# de casa" formControlName="House" value={{house}} 
+            [(ngModel)]="house"></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf = "sourcePage == 'admin'" class="wrap-input" >
+          <ion-input *ngIf = "sourcePage == 'admin' " class='input' type="text" 
+            name='location' placeholder="Location" 
+            [readonly] = "locationReadonly" formControlName="Location" value={{location}} 
+            [(ngModel)]="location">
+          </ion-input>
+        </ion-item>
+
+        <ion-item *ngIf = "sourcePage == 'adminNew'" class="wrap-input" > 
+          <ion-input *ngIf = "sourcePage == 'adminNew'" class='input' type="text" name='uuid'  placeholder = "uuid"
+          [readonly] = "uuidReadonly"
+          formControlName="Uuid" value={{uuid}} [(ngModel)]="uuid"></ion-input>
+        </ion-item>
+
+        <ion-item class="wrap-input" *ngIf = "sourcePage != 'adminNewExtrange'" >
+          <ion-select value="gender" [(ngModel)]="gender" label="Genero:"
+            formControlName="Gender" 
+            okText="Aceptar" cancelText="Cancelar" >
+              <ion-select-option value="M" >Hombre</ion-select-option>
+              <ion-select-option value="F" >Mujer</ion-select-option>
+              <ion-select-option value="O" >Otro</ion-select-option>
+          </ion-select>
+        </ion-item>
+      
+        <ion-item *ngIf = "sourcePage != 'login' && sourcePage != 'adminNewExtrange' " >
+          <ion-select *ngIf = "sourcePage != 'login' " [(ngModel)]="localRole" 
+          ok-text="Seleccionar" 
+            label="Roles:" cancel-text="Cancelar" 
+            formControlName="Roles" [multiple]="true">
+            <ion-select-option *ngFor="let item of RoleList" 
+              [value]='{id:item._id,name:item.name}'>{{item.name}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+      </div>
+
+      <ion-item *ngIf = "sourcePage == 'login' || sourcePage == 'commentApp' " class="wrap-input">
+        <ion-textarea #mycomment class='input' placeholder="Comentario" 
+        (ionChange)="onChangeComment(mycomment.value)" 
+          value = {{comment}} aria-multiline = 'true'>
+        </ion-textarea>
+      </ion-item>
+
+      <ion-item *ngIf = "sourcePage == 'login'" [disabled]="RegisterForm.invalid" > 
+        <div class="item-wripper">
+          <input class="button-17 submit" type="button"  
+          (click)="onSubmitItSelf(localCpu,localCore,name,
+            username,email,sim,house,gender)" value="Grabar">
+        </div>
+    
+      </ion-item>
+    
+    <ion-item *ngIf = "sourcePage == 'login' || sourcePage == 'adminNewExtrange'" 
       class="wrap-input" [disabled]="RegisterForm.invalid">
       <div class="item-wripper">
         <input class="button-17 submit" type="button"  
@@ -165,6 +170,13 @@
       <div class="item-wripper">
         <input class="button-17 submit" type="button"  
         (click)="newExtrange()" value="Mandar extrange">
+      </div>
+    </ion-item>
+
+    <ion-item *ngIf = "sourcePage == 'commentApp'" class="wrap-input">
+      <div class="item-wripper">
+        <input class="button-17 submit" type="button"  
+        (click)="newComment()" value="Mandar cometario">
       </div>
     </ion-item>
 
