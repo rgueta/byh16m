@@ -33,6 +33,7 @@ export class AdminPage implements OnInit {
     {'cmd':'uploadRestraint','name':'Upload restraint','confirm':'Upload restraint?'},
     {'cmd':'uploadCodes','name':'Upload codes','confirm':'Upload codes?'},
     {'cmd':'uploadExtrange','name':'Upload extrange','confirm':'Upload extrange?'},
+    {'cmd':'uploadNFC','name':'Upload NFC','confirm':'Upload NFC?'},
 
     {'cmd':'cfgCHG','option1':'app','option2':'coreId','option3':'',
       'name':'Change core Id','confirm':'Change core Id?'},
@@ -563,6 +564,7 @@ async getTimestamp(){
               case 'uploadRestraint':
               case 'uploadCodes':
               case 'uploadExtrange':
+              case 'uploadNFC':
                   await this.sendSms(item.Sim,option + ',' + await this.getTimestamp());
                 break;
 
