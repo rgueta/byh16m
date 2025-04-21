@@ -34,6 +34,8 @@ export class AdminPage implements OnInit {
     {'cmd':'uploadCodes','name':'Upload codes','confirm':'Upload codes?'},
     {'cmd':'uploadExtrange','name':'Upload extrange','confirm':'Upload extrange?'},
     {'cmd':'uploadNFC','name':'Upload NFC','confirm':'Upload NFC?'},
+    {'cmd':'getHouseNFC','input':true,'option1':'house-nfc','option2':'House Number',
+        'name':'House NFC','confirm':'get House NFC?'},
 
     {'cmd':'cfgCHG','option1':'app','option2':'coreId','option3':'',
       'name':'Change core Id','confirm':'Change core Id?'},
@@ -399,15 +401,9 @@ async getTimestamp(){
     
     let element = <HTMLInputElement> document.getElementById(event.srcElement.id);
 
-    let inputs = [{}];
+    let inputs = [{name: 'inputValue',placeholder: item.option2}];
 
-    if(this.input){
-      inputs.push({
-        name: 'inputValue',
-        placeholder: item.option2,
-        type:'text'
-      })
-    }else{
+    if(!this.input){
       inputs = [];
     }
 
@@ -545,6 +541,14 @@ async getTimestamp(){
               case 'getConfig':
                   this.sendSms(item.Sim, 'status,' + await this.getTimestamp() + ',getConfig')
                 break;
+              case 'getHouseNFC':
+                if(data.inputValue == ''){
+                  this.toolService.showAlertBasic('Alerta','Error, ' + option,
+                    'informacion incompleta',['Ok']);
+                }else{
+                this.sendSms(item.Sim, option + ',' + await this.getTimestamp() + ',' + data.inputValue);
+                }
+                break;
               case 'RestraintStatus':
                     await this.sendSms(item.Sim,'status,' + await this.getTimestamp() + ',restraint');
                   break;
@@ -580,8 +584,13 @@ async getTimestamp(){
                 try{
 
                   if(this.input){
-                    await this.sendSms(item.Sim,'cfgCHG,' + await this.getTimestamp() + ',' + 
-                      item.option1 + ',' + item.option2 + ',' + data.inputValue);
+                    if(data.inputValue == ''){
+                      this.toolService.showAlertBasic('Alerta','Error, ' + option,
+                        'informacion incompleta',['Ok']);
+                    }else{
+                      await this.sendSms(item.Sim,'cfgCHG,' + await this.getTimestamp() + ',' + 
+                        item.option1 + ',' + item.option2 + ',' + data.inputValue);
+                    }
                   }else{
                     if (this.routineOptions[index]['option2'] == 'coreId'){
                       await this.sendSms(item.Sim,'cfgCHG,' + await this.getTimestamp() + ',' + 
