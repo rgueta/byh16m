@@ -33,6 +33,9 @@ export class LoginPage implements OnInit {
   credentials: FormGroup;
   configApp : {};
 
+  showPassword = false;
+  passwordToggleIcon = 'eye';
+
   // Easy access for form fields
    get email() {
     return this.credentials.get('email');
@@ -266,6 +269,16 @@ export class LoginPage implements OnInit {
     );
   }
 
+
+  togglePassword():void{
+    this.showPassword = !this.showPassword;
+    if(this.passwordToggleIcon == 'eye'){
+      this.passwordToggleIcon = 'eye-off';
+    }
+    else{
+      this.passwordToggleIcon = 'eye';
+    }
+  }
 
 async newUser(){
     const modal = await this.modalController.create({

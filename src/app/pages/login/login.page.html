@@ -22,10 +22,11 @@
         <span *ngIf="email.errors?.['email']">Email is invalid</span>
       </div>
       <ion-item>
-        <ion-input type="password" placeholder="Password" (keyup.enter)="login()"
-         formControlName="pwd">
-        </ion-input>
-      </ion-item>
+        <ion-input type="password" placeholder="Password" (keyup.enter)="login()" 
+        [type]="showPassword ? 'text' : 'password'" formControlName="pwd"></ion-input>
+        <ion-icon slot="end" [name]="passwordToggleIcon" (click)="togglePassword()"></ion-icon>
+
+        </ion-item>
       <div *ngIf="(password.dirty || password.touched) && password.errors" class="errors">
         <span *ngIf="password.errors?.['required']">Password is required</span>
         <span *ngIf="password.errors?.['minlength']">Password needs to be 6 characters</span>
