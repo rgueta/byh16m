@@ -16,10 +16,11 @@ import { Share } from "@capacitor/share";
 const USERID = 'my-userId';
 
 @Component({
-  selector: 'app-upd-codes-modal',
-  templateUrl: './upd-codes-modal.page.html',
-  styleUrls: ['./upd-codes-modal.page.scss'],
-  encapsulation:ViewEncapsulation.None,
+    selector: 'app-upd-codes-modal',
+    templateUrl: './upd-codes-modal.page.html',
+    styleUrls: ['./upd-codes-modal.page.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class UpdCodesModalPage implements OnInit {
   RegisterForm : FormGroup;

@@ -4,9 +4,10 @@ import { FormGroup } from "@angular/forms";
 import { Utils } from "../../tools/tools";
 
 @Component({
-  selector: 'app-store',
-  templateUrl: './store.page.html',
-  styleUrls: ['./store.page.scss'],
+    selector: 'app-store',
+    templateUrl: './store.page.html',
+    styleUrls: ['./store.page.scss'],
+    standalone: false
 })
 export class StorePage implements OnInit {
 credentials = new FormGroup({});

@@ -6,9 +6,10 @@ import { ToolsService } from "../../services/tools.service";
 import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.page.html',
-  styleUrls: ['./users.page.scss'],
+    selector: 'app-users',
+    templateUrl: './users.page.html',
+    styleUrls: ['./users.page.scss'],
+    standalone: false
 })
 export class UsersPage implements OnInit {
 

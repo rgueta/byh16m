@@ -13,9 +13,10 @@ import { ToolsService } from "../../services/tools.service";
 const USERID = 'my-userId';
 
 @Component({
-  selector: 'app-info',
-  templateUrl: './info.page.html',
-  styleUrls: ['./info.page.scss'],
+    selector: 'app-info',
+    templateUrl: './info.page.html',
+    styleUrls: ['./info.page.scss'],
+    standalone: false
 })
 export class InfoPage implements OnInit {
   RegisterForm : FormGroup;

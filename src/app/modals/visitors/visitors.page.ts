@@ -8,9 +8,10 @@ import { ContactsPage } from "../../modals/contacts/contacts.page";
 const VISITORS = 'visitors';
 
 @Component({
-  selector: 'app-visitors',
-  templateUrl: './visitors.page.html',
-  styleUrls: ['./visitors.page.scss'],
+    selector: 'app-visitors',
+    templateUrl: './visitors.page.html',
+    styleUrls: ['./visitors.page.scss'],
+    standalone: false
 })
 export class VisitorsPage implements OnInit {
   RegisterForm : FormGroup;

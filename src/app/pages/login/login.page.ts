@@ -23,9 +23,10 @@ const DEVICE_PKG = 'device-pkg';
 const ADMIN_DEVICE = 'admin_device';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+    selector: 'app-login',
+    templateUrl: './login.page.html',
+    styleUrls: ['./login.page.scss'],
+    standalone: false
 })
 
 export class LoginPage implements OnInit {

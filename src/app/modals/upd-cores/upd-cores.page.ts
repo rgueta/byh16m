@@ -4,9 +4,10 @@ import { Validators, FormControl, FormBuilder, FormGroup} from "@angular/forms";
 import { DatabaseService } from '../../services/database.service';
 
 @Component({
-  selector: 'app-upd-cores',
-  templateUrl: './upd-cores.page.html',
-  styleUrls: ['./upd-cores.page.scss'],
+    selector: 'app-upd-cores',
+    templateUrl: './upd-cores.page.html',
+    styleUrls: ['./upd-cores.page.scss'],
+    standalone: false
 })
 export class UpdCoresPage implements OnInit {
   updCoreForm : FormGroup;

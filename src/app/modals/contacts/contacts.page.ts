@@ -8,9 +8,10 @@ import { ToolsService } from "../../services/tools.service";
 
 
 @Component({
-  selector: 'app-contacts',
-  templateUrl: './contacts.page.html',
-  styleUrls: ['./contacts.page.scss'],
+    selector: 'app-contacts',
+    templateUrl: './contacts.page.html',
+    styleUrls: ['./contacts.page.scss'],
+    standalone: false
 })
 export class ContactsPage implements OnInit {
   myToast : any;

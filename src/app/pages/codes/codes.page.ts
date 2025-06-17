@@ -10,9 +10,10 @@ import { ToolsService } from "../../services/tools.service";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-codes',
-  templateUrl: './codes.page.html',
-  styleUrls: ['./codes.page.scss'],
+    selector: 'app-codes',
+    templateUrl: './codes.page.html',
+    styleUrls: ['./codes.page.scss'],
+    standalone: false
 })
 export class CodesPage implements OnInit {
 

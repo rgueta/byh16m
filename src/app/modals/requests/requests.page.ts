@@ -8,9 +8,10 @@ import { DatabaseService } from "../../services/database.service";
 const DEVICE_PKG = 'device-pkg';
 
 @Component({
-  selector: 'app-requests',
-  templateUrl: './requests.page.html',
-  styleUrls: ['./requests.page.scss'],
+    selector: 'app-requests',
+    templateUrl: './requests.page.html',
+    styleUrls: ['./requests.page.scss'],
+    standalone: false
 })
 export class RequestsPage implements OnInit {
   title: string ;

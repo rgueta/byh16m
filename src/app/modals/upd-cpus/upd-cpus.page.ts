@@ -4,9 +4,10 @@ import { DatabaseService } from '../../services/database.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-upd-cpus',
-  templateUrl: './upd-cpus.page.html',
-  styleUrls: ['./upd-cpus.page.scss'],
+    selector: 'app-upd-cpus',
+    templateUrl: './upd-cpus.page.html',
+    styleUrls: ['./upd-cpus.page.scss'],
+    standalone: false
 })
 export class UpdCpusPage implements OnInit {
   @Input() cores?:number = 23;

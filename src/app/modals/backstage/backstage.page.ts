@@ -5,9 +5,10 @@ import { UpdUsersPage } from "../../modals/upd-users/upd-users.page";
 import { ToolsService } from "../../services/tools.service";
 
 @Component({
-  selector: 'app-backstage',
-  templateUrl: './backstage.page.html',
-  styleUrls: ['./backstage.page.scss'],
+    selector: 'app-backstage',
+    templateUrl: './backstage.page.html',
+    styleUrls: ['./backstage.page.scss'],
+    standalone: false
 })
 export class BackstagePage implements OnInit {
 

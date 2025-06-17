@@ -4,9 +4,10 @@ import { DatabaseService } from "../../services/database.service";
 
 
 @Component({
-  selector: 'app-family',
-  templateUrl: './family.page.html',
-  styleUrls: ['./family.page.scss'],
+    selector: 'app-family',
+    templateUrl: './family.page.html',
+    styleUrls: ['./family.page.scss'],
+    standalone: false
 })
 export class FamilyPage implements OnInit {
   myFamily : any = [];

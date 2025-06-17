@@ -10,9 +10,10 @@ const CORE_SIM = 'my-core-sim';
 const netStatus = 'netStatus';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+    selector: 'app-tab2',
+    templateUrl: 'tab2.page.html',
+    styleUrls: ['tab2.page.scss'],
+    standalone: false
 })
 
 export class Tab2Page implements OnInit {

@@ -5,9 +5,10 @@ import { VisitorsPage } from "../visitors/visitors.page";
 import { Contacts } from "@capacitor-community/contacts";
 
 @Component({
-  selector: 'app-visitor-list',
-  templateUrl: './visitor-list.page.html',
-  styleUrls: ['./visitor-list.page.scss'],
+    selector: 'app-visitor-list',
+    templateUrl: './visitor-list.page.html',
+    styleUrls: ['./visitor-list.page.scss'],
+    standalone: false
 })
 export class VisitorListPage implements OnInit {
   myVisitors:any = [];

@@ -7,9 +7,10 @@ import { SMS, SmsOptions } from '@ionic-native/sms/ngx';
 import { ToolsService } from "../../services/tools.service";
 
 @Component({
-  selector: 'app-upd-users',
-  templateUrl: './upd-users.page.html',
-  styleUrls: ['./upd-users.page.scss'],
+    selector: 'app-upd-users',
+    templateUrl: './upd-users.page.html',
+    styleUrls: ['./upd-users.page.scss'],
+    standalone: false
 })
 export class UpdUsersPage implements OnInit {
   RegisterForm:FormGroup;
